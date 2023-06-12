@@ -1,0 +1,164 @@
+﻿@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_IscrittoLayout.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<div class="card card-default">
+    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">
+        Informazioni
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card card-default">
+                    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">
+                        Dove siamo
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                Viale Beethoven 48, 00144 Roma
+                            </li>
+                            <li>
+                                Apertura Uffici Lun/Giov dalle 08.00 alle 16.00
+                            </li>
+                            <li>
+                                Apertura Uffici Venerdì dalle 08.00 alle 13.00
+                            </li>
+                            <li>
+                                Tel. 06 54581
+                            </li>
+                        </ul>
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card card-default">
+                    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">
+                        Call Center
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                Lun/Giov 09:00 - 16:00
+                            </li>
+                            <li>
+                                Ven. 09:00 - 13:00
+                            </li>
+                            <li>
+                                <span style="color: #008000;"><strong>800 24 26 24</strong></span>
+                            </li>
+                        </ul>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card card-default">
+                    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">
+                        Scrivici
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                <strong>E-mail:</strong> info@enpaia.it
+                            </li>
+                            <li>
+                                <strong>PEC:</strong> info@pec.enpaia.it
+                            </li>
+                            <li>
+                                <strong>Protezione Dati:</strong> dpo@enpaia.it
+                            </li>
+                            <li>
+                                <strong>Segnalazione violazione dati personali:</strong> databreach@enpaia.it - <a href="https://www.enpaia.it/wp-content/uploads/2019/03/modulo-data-breach-1.pdf" target="_blank" rel="noopener">Modulo segnalazione</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-default">
+    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">
+        Inviaci un messaggio
+    </div>
+    <div class="card-body">
+        <div id="CF5cb09c92502c0_1-row-1" class="row  first_row">
+            <div class="col-sm-12  single">
+                <div data-field-wrapper="fld_8768091" class="form-group" id="fld_8768091_1-wrap">
+                    <label id="fld_8768091Label" for="fld_8768091_1" class="control-label screen-reader-text sr-only">Nome completo</label>
+                    <div class="">
+                        <input placeholder="Nome completo" required type="text" data-field="fld_8768091" class=" form-control" id="fld_8768091_1" name="fld_8768091" value="" data-type="text" aria-required="true" aria-labelledby="fld_8768091Label">
+                    </div>
+                </div>
+                <div data-field-wrapper="fld_9970286" class="form-group" id="fld_9970286_1-wrap">
+                    <label id="fld_9970286Label" for="fld_9970286_1" class="control-label screen-reader-text sr-only">Codice fiscale</label>
+                    <div class="">
+                        <input placeholder="Codice fiscale" required type="text" data-field="fld_9970286" class=" form-control" id="fld_9970286_1" name="fld_9970286" value="" data-type="text" aria-required="true" aria-labelledby="fld_9970286Label">
+                    </div>
+                </div>
+                <div data-field-wrapper="fld_6009157" class="form-group" id="fld_6009157_1-wrap">
+                    <label id="fld_6009157Label" for="fld_6009157_1" class="control-label screen-reader-text sr-only">Email</label>
+                    <div class="">
+                        <input placeholder="Email" required type="email" data-field="fld_6009157" class=" form-control" id="fld_6009157_1" name="fld_6009157" value="" data-type="email" aria-required="true" aria-labelledby="fld_6009157Label">
+                    </div>
+                </div>
+                <div data-field-wrapper="fld_1675122" class="form-group" id="fld_1675122_1-wrap">
+                    <label id="fld_1675122Label" for="fld_1675122_1" class="control-label screen-reader-text sr-only">Contatto telefonico</label>
+                    <div class="">
+                        <input placeholder="Contatto telefonico" data-inputmask="'mask': '+99 99 999 9999'" type="phone" data-field="fld_1675122" class=" form-control" id="fld_1675122_1" name="fld_1675122" value="" data-type="phone" aria-labelledby="fld_1675122Label">
+                    </div>
+                </div>
+            </div>
+        </div><div id="CF5cb09c92502c0_1-row-2" class="row ">
+            <div class="col-sm-12  single">
+                <div data-field-wrapper="fld_7683514" class="form-group" id="fld_7683514_1-wrap">
+                    <label id="fld_7683514Label" for="fld_7683514_1" class="control-label screen-reader-text sr-only">Messaggio</label>
+                    <div class="">
+                        <textarea name="fld_7683514" value="" data-field="fld_7683514" class="form-control" id="fld_7683514_1" rows="7" placeholder="Messaggio" required="required" aria-labelledby="fld_7683514Label"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group clearfix">
+                    <center>
+                        <label>
+                            Accettazione <a target="_blank" href="https://www.enpaia.it/privacy-policy/">Privacy</a>
+                        </label>
+                    </center>
+
+                    <center>
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Accetto
+                            </label>
+                        </div>&emsp;
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Non Accetto
+                            </label>
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-block btn-outline-success btn-lg">Invia</button>
+            </div>
+        </div>
+    </div>
+</div>
+

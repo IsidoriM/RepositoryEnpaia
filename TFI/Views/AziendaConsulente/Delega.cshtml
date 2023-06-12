@@ -1,0 +1,271 @@
+﻿@model TFI.OCM.AziendaConsulente.DelegheOCM
+@{
+    ViewBag.Title = "Delega";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 10px;
+    }
+
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Deleghe Azienda</h3>
+    </div>
+    <div class="card-body">
+
+        @if (Model != null)
+        {
+            if (Model.delegheatt.Count > 0 || Model.deleghecanc.Count > 0 || Model.deleghenonatt.Count > 0)
+            {
+
+                <div class="card">
+                    <div class="card-body" style="overflow-x:auto">
+                        <div class="form-group justify-content-end">
+                            <div class="input-group justify-content-end">
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Tutti" checked>
+                                    <label class="form-check-label" for="Tutti" id="Tutti">
+                                        Tutte
+                                    </label>
+                                </div>
+                                &emsp;
+
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Attivo">
+                                    <label class="form-check-label" for="Attivo" id="Attivo">
+                                        Attive
+                                    </label>
+                                </div>
+                                &emsp;
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Cessato">
+                                    <label class="form-check-label" for="Cessato" id="Cessato">
+                                        Cancellate
+                                    </label>
+                                </div>
+                                &emsp;
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Nonatt">
+                                    <label class="form-check-label" for="Nonatt" id="Nonatt">
+                                        Da Attivare
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <table id="tb_Del" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr class="header" style="background:#0c773c;color:white">
+                                        <th>Ragione Sociale</th>
+                                        <th>Ass. Nazionale</th>
+                                        <th>Ass. Territoriale</th>
+                                        <th>Data Inizio</th>
+                                        <th>Data Fine</th>
+                                        <th>Stato</th>
+                                        <th>Dettaglio</th>
+                                        <th>Modifica</th>
+                                        <th>Elimina</th>
+                                        <th>Attiva</th>
+                                        @if (!Model.delegheatt.Any() && Model.deleghenonatt.Any())
+                                        {
+                                            <th>Rifiuta</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.delegheatt)
+                                    {
+                                    <tr style="vertical-align:middle;text-align:center">
+                                        <td>@i.ragsoc</td>
+                                        <td>@i.assnaz</td>
+                                        <td>@i.asster</td>
+                                        <td>@i.datini</td>
+                                        <td></td>
+                                        <td>@i.attivo</td>
+                                        <td><a href="@Url.Action("DettaglioDelega","AziendaConsulente", new { codter = i.codter })"><i class="text-blue fas fa-eye"></i></a></td>
+                                        <td><a href="@Url.Action("ModificaDeleghe","AziendaConsulente", new { datini = i.datini, asster = i.asster, codter = i.codter, assnaz = i.assnaz.Trim(), codnaz = i.codnaz, stato = i.stato, codpos = i.codpos, ragsoc = i.ragsoc })"><i class="far fa-edit fa-lg"></i></a></td>
+                                        <td><a href="@Url.Action("EliminaDelega","AziendaConsulente", new { codter = i.codter })"><i class="fas fa-trash-alt"></i></a></td>
+                                        <td><i class="text-blue fas fa-check-circle"></i></td>
+                                    </tr>
+                                    }
+                                    @foreach (var i in Model.deleghecanc)
+                                    {
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td>@i.ragsoc</td>
+                                    <td>@i.assnaz</td>
+                                    <td>@i.asster</td>
+                                    <td>@i.datini</td>
+                                    <td>@i.datfin</td>
+                                    <td>@i.cancellato</td>
+                                    <td><a href="@Url.Action("DettaglioDelega","AziendaConsulente", new { codter = i.codter })"><i class="text-blue fas fa-eye"></i></a></td>
+                                    <td><i class="far fa-edit fa-lg"></i></td>
+                                    <td><i class="fas fa-trash-alt"></i></td>
+                                    <td><i class="fas fa-check-circle"></i></td>
+                                    @if (!Model.delegheatt.Any() && Model.deleghenonatt.Any())
+                                    {
+                                        <td><i class="fas fa-times-circle"></i></td>
+                                    }
+                                </tr>
+                                    }
+                                    @if (Model.deleghenonatt.Count > 0)
+                                    {
+                                        foreach (var i in Model.deleghenonatt)
+                                        {
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td>@i.ragsoc</td>
+                                    <td>@i.assnaz</td>
+                                    <td>@i.asster</td>
+                                    <td>@i.datini</td>
+                                    <td></td>
+                                    @if (!Model.delegheatt.Any() && Model.deleghenonatt.Any())
+                                    {
+                                        <td>@i.daAttivare</td>
+                                        <td><a href="@Url.Action("DettaglioDelega","AziendaConsulente", new { codter = i.codter })"><i class="text-blue fas fa-eye"></i></a></td>
+                                        <td><a onclick="Delega1()"><i class="far fa-edit fa-lg"></i></a></td>
+                                        <td><a onclick="Elimina1()"><i class="fas fa-trash-alt"></i></a></td>
+                                        <td><a href="@Url.Action("AttivaDelega","AziendaConsulente", new { codter = i.codter })"><i class="text-green fas fa-check-circle"></i></a></td>
+                                        <td><a href="@Url.Action("EliminaDelega","AziendaConsulente", new { codter = i.codter })"><i class="text-red fas fa-times-circle"></i></a></td>
+                                    }
+                                    else
+                                    {
+                                        <td>--</td>
+                                        <td><i class="far fa-edit fa-lg"></i></td>
+                                        <td><i class="fas fa-trash-alt"></i></td>
+                                        <td><i class="fas fa-check-circle"></i></td>
+                                    }
+                                </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+    </div>
+</div>
+<script>
+    $(document).change(function () {
+        if (document.getElementById('Tutti').checked == true) {
+            $('tr').show();
+        }
+
+        else if (document.getElementById('Attivo').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Attiva"))').hide();
+        }
+
+        else if (document.getElementById('Cessato').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Cancellata"))').hide();
+        }
+
+        else if (document.getElementById('Nonatt').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Non Confermate"))').hide();
+        }
+
+    });
+    function Elimina() {
+        if (confirm('Impossibile Eliminare una delega già cancellata!')) {
+            this.submit();
+        }
+        return false;
+    };
+    function Delega() {
+        if (confirm('Impossibile Modificare una delega già cancellata!')) {
+            this.submit();
+        }
+        return false;
+    };
+    function Attiva1() {
+        if (confirm('Impossibile Attivare una delega che è già stata attivata!')) {
+            this.submit();
+        }
+        return false;
+    };
+    function Attiva() {
+        if (confirm('Impossibile Attivare una delega che è già stata cancellata!')) {
+            this.submit();
+        }
+        return false;
+    };
+    function Delega1() {
+        if (confirm('Impossibile Modificare una delega che non è stata attivata!')) {
+            this.submit();
+        }
+        return false;
+    };
+    function Elimina1() {
+        if (confirm('Impossibile Eliminare una delega che non è stata attivata!')) {
+            this.submit();
+        }
+        return false;
+    };
+
+</script>
+
+
+
+

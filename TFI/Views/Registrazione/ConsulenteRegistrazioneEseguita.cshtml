@@ -1,0 +1,17 @@
+@using TFI.Models.Registrazione
+@{
+    ViewBag.Title = "Enpaia | Registrazione Completata";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="container">
+    @Html.Partial("RegistrazioneHeaderPartial", new RegistrazioneHeaderModel{ Title = "Registrazione Completata"})
+    <div class="d-flex flex-column">
+        <h3 class="align-self-center">Procedura di registrazione completata con successo!</h3>
+        <p class="my-5">
+            Abbiamo inviato un'email alla vostra casella di posta con le credenziali d'accesso al portale <br/>
+            Consigliamo di modificare la password quanto prima
+        </p>
+        @Html.ActionLink("Torna alla login", "Accesso",  "Login", string.Empty,new {@class="btn btn-primary align-self-start"})
+    </div>
+</div>

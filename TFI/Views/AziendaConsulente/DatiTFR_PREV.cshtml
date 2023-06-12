@@ -1,0 +1,356 @@
+﻿@model IEnumerable<TFI.OCM.AziendaConsulente.DatiPREV_TFR_OCM.PrevdaConf>
+
+@{
+    ViewBag.Title = "DatiTFR_PREV";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+
+<form autocomplete="off" method="post">
+    <div class="card-default">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca PREV</h3>
+        </div>
+        <div class="card" style="background-color:white">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="input-group">
+                        <div class="form-group col-sm-4">
+                            <label>Matricola:</label>
+                            <div class="input-group">
+                                <input type="text" style="border-color:#0c773c;background:white" value="@ViewBag.Mat" class="form-control" id="Mat" name="Mat" asp-for="Mat" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>Cognome:</label>
+                            <div class="input-group">
+                                <input type="text" style="border-color:#0c773c;background:white" value="@ViewBag.Cog" class="form-control" id="Cog" name="Cog" asp-for="Cog" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>Nome:</label>
+                            <div class="input-group">
+                                <input type="text" style="border-color:#0c773c;background:white" value="@ViewBag.Nom" class="form-control" id="Nom" name="Nom" asp-for="Nom" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Periodo:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="background:#0c773c;color:white">
+                                        <i class="far fa-calendar-alt"></i>
+                                    </span>
+                                </div>
+                                <input type="text" name="reservation" style="border-color:#0c773c;background:white" class="form-control float-right" id="reservation">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Tipo:</label>
+                            <div class="input-group">
+                                <button type="button" class="btn dropdown-toggle col-sm-5" href="javascript:void(0)" onclick="searchTableDevice('all')" style="border-color:#0c773c;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        id="deviceSelector">
+                                    --Seleziona--
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Trasmesse</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Da Trasmettere</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">In Lavorazione</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Pagato</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="row justify-content-end">
+
+                        <div class="col-sm-2">
+                            <input type="submit" value="Cerca" onclick="location.href" class="btn btn-block btn-outline-success btn-lg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    
+</form>
+<br />
+
+@if (Model != null)
+{
+
+    using (Html.BeginForm("DatiTFR_PREV", "AziendaConsulente", FormMethod.Post))
+    {
+
+        <section class="content" id="btnNuovo">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                                Elenco PREV/TFR
+                            </div>
+                            <br />
+                            <div class="card-body" style="height:300px; overflow:scroll;">
+                                <table class="table table-bordered  table-hover table-striped  " >
+                                    <thead>
+                                        <tr>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Matricola</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Cognome</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Nome</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Data Iscrizione</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Data Cessazione</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle; width: 30%">Causale</th>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Compila</th>
+                                            @*<th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Ricevuta Cessazione RDL</th>*@
+                                        </tr>
+                                    </thead>
+                                    <tbody id="btnNuovo">
+
+                                        @{
+
+
+                                            foreach (var GetTabella in Model)
+                                            {
+
+                                                <tr>
+
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Matricola
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Cognome
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Nome
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.DataIsc
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.DataCess
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Causale
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <a href="@Url.Action("Modprev01", "AziendaConsulente", new  {mat = GetTabella.Matricola, nom = GetTabella.Nome, cog = GetTabella.Cognome, prorap = GetTabella.Prorap , promod = GetTabella.Promod})" style="color:black;background-color:lightgray;text-align:center">
+                                                            <img src="~/Images/Modifica.jpg" />
+                                                        </a>
+                                                    </td>
+                                                    @*<td style="text-align:center">
+                                                        <img style="width: 25px" src="~/Images/pdf-icon-png-adobe-acrobat.png" />
+                                                    </td>*@
+                                                    <td style="display:none">
+                                                        @Html.Hidden(GetTabella.Prorap)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Promod)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Strprot)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Datprot)
+                                                    </td>
+                                                </tr>
+
+                                            }
+                                        }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+        <br />
+
+
+    }
+
+}
+
+<script>
+    $(function () {
+        $('#Mat').on('input', function () {
+            searchRow();
+        });
+        $('#Cog').on('input', function () {
+            searchRow();
+        });
+        $('#Nom').on('input', function () {
+            searchRow();
+        });
+
+    })
+    function searchRow() {
+        var $rows = $('#table > tbody > tr').not(".header");
+        var val1 = $.trim($('#Mat').val()).replace(' ').toLowerCase();
+        var val2 = $.trim($("#deviceSelector").text()).toLowerCase();
+        var val3 = $.trim($('#Cog').val()).replace(' ').toLowerCase();
+        var val4 = $.trim($('#Nom').val()).replace(' ').toLowerCase();
+        val2 = (val2 === "--seleziona--") ? "" : val2;
+
+        $rows.show().filter(function () {
+            var text1 = $(this).find('td:nth-child(1)').text().replace(' ').toLowerCase();
+            var text2 = $(this).find('td:nth-child(5)').text().replace(' ').toLowerCase();
+            var text3 = $(this).find('td:nth-child(2)').text().replace(' ').toLowerCase();
+            var text4 = $(this).find('td:nth-child(3)').text().replace(' ').toLowerCase();
+            return !~text1.indexOf(val1) || !~text2.indexOf(val2) || !~text3.indexOf(val3) || !~text4.indexOf(val4);
+        }).hide();
+    }
+    function searchTableDevice(device) {
+        var filter, table, tr, td, i;
+
+        $("#deviceSelector").html(device);
+
+        if (device == "all") {
+            $("#deviceSelector").html("--Seleziona--");
+        }
+
+        searchRow();
+    }
+</script>
+@*<script>
+    $(function () {
+        //Initialize Select2 Elements
+        $('.select2').select2()
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        })
+
+        //Datemask dd/mm/yyyy
+        $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        //Datemask2 mm/dd/yyyy
+        $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+        //Money Euro
+        $('[data-mask]').inputmask()
+
+        //Date picker
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+
+        //Date and time picker
+        $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+        //Date range picker
+        $('#reservation').daterangepicker()
+        //Date range picker with time picker
+        $('#reservationtime').daterangepicker({
+            timePicker: true,
+            timePickerIncrement: 30,
+            locale: {
+                format: 'MM/DD/YYYY hh:mm A'
+            }
+        })
+        //Date range as a button
+        $('#daterange-btn').daterangepicker(
+            {
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment()
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+        )
+
+        //Timepicker
+        $('#timepicker').datetimepicker({
+            format: 'LT'
+        })
+
+        //Bootstrap Duallistbox
+        $('.duallistbox').bootstrapDualListbox()
+
+        //Colorpicker
+        $('.my-colorpicker1').colorpicker()
+        //color picker with addon
+        $('.my-colorpicker2').colorpicker()
+
+        $('.my-colorpicker2').on('colorpickerChange', function (event) {
+            $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+        })
+
+        $("input[data-bootstrap-switch]").each(function () {
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
+        })
+
+    })
+    // BS-Stepper Init
+   
+
+    // DropzoneJS Demo Code Start
+   
+
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+    var previewNode = document.querySelector("#template")
+    
+    var previewTemplate = previewNode.parentNode.innerHTML
+    previewNode.parentNode.removeChild(previewNode)
+
+    var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+        url: "/target-url", // Set the url
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: previewTemplate,
+        autoQueue: false, // Make sure the files aren't queued until manually added
+        previewsContainer: "#previews", // Define the container to display the previews
+        clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    })
+
+    myDropzone.on("addedfile", function (file) {
+        // Hookup the start button
+        file.previewElement.querySelector(".start").onclick = function () { myDropzone.enqueueFile(file) }
+    })
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function (progress) {
+        document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+    })
+
+    myDropzone.on("sending", function (file) {
+        // Show the total progress bar when upload starts
+        document.querySelector("#total-progress").style.opacity = "1"
+        // And disable the start button
+        file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+    })
+
+    // Hide the total progress bar when nothing's uploading anymore
+    myDropzone.on("queuecomplete", function (progress) {
+        document.querySelector("#total-progress").style.opacity = "0"
+    })
+
+    // Setup the buttons for all transfers
+    // The "add files" button doesn't need to be setup because the config
+    // `clickable` has already been specified.
+    document.querySelector("#actions .start").onclick = function () {
+        myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+    }
+    document.querySelector("#actions .cancel").onclick = function () {
+        myDropzone.removeAllFiles(true)
+    }
+      // DropzoneJS Demo Code End
+</script>*@

@@ -1,0 +1,331 @@
+﻿@model IEnumerable<TFI.OCM.Admin>
+
+@{
+    ViewBag.Title = "Anagrafica Utente";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    var webGrid = new WebGrid(Model);
+}
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .cancelBtn::after {
+        visibility: visible;
+        background-color: #0c773c;
+        color: white;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .applyBtn::after {
+        background-color: #0c773c;
+        color: white;
+        visibility: visible;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .webgrid-footer {
+        text-align: center;
+        background-color: #0c773c;
+        color: white;
+    }
+
+    .webgrid-header {
+        font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        background-color: #0c773c;
+        color: white;
+    }
+
+        .webgrid-header a {
+            font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            color: white;
+        }
+
+    #cerca {
+        text-align: center;
+    }
+
+        #cerca:hover {
+            text-align: center;
+            background-color: #0c773c;
+        }
+
+    #cancella:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+
+    #inserisci:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+</style>
+
+@{
+    Html.RenderPartial("PartialViewShowMessages");
+}
+
+
+
+@using (Html.BeginForm("Index", "Admin", FormMethod.Post))
+{
+
+
+
+
+    <div class="card" style="background-color:white; align-content:center" id="inserimento">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Nuovo Utente</h3>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Inserisci un nuovo utente</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            </div>
+            <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" col-lg="6">
+                    <label>Codice Utente:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="codiceUtenteIns" name="codiceUtenteIns" placeholder="Inserire il codice utente" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <label>Denominazione:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="selezionaDenominazioneIns" name="selezionaDenominazioneIns" placeholder="Inserire la denominazione" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <label>Email:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="email" name="email" placeholder="Inserire l'email" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <div class="form-group" col-lg="6">
+                        <label>Codice Fiscale:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="codFis" name="codFis" placeholder="Inserire il codice fiscale" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class="form-group" col-lg="6">
+                        <label>Utenza Windows:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="uteWin" name="uteWin" placeholder="Inserire l'utenza Windows" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class="form-group" col-lg="6">
+                        <label>&nbsp;</label>
+                        <button name="submit_button" id="inserisci" type="submit" class="btn btn-block btn-outline-success" value="Inserisci">Inserisci</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card" style="background-color:white" id="anagrafica">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Anagrafica Utente</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" col-lg="6">
+                    <label>Codice Utente:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="codiceUtente" name="codiceUtente" placeholder="Indicare il codice utente" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <label>Denominazione:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="selezionaDenominazione" name="selezionaDenominazione" placeholder="Indicare la denominazione" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-right: 20px">
+                    <label>Stato:</label>
+                    <select asp-for="DropLogin" class="form-control" id="selezionaStato" name="dropStato" style="border-color:#0c773c;background:white;width:300px" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <option selected disabled hidden value="">Selezionare uno stato</option>
+                        <option name="A" value="A">Attivo</option>
+                        <option name="D" value="D">Disattivo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" style="width: 300px; margin-right: 20px;">
+                    <label>Sistemi:</label>
+                    <select asp-for="DropLogin" class="form-control" id="selezionaSistema" name="selezionaSistema" style="border-color:#0c773c;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <option selected disabled hidden value="">Selezionare un sistema</option>
+                        @try
+                        {
+
+                            foreach (var item in Model)
+                            {
+
+                                if (item.NumCmb == 1)
+                                {
+                                    <option value="@item.codSis"> @item.sistema </option>
+                                }
+
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                    </select>
+                </div>
+
+                <div class="form-group" style="width: 300px; margin-right: 20px;">
+                    <label>Gruppi:</label>
+                    <select asp-for="DropLogin" class="form-control" id="selezionaGruppo" name="selezionaGruppo" style="border-color:#0c773c;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <option selected disabled hidden value="">Selezionare un gruppo</option>
+                        @try
+                        {
+
+                            foreach (var item in Model)
+                            {
+
+                                if (item.NumCmb == 2)
+                                {
+                                    <option value="@item.codGru">@item.denGru</option>
+                                }
+
+
+
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </select>
+
+
+                </div>
+
+                <div class="form-group" style="width: 300px; margin-right: 20px;">
+                    <label>Funzioni:</label>
+                    <select asp-for="DropLogin" class="form-control" id="selezionaFunzione" name="selezionaFunzione" style="border-color:#0c773c;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <option selected disabled hidden value="">Selezionare una funzione</option>
+                        @try
+                        {
+
+                            foreach (var item in Model)
+                            {
+
+                                if (item.NumCmb == 3)
+                                {
+
+                                    <option value="@item.codFun"> @item.denFun </option>
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="input-group">
+                    <div class="form-group" style="margin-left: 450px;">
+                        <label>&nbsp;</label>
+                        <button name="submit_button" id="cerca" type="submit" class="btn btn-block btn-outline-success" value="Cerca" onclick="CollapseBox">Cerca</button>
+                    </div>
+                    <div class="form-group" style="margin-left: 20px;">
+                        <label>&nbsp;</label>
+                        <button name="submit_button" id="cancella" type="submit" class="btn btn-block btn-outline-success" value="CancellaFiltro" onclick="cancellaFiltro()">Cancella Filtro</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#inserimento').CardWidget('collapse')
+    });
+    //$('#cerca').click(function () {
+    //    $('#anagrafica').CardWidget('collapse')
+    //});
+
+
+    $(function () {
+        var dropStato = sessionStorage.getItem("dropStato");
+        var codiceUtente = sessionStorage.getItem("codiceUtente");
+        var selezionaDenominazione = sessionStorage.getItem("selezionaDenominazione");
+        var selezionaSistema = sessionStorage.getItem("selezionaSistema");
+        var selezionaGruppo = sessionStorage.getItem("selezionaGruppo");
+        var selezionaFunzione = sessionStorage.getItem("selezionaFunzione");
+        if (dropStato != null || codiceUtente != null || selezionaDenominazione != null || selezionaSistema != null || selezionaGruppo != null || selezionaFunzione != null) {
+            $("select[name=dropStato]").val(dropStato);
+            $("input[name=codiceUtente]").val(codiceUtente);
+            $("input[name=selezionaDenominazione]").val(selezionaDenominazione);
+            $("select[name=selezionaSistema]").val(selezionaSistema);
+            $("select[name=selezionaGruppo]").val(selezionaGruppo);
+            $("select[name=selezionaFunzione]").val(selezionaFunzione);
+        }
+
+        $("select[name=dropStato]").on("change", function () {
+            sessionStorage.setItem("dropStato", $(this).val());
+        });
+        $("input[name=codiceUtente]").on("change", function () {
+            sessionStorage.setItem("codiceUtente", $(this).val());
+        });
+        $("input[name=selezionaDenominazione]").on("change", function () {
+            sessionStorage.setItem("selezionaDenominazione", $(this).val());
+        });
+        $("select[name=selezionaSistema]").on("change", function () {
+            sessionStorage.setItem("selezionaSistema", $(this).val());
+        });
+        $("select[name=selezionaGruppo]").on("change", function () {
+            sessionStorage.setItem("selezionaGruppo", $(this).val());
+        });
+        $("select[name=selezionaFunzione]").on("change", function () {
+            sessionStorage.setItem("selezionaFunzione", $(this).val());
+        });
+    })
+
+
+    function cancellaFiltro() {
+        sessionStorage.clear();
+    }
+</script>
+@{
+    Html.RenderPartial("_AdminWebGrid");
+}

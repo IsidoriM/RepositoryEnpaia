@@ -1,0 +1,220 @@
+﻿@model TFI.OCM.AziendaConsulente.ConsultazioneArretrati
+@{
+	ViewBag.Title = "ConsultazioneArretrati";
+	Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+	var cls = string.Empty;
+	if (Model.btnRettificheVisible && Model.btnTotaliVisible)
+	{
+		cls = "col-4";
+	}
+	else if (Model.btnRettificheVisible || Model.btnTotaliVisible)
+	{
+		cls = "col-6";
+	}
+	else
+	{
+		cls = "col-12";
+	}
+}
+
+@section showMessage{
+	@{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<div class="card card-default" id="ricArr">
+	<div style="background-color: #0c773c" class="card-header">
+		<h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+			@Model.intestazione
+		</h3>
+	</div>
+</div>
+<div class="card">
+	<div class="card-body">
+	@using (Html.BeginForm("ConsultazioneArretrati", "AziendaConsulente", FormMethod.Post, new { id = "ricercaArretrati" }))
+	{
+
+		<div class="row">
+			<div class="col-12">
+				<table class="table table-bordered table-hover table-striped" id="tbArretrati">
+					<thead>
+						<tr>
+							<th hidden>Proden</th>
+							@if (Model.colAnnoVisible)
+							{
+								<th>Anno Denuncia</th>
+							}
+							else
+							{
+								<th hidden>Anno</th>
+							}
+							@if (Model.colMesVisible)
+							{
+								<th>Mese</th>
+							}
+							else
+							{
+								<th hidden>Mese</th>
+							}
+							@if (Model.colAnnComVisible)
+							{
+								<th>Anno Comp.</th>
+							}
+							else
+							{
+								<th hidden>Anno Comp.</th>
+							}
+							<th>Mat.</th>
+							<th>Cognome e Nome</th>
+							<th hidden>Datnas</th>
+							<th>Dal</th>
+							<th>Al</th>
+							<th>Qual.</th>
+							<th>65enne</th>
+							<th>Retribuzione</th>
+							<th>di cui Occasionale</th>
+							<th hidden>Figurativa</th>
+							<th>Aliquota</th>
+							<th>Contributi</th>
+							<th hidden>Erogazione</th>
+							<th hidden>Stato</th>
+							<th hidden>CODMODPAG</th>
+						</tr>
+					<tbody>
+						@foreach (TFI.OCM.AziendaConsulente.DenunciaArretrati azi in Model.listaSelezione)
+						{
+							<text>
+								<tr>
+									<td hidden>@azi.proDen</td>
+									@if (Model.colAnnoVisible)
+									{
+										<td>@azi.anno</td>
+									}
+									else
+									{
+										<td hidden>@azi.anno</td>
+									}
+									@if (Model.colMesVisible)
+									{
+										<td>@azi.hdnMese</td>
+									}
+									else
+									{
+										<td hidden>@azi.hdnMese</td>
+									}
+									@if (Model.colAnnComVisible)
+									{
+										<td>@azi.anncom</td>
+									}
+									else
+									{
+										<td hidden>@azi.anncom</td>
+									}
+									<td>@azi.mat</td>
+									<td>@azi.nome</td>
+									<td hidden>@azi.datnas</td>
+									<td>@azi.datadal.Substring(0, 10)</td>
+									<td>@azi.dataal.Substring(0, 10)</td>
+									<td>@azi.denqua</td>
+									<td>@azi.eta65</td>
+									<td>@azi.impret</td>
+									<td>@azi.impocc</td>
+									<td hidden>@azi.impfig</td>
+									<td>@azi.aliquota</td>
+									<td>@azi.impcon</td>
+									<td hidden>@azi.erogazione</td>
+									<td hidden>@azi.hdnStaden</td>
+									<td hidden>@azi.codmodpag</td>
+
+								</tr>
+							</text>
+						}
+					</tbody>
+				</table>
+				<div>
+					@Html.Hidden("anno", Model.anno)
+					@Html.Hidden("mese", Model.mese)
+					@Html.Hidden("proden", Model.proDen)
+					@Html.Hidden("parm", Model.parm)
+					@Html.Hidden("staDen", Model.staDen)
+					@Html.Hidden("mat", Model.matricola)
+					@Html.Hidden("anncom", Model.annCom)
+				</div>
+			</div>
+		</div>
+
+	<INPUT class=smallsizef id=hdnCodModPag style="Z-INDEX: 105; POSITION: absolute; BACKGROUND-COLOR: #66ccff; WIDTH: 52px; HEIGHT: 18px; TOP: 33px; LEFT: 320px" type=hidden size=3 name=Hidden1 runat="server">
+
+		<section id="arretrati-box-totali" class="content row w-100 mx-0">
+			<div class="container-fluid px-0">
+				<div class="boxTotali card col-12">
+					<div class="card-body row text-white">
+						<div class="col-3">
+                            <b id="Label3">Totale Arretrati</b>
+                        </div>
+                        <div class="row col-9">
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label4" class="mr-1">Imponibile</b>
+                                @if (Model.lblTotRetribuzioni != 0)
+                                {
+                                    <b>€ <span id="lblTotRetribuzioni">@Model.lblTotRetribuzioni.ToString()</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotRetribuzioni">0,00</span></b>
+                                }
+                            </div>
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label5" class="mr-1">Occasionale</b>
+                                @if (Model.lblTotOccasionali != 0)
+                                {
+                                    <b>€ <span id="lblTotOccasionali">@Model.lblTotOccasionali.ToString().Replace(",", ".")</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotOccasionali">0,00</span></b>
+                                }
+                            </div>
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label6" class="mr-1">Contributi</b>
+                                @if (Model.lblTotContributi != 0)
+                                {
+                                    <b>€ <span id="lblTotContributi">@Model.lblTotContributi.ToString().Replace(",", ".")</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotContributi">0,00</span></b>
+                                }
+                            </div>
+                        </div>
+
+						@Html.Hidden("ricerca", Model.isRicerca)
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<div class="card-body row">
+			<div class="col-12">
+				<div class="d-flex">
+					@if (Model.btnRettificheVisible)
+					{
+						<div class="@cls">
+							<button type="submit" value="RETTIFICHE" class="btn btn-block btn-outline-success m-auto w-50" id="btnRettifiche" name="btnRettifiche">Rettifiche</button>
+						</div>
+					}
+					@if (Model.btnTotaliVisible)
+					{
+						<div class="@cls">
+							<button type="submit" value="TOTALI" name="btnConfermaTotali" id="btnConfermaTotali" class="btn btn-block btn-outline-success m-auto w-50">Totali</button>
+						</div>
+					}
+					<div class="@cls">
+						<button type="button" onclick="history.back()" class="btn btn-block btn-outline-success m-auto w-50">Torna Indietro</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	</div>
+</div>

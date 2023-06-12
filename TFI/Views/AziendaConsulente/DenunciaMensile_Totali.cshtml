@@ -1,0 +1,331 @@
+﻿@using TFI.BLL.Utilities.PagoPa
+@model TFI.OCM.AziendaConsulente.DatiTotaliDenuncia
+@{
+    ViewBag.Title = "DenunciaMensile_Totali";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<div class="card card-default" id="denunciaMensile_totali">
+<div class="card-header">
+    <div class="row">
+        <div class="col-2">
+            @Html.Label("Anno: ")
+            @Html.Label(Model.Anno.ToString())
+        </div>
+        <div class="col-10">
+            @Html.Label("Mese: ")
+            @Html.Label(Model.NomeMese)
+        </div>
+    </div>
+    <div class="row">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            @Model.IntestazioneTotali
+        </h3>
+    </div>
+</div>
+<div class="card-body">
+<section class="row">
+    @using (Html.BeginForm("FiltroBtnTotali", "AziendaConsulente", FormMethod.Post, new {id = "form_totaliDenuncia"}))
+    {
+        <text>
+            <table id="tb_Totali">
+                <tbody>
+                <tr>
+                    <td class="col-2">@Html.Label("Contributi dovuti €")</td>
+                    <td class="col-2">@Html.TextBox("contributiDovuti", Model.LblContributi, new {@readonly = "readonly"})</td>
+                </tr>
+                <tr>
+                    <td class="col-2">@Html.Label(Model.LblDescrizAddizionale)</td>
+                    <td class="col-2">@Html.TextBox("addizionale", Model.LblAddizionale, new {@readonly = "readonly"})</td>
+                    <td class="col-2"></td>
+                    <td class="col-2 text-right">
+                        @if (Model.LblCreditiIsVisible && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                        {
+                            @Html.Label("Crediti")
+                        }
+                    </td>
+                    <td class="col-2">
+                        @if (Model.TxtCreditiIsVisible && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                        {
+                            <input type="text" id="txtCrediti" name="txtCrediti" value="@Model.TxtCrediti" class="numberonly"/>
+                            <div style="display:none" id="txtCrediti_readonly">@Model.TxtCrediti_readonly</div>
+                            <input type="text" id="decurtato" value="@Model.LblDecurtato" style="display:none"/>
+                        }
+                    </td>
+                    <td class="col-2">
+                        @if (Model.BtnCreditiIsVisible && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                        {
+                            <button type="button" id="btn_decurtaCredito" class="btn_official">Decurta Credito</button>
+                        }
+                    </td>
+                    <td class="col-2">
+                        @if (Model.BtnRipristinaImportoIsVisible)
+                        {
+                            <button type="button" id="btn_ripristina" class="btn_official" style="display:none">Ripristina Importo</button>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-2">@Html.Label("Totale Contributi €")</td>
+                    <td class="col-2">@Html.TextBox("totContributi", Model.LblTotContributi, new {@readonly = "readonly"})</td>
+                </tr>
+                <tr>
+                    <td class="col-2">
+                        <b>Abbonamento P.A. €</b>
+                    </td>
+                    <td class="col-2">@Html.TextBox("abbonamento", Model.LblAbbonamento, new {@readonly = "readonly"})</td>
+                </tr>
+                <tr>
+                    <td class="col-2">@Html.Label("Assistenza Contrattuale €")</td>
+                    <td class="col-2">@Html.TextBox("assistenza", Model.LblAssistenza, new {@readonly = "readonly"})</td>
+                </tr>
+                <tr>
+                    <td class="col-2">@Html.Label("Totale Dovuto per il mese €")</td>
+                    <td class="col-2">@Html.TextBox("totDovuto", Model.LblTotDovuto, new {@readonly = "readonly", id = "totDovuto"})</td>
+                </tr>
+                @*@if (Model.RigaSanzioniIsVisible)
+                            {
+                                <tr>
+                                    <td>@Html.Label("Sanzioni €")</td>
+                                    <td>@Html.TextBox("sanzioni", Model.LblSanzioni, new { @readonly = "readonly", id="lblSanzioni" })</td>
+                                </tr>
+                            }*@
+                <tr>
+                    <td class="col-2">@Html.Label("Credito applicato €")</td>
+                    <td class="col-2">@Html.TextBox("impDec", Model.ImpDec, new {id = "impDec", @readonly = "readonly"})</td>
+                </tr>
+                <tr>
+                    <td class="col-2">
+                        @if (Model.LblTotaleIsVisible)
+                        {
+                            @Html.Label("Totale da Pagare €")
+                        }
+                    </td>
+                    <td class="col-2">
+                        @if (Model.LblTotPagareIsVisible)
+                        {
+                            @Html.TextBox("totPagare", Model.LblTotPagare, new {id = "totPagare", @readonly = "readonly"})
+                        }
+                    </td>
+                </tr>
+                <tr style="display:none">
+                    <td>
+                        <input type="text" name="btnType" id="btnType"/>
+                    </td>
+                    <td>
+                        <input type="text" name="staDen" id="staDen" value="@Model.StaDen"/>
+                    </td>
+                    <td>
+                        <input type="text" name="anno" id="anno" value="@Model.Anno"/>
+                    </td>
+                    <td>
+                        <input type="text" name="mese" id="mese" value="@Model.Mese"/>
+                    </td>
+                    <td>
+                        <input type="text" name="proDen" id="proDen" value="@Model.ProDen"/>
+                    </td>
+                    <td>
+                        <input type="text" name="idDipa" value="@Model.IdDipa"/>
+                    </td>
+                    <td>
+                        <input type="text" name="annFia" value="@Model.AnnFIA"/>
+                    </td>
+                    <td>
+                        <input type="text" name="mesFia" value="@Model.MesFIA"/>
+                    </td>
+                    <td>
+                        <input type="text" name="hdnMAV" value="@Model.HdnMAV"/>
+                    </td>
+                    <td>
+                        <input type="text" name="hdnMAVSanit" value="@Model.HdnMavSanit"/>
+                    </td>
+                    <td>
+                        <input type="text" name="hdnCheck" value="@Model.HdnCheck"/>
+                    </td>
+                    <td>
+                        <input type="text" name="hdnProt" id="prot" value="@Model.Prot"/>
+                    </td>
+                    <td>
+                        <input type="text" name="tipMov" id="tipMov" value="@Model.TipMov"/>
+                    </td>
+                    <td>
+                        <input type="text" id="idDipaDef" value="@Model.IdDipaDef"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row" id="cont_btnTotali">
+                <div class="col-4">
+                    @if (Model.BtnConfermaTotaliIsVisible && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                    {
+                        <button type="submit" id="btnConfermaTotali" class="btn_official" onclick="return Conferma()">Conferma Dati ad Enpaia</button>
+                    }
+                </div>
+                <div class="col-4">
+                    @if (Model.BtnDettagliDipaIsVisible)
+                    {
+                        <button type="submit" id="dettaglioDipa" class="btn_official" onclick="return GetBtnType('DETTAGLIO')">Dettaglio Denuncia</button>
+                    }
+                </div>
+                <div class="col-4">
+                    <button type="submit" id="chiudi" class="btn_official" onclick="return GetBtnType('CHIUDI')">Chiudi</button>
+                </div>
+            </div>
+        </text>
+    }
+</section>
+@if (Model.TbIntestazionePagamentoIsVisible)
+{
+    <section class="row" id="tbIntestazionePagamento">
+        <div style="width:100%">
+            <div style="background-color: #0c773c">
+                <h5 style="color:#fff">Estremi di Pagamento</h5>
+            </div>
+            <div>
+                @if (Model.TbPagamentoIsVisible)
+                {
+                    <table id="tbPagamento">
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>@Html.Label("Data Operazione")</td>
+                            <td>@Html.TextBox("dataVersamento", Model.TxtDataVersamento, new {id = "txtDataVersamento"})</td>
+                            <td></td>
+                            <td>@Html.Label("Importo del Versamento")</td>
+                            <td>@Html.TextBox("importoVersato", Model.TxtImportoVersato, new {id = "txtImportoVersato"})</td>
+                        </tr>
+                        <tr style="display:none">
+                            <td id="txtDataVersam_attr_today">@Model.TxtDataVersamento_attr_today</td>
+                            <td id="txtDataVersam_attr_value">@Model.TxtDataVersamento_attr_value</td>
+                            <td id="txtImpVersato_attr_value">@Model.TxtImportoVersato_attr_value</td>
+                            <td id="txtDataVersamento_readonly">@Model.TxtDataVersamento_readonly</td>
+                            <td id="txtImportoVersato_readonly">@Model.TxtImportoVersato_readonly</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" id="cont_btnPagamento">
+                        <div class="col-6 d-flex">
+                            @if (Model.StatoPagamentoPagoPa == StatoPagoPa.OK)
+                            {
+                                <div class="col-12 text-bold">
+                                    <p> Il Pagamento con PagoPa per il mese selezionato risulta effettuato.</p>
+                                </div>
+                            }
+                            @if (Model.StatoPagamentoPagoPa == StatoPagoPa.KO)
+                            {
+                                <div class="col-12 text-bold">
+                                    <p>Il Pagamento per PagoPa il mese selezionato risulta in attesa di esito.</p>
+                                </div>
+                            }
+                            @if ((Model.StatoPagamentoPagoPa == StatoPagoPa.ERR || Model.StatoPagamentoPagoPa == StatoPagoPa.ALT || Model.StatoPagamentoPagoPa == StatoPagoPa.ALTRO) && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                            {
+                                <div class="col-6">
+                                    <a type="button" class="btn_official" href="@Url.Action("PagaOnLinePagoPA", new { iuvCode = Model.IuvCode, tranActionId = Model.TransActionId })">Paga Online</a>
+                                </div>
+                            }
+                            @if (Model.StatoPagamentoPagoPa == StatoPagoPa.DACREARE && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                        {
+                            <div class="col-6">
+                                <a type="button" class="btn_official" href="@Url.Action("CreaPagamentoPa", new { anno = Model.Anno, mese = Model.Mese, progressivo = Model.ProDen, tipMov = Model.TipMov })">Crea Pagamento PagoPA</a>
+                            </div>
+                        }
+                            @if ((Model.StatoPagamentoPagoPa == StatoPagoPa.ERR || Model.StatoPagamentoPagoPa == StatoPagoPa.ALT || Model.StatoPagamentoPagoPa == StatoPagoPa.ALTRO) && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                            {
+                                <div class="col-6">
+                                    <a type="button" class="btn_official" href="@Url.Action("StampaBollettino", new { anno = Model.Anno, mese = Model.Mese, progressivo = Model.ProDen, tranActionId = Model.TransActionId, iuvCode = Model.IuvCode })">Stampa Bollettino</a>
+                                </div>
+                            }
+                        </div>
+                        <div class="col-6 d-flex">
+                            <div class="col-6">
+                                <a type="button" class="btn_official" href="@Url.Action("StampaDipa", new { anno = Model.Anno, mese = Model.Mese, proDen = Model.ProDen })">Stampa Denuncia</a>
+                            </div>
+                            <div class="col-6">
+                                @if (Model.BtnStampaRicevutaIsVisible && Model.Anno >= ViewBag.PrimoAnnoNonPrescritto)
+                                {
+                                    @Html.ActionLink("Stampa Ricevuta", "StampaRicevutaDipa", "AziendaConsulente", new { anno = Model.Anno, mese = Model.Mese, proDen = Model.ProDen }, new { @class = "btn_official" })
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+@if (Model.FondoSanitarioIsVisible)
+{
+    <section class="row" id="fondoSanitario">
+        <div class="col-12 intestazioneAzzurra">
+            @Html.Label("Totali Distinta Fondo Sanitario")
+        </div>
+        <div class="col-12 FS_body">
+            @Html.Label("Totale Dovuto Fondo Sanitario €")
+            @Html.TextBox("lblTotFondo", Model.LblTotFondo, new {name = "lblTotFondo"})
+        </div>
+    </section>
+}
+
+@if (Model.TbIntestazionePagamentoFondoSanitarioIsVisible)
+{
+    <section class="row" id="pagamentoSanitario">
+        <div class="col-12 intestazioneAzzurra">
+            <h5>Estremi di Pagamento Distinta Fondo Sanitario</h5>
+        </div>
+        <div class="col-12" style="background-color: #8ac3e3;">
+            @if (Model.TbPagamentoSanitarioIsVisible)
+            {
+                <table id="tbPagamentoSanitario">
+                    <tbody>
+                    <tr>
+                        <td></td>
+                        <td>@Html.Label("Data Operazione")</td>
+                        <td>@Html.TextBox("dataVersamentoSanit", Model.TxtDataVersamentoSanit, new {id = "txtDataVersamentoSanit"})</td>
+                        <td></td>
+                        <td>@Html.Label("Importo del Versamento")</td>
+                        <td>@Html.TextBox("importoVersatoSanit", Model.TxtImportoVersatoSanit, new {id = "txtImportoVersatoSanit"})</td>
+                    </tr>
+                    <tr style="display:none">
+                        <td id="txtDataVersamentoSanit_readonly">@Model.TxtDataVersamentoSanit_readonly</td>
+                        <td id="txtImportoVersatoSanit_readonly">@Model.TxtImportoVersatoSanit_readonly</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row" id="cont_btnPagamentoSanitario">
+                    <div class="col-3">
+                        @if (Model.BtnMAVSanitIsVisible)
+                        {
+                            <button type="button" class="btn_official">Collegamento Banca per M.Av.</button>
+                        }
+
+                    </div>
+                    <div class="col-2">
+                        @if (Model.BtnStampaMAVSanitIsVisible)
+                        {
+                            <button type="button" class="btn_official">Stampa Bollettino M.Av</button>
+                        }
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn_official" id="stampaDenSanit">Stampa Distinta Sanitario</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn_official" id="stampaRicSanit">Stampa Ricevuta Sanitario</button>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn_official" id="stampaModuli">Stampa Moduli Adesione</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+</div>
+</div>
+
+@section showMessage{
+    @{ Html.RenderPartial("PartialViewShowMessages"); }
+}
+
+@section JS{
+    @Scripts.Render("~/dist/js/pages/DenunciaMensile_Totali.js")
+}

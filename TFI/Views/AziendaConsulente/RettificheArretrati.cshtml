@@ -1,0 +1,234 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model  TFI.OCM.AziendaConsulente.RettificheArretrati
+
+@section JS{
+    <script>
+        function modalDialog(url) {
+            showModalDialog(url, "window", "dialogWidth=590px;dialogHeight=296px;status=no;help=no;unadorned=yes;scroll=yes;toolbar=no;");
+        }
+    </script>
+}
+
+<div class="card card-default" id="insDenArr">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            Rettifiche Arretrati
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm("RettificheArretrati", "AziendaConsulente", FormMethod.Post, new { id = "formArretrati" }))
+{
+    <div class="card" style="background-color:white">
+        <div class="card-body col-lg-12">
+            <div class="row">
+                <div class="input-group col-lg-6">
+                    @Html.Label("lblPeriodo", Model.lblPeriodo)
+                </div>
+                <div class="input-group col-lg-3">
+                    <label id=""></label>
+                </div>
+                <div class="input-group col-lg-3 justify-content-end">
+                    @Html.Label("lblDataDenuncia", "Data Denuncia:  ", new { @id = "lblDataDenuncia" })
+                    @Html.Label("txtDataDenuncia", Model.denuncia)
+                </div>
+            </div>
+        </div>
+        <div class="card-body col-lg-12">
+            <div class="row">
+                <div class="input-group col-lg-4">
+                    @Html.Label("lblIndirizzo", "Indirizzo:  ", new { @id = "lblIndirizzo" })
+                    @Html.Label("SedeLegale", Model.sedeLegale)
+                </div>
+                <div class="input-group col-lg-4 justify-content-center">
+                    @Html.Label("lblCodFis", "Codice Fiscale:  ", new { @id = "lblCodFis" })
+                    @Html.Label("txtCodFis", Model.CodFis)
+                </div>
+                <div class="input-group col-lg-4 justify-content-end">
+                    @Html.Label("lblPIVA", "Partita IVA:  ", new { @id = "lblPIVA" })
+                    @Html.Label("txtPIVA", Model.pIVA)
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <INPUT class="smallsizef" id="mese" style="Z-INDEX: 111; LEFT: 353px; WIDTH: 40px; POSITION: absolute; TOP: 63px; HEIGHT: 20px; BACKGROUND-COLOR: sandybrown"
+           type="hidden" size="1" name="mese" runat="server" value="@Model.hdnMese">
+    <INPUT class="smallsizef" id="anno" style="Z-INDEX: 108; LEFT: 399px; WIDTH: 40px; POSITION: absolute; TOP: 63px; HEIGHT: 20px; BACKGROUND-COLOR: sandybrown"
+           type="hidden" size="1" name="anno" runat="server" value="@Model.hdnAnno">
+    <INPUT id="proDen style="Z-INDEX: 106; LEFT: 445px; WIDTH: 40px; POSITION: absolute; TOP: 63px; HEIGHT: 20px; BACKGROUND-COLOR: sandybrown"
+           type="hidden" size="1" name="proDen" runat="server" value="@Model.hdnProDen">
+    <INPUT id="anncom style="Z-INDEX: 106; LEFT: 445px; WIDTH: 40px; POSITION: absolute; TOP: 63px; HEIGHT: 20px; BACKGROUND-COLOR: sandybrown"
+           type="hidden" size="1" name="anncom" runat="server" value="@Model.hdnAnncom">
+    <INPUT id="mat style="Z-INDEX: 106; LEFT: 445px; WIDTH: 40px; POSITION: absolute; TOP: 63px; HEIGHT: 20px; BACKGROUND-COLOR: sandybrown"
+           type="hidden" size="1" name="mat" runat="server" value="@Model.hdnMat">
+    <INPUT class="smallsizef" id="hdnTipMov" style="Z-INDEX: 110; LEFT: 272px; WIDTH: 48px; POSITION: absolute; TOP: 64px; HEIGHT: 19px; BACKGROUND-COLOR: #ffcc66"
+           type="hidden" size="2" runat="server" NAME="hdnTipMov">
+    <INPUT class="smallsizef" id="hdNatGiu" style="Z-INDEX: 107; LEFT: 216px; WIDTH: 32px; POSITION: absolute; TOP: 64px; HEIGHT: 19px"
+           type="hidden" size="1" name="hdPagine" runat="server">
+
+
+    <table class="table table-bordered table-hover table-striped" id="tb_Rettifiche">
+        <thead>
+            <tr>
+                <th>Anno Comp.</th>
+                <th>Mat.</th>
+                <th>Cognome e Nome</th>
+                <th>Dal</th>
+                <th>Al</th>
+                <th>Qual.</th>
+                <th>Liv.</th>
+                <th>Prest.</th>
+                <th>Retribuzione</th>
+                <th>Precedente</th>
+                <th>Differenza</th>
+                <th>Aliquota</th>
+                <th>Contributi</th>
+                <th>Sanzione</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (TFI.OCM.AziendaConsulente.TabRettifiche ret in Model.listaRettifiche)
+            {
+
+
+                <text>
+                    <tr>
+                        @if (Model.annoCompetenzaVisible)
+                        {
+                            <td>@ret.anno</td>
+                        }
+                        else
+                        {
+                            <td hidden>@ret.anno</td>
+                        }
+                        <td class="Matricola">@ret.mat</td>
+                        <td>@ret.nome</td>
+                        <td>@ret.datadal.Substring(0, 10)</td>
+                        <td>@ret.dataal.Substring(0, 10)</td>
+                        <td hidden>@ret.qualifica</td>
+                        <td hidden>@ret.livello</td>
+                        <td hiddeen>@ret.perApp</td>
+                        <td>
+                            @Html.TextBox("impRet", ret.impret, new
+                       {
+                           @id = "txtImponibile",
+                           style = "max-width: 100px",
+                           @class = "txt_impRet",
+                           //@readonly = "readonly",
+                           oldValue = "0",
+                           previous_value = "0"
+                       })
+                        </td>
+                        <td>
+                            @Html.TextBox("impOcc", ret.impocc, new
+                       {
+                           @id = "txtOccasionale",
+                           style = "max-width: 80px",
+                           @class = "txt_impOcc",
+                           //@readonly = "readonly",
+                           oldValue = "0",
+                           previous_value = "0"
+                       })
+                        </td>
+                        <td>
+                            @Html.TextBox("impRetDel", ret.impRetDel, new
+                       {
+                           @id = "txtContributi",
+                           style = "max-width: 80px",
+                           @class = "txt_impCon",
+                           @readonly = "readonly",
+                           oldValue = "0"
+
+                       })
+                        </td>
+                        <td>@Html.Label("aliquota", ret.aliquota)</td>
+                        <td>
+                            @Html.TextBox("impConDel", ret.impConDel, new
+                      {
+                          @id = "txtContributi",
+                          style = "max-width: 80px",
+                          @class = "txt_impCon",
+                          @readonly = "readonly",
+                          oldValue = "0"
+
+                      })
+                        </td>
+                        <td>@ret.impSanDet</td>
+                    </tr>
+                </text>
+            }
+        </tbody>
+    </table>
+
+
+    <div class="card col-12 boxTotali">
+        <table class="table table-bordered table-hover table-striped" style="background-color: #0c773c; color:white" id="tbTotali">
+            <thead>
+                <tr>
+                    <td id="Label3">@Html.Label("Contributi", new { style = "color:White" })</td>
+                    <td id="Label4">@Html.Label("Addizzionale", new { style = "color:White" })</td>
+                    <td id="Label5">@Html.Label("Totale", new { style = "color:White" })</td>
+                    <td id="Label6">@Html.Label("Sanzioni", new { style = "color:White" })</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @if (Model.lblTotContributi != 0)
+                    {
+                        <td id="">@Html.Label(Model.lblTotContributi.ToString().Replace(".", ","), new { id = "lblTotContributi", style = "color:White" })</td>
+                    }
+                    else
+                    {
+                        <td id="">@Html.Label("0,00", new { id = "lblTotContributi", style = "color:White" })</td>
+                    }
+                    @if (Model.lblAddizionale != 0)
+                    {
+                        <td id="">@Html.Label(Model.lblAddizionale.ToString().Replace(".", ","), new { id = "lblAddizzionale", style = "color:White" })</td>
+                    }
+                    else
+                    {
+                        <td id="">@Html.Label("0,00", new { id = "lblAddizzionale", style = "color:White" })</td>
+                    }
+                    @if (Model.lblTotale != 0)
+                    {
+                        <td id="">@Html.Label(Model.lblTotale.ToString().Replace(".", ","), new { id = "lblTotale", style = "color:White" })</td>
+                    }
+                    else
+                    {
+                        <td id="">@Html.Label("0,00", new { id = "lblTotale", style = "color:White" })</td>
+                    }
+                    @if (Model.lblSanzione != 0)
+                    {
+                        <td id="">@Html.Label(Model.lblSanzione.ToString().Replace(".", ","), new { id = "lblSanzione", style = "color:White" })</td>
+                    }
+                    else
+                    {
+                        <td id="">@Html.Label("0,00", new { id = "lblSanzione", style = "color:White" })</td>
+                    }
+                </tr>
+        </table>
+
+    </div>
+
+    <div class="row">
+		<div class="col-12">
+			<div class="input-group d-flex">
+				<div class="col-lg-4">
+					<button type="submit" id="btnTotali" name="btnScelta" value="Totali" class="btn btn-block btn-outline-success m-auto w-50">Totali</button>
+				</div>
+				<div class="col-lg-4">
+					<button type="submit" id="btnSeleziona" name="btnScelta" value="Arretrato Originale" class="btn btn-block btn-outline-success m-auto w-50">Arretrato Originale</button>
+				</div>
+				<div class="col-lg-4">
+					<button type="submit" id="btnChiudi" name="btnScelta" value="Torna Indietro" class="btn btn-block btn-outline-success m-auto w-50">Torna Indietro</button>
+				</div>
+			</div>
+        </div>
+    </div>
+}

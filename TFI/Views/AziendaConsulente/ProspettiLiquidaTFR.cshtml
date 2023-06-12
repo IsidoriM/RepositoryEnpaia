@@ -1,0 +1,158 @@
+﻿@model TFI.OCM.AziendaConsulente.DatiPREV_TFR_OCM
+
+@{
+    ViewBag.Title = "Prospetti TFR";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+@{
+    if (Model != null)
+    {
+
+        var PosAziTfr = Model.prospLiqTfr;
+
+
+
+        @*<form autocomplete="off" method="post">
+            <div class="card-default">
+                <div style="background-color: #0c773c" class="card-header">
+                    <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca PREV</h3>
+                </div>
+                <div class="card" style="background-color:white">
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="input-group">
+                                <div class="form-group col-sm-4">
+                                    <label>Posizione:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.Posizione" class="form-control" id="Mat" name="Mat" asp-for="Mat" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Ragione Sociale:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.RagSoc" class="form-control" id="Cog" name="Cog" asp-for="Cog" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Partita Iva:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.ParIVA" class="form-control" id="Nom" name="Nom" asp-for="Nom" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Codice Fiscale:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.CodFis" class="form-control" id="Periodo1" name="Periodo1" asp-for="Periodo1" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Indirizzo Sede Amm.:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.IndSede" class="form-control" id="Periodo2" name="Periodo2" asp-for="Periodo2" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Comune:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.Comune" class="form-control" id="Periodo2" name="Periodo2" asp-for="Periodo2" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Cap:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.Cap" class="form-control" id="Periodo2" name="Periodo2" asp-for="Periodo2" placeholder="" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label>Provincia:</label>
+                                    <div class="input-group">
+                                        <input type="text" value="@PosAziTfr.Prov" class="form-control" id="Periodo2" name="Periodo2" asp-for="Periodo2" placeholder="" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <br />*@
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                                Prospetti pagamento
+                            </div>
+                            <div class="card-body">
+                                <div class="row" style="overflow:scroll">
+                                    <table class="table table-bordered table-hover table-striped " id="tb_liquida">
+                                        <thead>
+                                            <tr>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Anno Elenco</th>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Numero Elenco</th>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Matricola</th>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Cognome</th>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Nome</th>
+                                                <th style="background:#0c773c;color:white;width:auto;text-align:center;vertical-align:middle">Elenco di Liquidazione</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody id="btnNuovo">
+
+
+                                            @foreach (var GetTabella in Model.listProspLiqTfrs)
+                                            {
+                                                using (Html.BeginForm("Conferma_Prev", "AziendaConsulente"))
+                                                {
+
+                                            <tr>
+
+                                                <td style="text-align:center">
+                                                    @GetTabella.anno
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @GetTabella.numElenco
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @GetTabella.matricola
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @GetTabella.Cognome
+                                                </td>
+                                                <td style="text-align:center">
+                                                    @GetTabella.Nome
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <a href="@Url.Action("FTP_DownloadFile","AziendaConsulente", new { path = GetTabella.path})"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a>
+                                                </td>
+
+                                            </tr>
+
+                                                }
+                                            }
+                                    </table>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <h4 style="text-align:center;font-weight:600;font-size:15px">Per una corretta visualizzazione degli Estratti Conto scaricare la versione Acrobat Reader 20.xx</h4>
+        <center> <a href="https://get.adobe.com/it/reader/" target="_blank"><img src="~/Images/adobeReader.jpg" style="width: 13%;" /></a></center>
+        <br />
+    }
+}

@@ -1,0 +1,15 @@
+.nuovo-infortunio-title {
+    background-color: #0c773c;
+}
+.custom-tab{
+    background-color: #0c773c;
+    color:white;
+}
+.tabs-container{
+    background-color: #0c773c;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    padding-left: .5%;
+    padding-top: .5%;
+    padding-right: .5%;
+}

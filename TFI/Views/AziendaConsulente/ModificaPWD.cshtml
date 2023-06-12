@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Enpaia | Modifica Password";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<div class=" d-flex align-items-center justify-content-center pt-5">
+    <div class="col-lg-6 col-md-8 col-sm-12">
+
+        <div class="card">
+            <div class="card-body login-card-body" style="background:#097132">
+                <h3 style="color: white; padding: 0; float: left; font-size: 1.1rem; font-weight: 400; ">Modifica Password</h3>
+                <hr />
+                <form id="form_login" method="post">
+
+                    <div class="input-group mb-3">
+                        <input type="password" name="VecchiaPassword" asp-for="VecchiaPassword" id="VecchiaPassword" class="form-control" placeholder="Vecchia Password" required value="@ViewBag.VecchiaPassword">
+
+                        <div class="input-group-append" style="background: white">
+                            <div class="input-group-text">
+                                <i class="fas fa-eye" id="toggleVecchiaPassword" style="cursor: pointer; color: black"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="NuovaPassword" asp-for="NuovaPassword" id="NuovaPassword" class="form-control"
+                               pattern="@("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"?$%&()=[\\]<>+._*@#-]).{8,16}$")" 
+                               title="Inserire una password con: &nbsp; &ndash; una lunghezza tra 8 e 16 caratteri &nbsp; &ndash; almeno un carattere minuscolo &nbsp; &ndash; almeno un carattere maiuscolo &nbsp; &ndash; almeno un carattere numerico &nbsp; &ndash; almeno un carattere speciale tra @("!\"?$%&()=[\\]<>+._*@#-")"
+                               placeholder="Nuova Password" required value="@ViewBag.NuovaPassword">
+                        <div class="input-group-append" style="background:white">
+                            <div class="input-group-text">
+                                <i class="fas fa-eye" id="toggleNuovaPassword" style="cursor: pointer; color: black"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="ConfermaPassword" asp-for="ConfermaPassword" id="ConfermaPassword" class="form-control" 
+                               pattern="@("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"?$%&()=[\\]<>+._*@#-]).{8,16}$")" 
+                               title="Inserire una password con: &nbsp; &ndash; una lunghezza tra 8 e 16 caratteri &nbsp; &ndash; almeno un carattere minuscolo &nbsp; &ndash; almeno un carattere maiuscolo &nbsp; &ndash; almeno un carattere numerico &nbsp; &ndash; almeno un carattere speciale tra @("!\"?$%&()=[\\]<>+._*@#-")"
+                               placeholder="Conferma Password" required value="@ViewBag.ConfermaPassword">
+                        <div class="input-group-append" style="background:white">
+                            <div class="input-group-text">
+                                <i class="fas fa-eye" id="toggleConfermaPassword" style="cursor: pointer; color: black"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="d-flex justify-content-start">
+                        <button type="submit" id="Bottone" class="btn btn-dark btn-block col-6">Cambia Password</button>
+                    </div>
+
+                </form>
+                <br />
+
+                @if (ViewBag.Visibility == true)
+                {
+                    if (HttpContext.Current.Items["errorMessage"].ToString() != null)
+                    {
+                        <div id="divErrore" style="text-align:center;color:red; background:white;padding:5px;font-weight:800;" runat="server">@TempData["errorMessage"]</div>
+                    }
+                    else
+                    {
+                        <div id="divErrore" style="text-align:center;color:red; background:white;padding:5px;font-weight:800;" runat="server">@TempData["successMessage"]</div>
+
+                    }
+                }
+                <br />
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const toggleVecchiaPassword = document.querySelector('#toggleVecchiaPassword');
+        const toggleNuovaPassword = document.querySelector('#toggleNuovaPassword');
+        const toggleConfermaPassword = document.querySelector('#toggleConfermaPassword');
+        const vecchiaPassword = document.querySelector('#VecchiaPassword');
+        const nuovaPassword = document.querySelector('#NuovaPassword');
+        const confermaPassword = document.querySelector('#ConfermaPassword');
+
+        toggleVecchiaPassword.addEventListener('click', function (e) {
+            const type = vecchiaPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            vecchiaPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        toggleNuovaPassword.addEventListener('click', function (e) {
+            const type = nuovaPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            nuovaPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        toggleConfermaPassword.addEventListener('click', function (e) {
+            const type = confermaPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confermaPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+
+
+</script>

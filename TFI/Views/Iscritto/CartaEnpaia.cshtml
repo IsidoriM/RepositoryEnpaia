@@ -1,0 +1,123 @@
+﻿@model TFI.OCM.Iscritto.Anagrafica
+@{
+    ViewBag.Title = "Carta Enpaia";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Dati Anagrafici
+                    </div>
+                    <div class="card-body">
+                        <form id="form_Modifica" autocomplete="off" method="post">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Matricola</label>
+                                        <input type="text" class="form-control" value="@Model.Mat" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="Mat" asp-for="Mat" name="Mat" value="@Model.Mat">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Nominativo</label>
+                                        <input type="text" class="form-control" value="@Model.Cognome @Model.Nome" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="Cognome" asp-for="Cognome" name="Cognome" value="@Model.Cognome">
+                                        <input type="text" hidden style="width:0" class="form-control" id="Nome" asp-for="Nome" name="Nome" value="@Model.Nome">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" class="form-control" value="@Model.CodiceFiscale" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="CodiceFiscale" asp-for="CodiceFiscale" name="CodiceFiscale" value="@Model.CodiceFiscale">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Comune</label>
+                                        <input type="text" class="form-control" value="@Model.ComuneResidenza" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="ComuneResidenza" asp-for="ComuneResidenza" name="ComuneResidenza" value="@Model.ComuneResidenza">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Indirizzo</label>
+                                        <input type="text" class="form-control" value="@Model.TipoResidenza @Model.Indirizzo @Model.NumeroCivico" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="Indirizzo" asp-for="Indirizzo" name="Indirizzo" value="@Model.Indirizzo">
+                                        <input type="text" hidden style="width:0" class="form-control" id="TipoResidenza" asp-for="TipoResidenza" name="TipoResidenza" value="@Model.TipoResidenza">
+                                        <input type="text" hidden style="width:0" class="form-control" id="NumeroCivico" asp-for="NumeroCivico" name="NumeroCivico" value="@Model.NumeroCivico">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>CAP</label>
+                                        <input type="text" class="form-control datetimepicker-input" value="@Model.Cap" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="Cap" asp-for="Cap" name="Cap" value="@Model.Cap">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <input type="text" class="form-control" value="@Model.SigproResidenza" disabled>
+                                        <input type="text" hidden style="width:0" class="form-control" id="SigproResidenza" asp-for="SigproResidenza" name="SigproResidenza" value="@Model.SigproResidenza">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Cellulare</label>
+                                        <input type="text" class="form-control" value="@Model.Cellulare" disabled />
+                                        <input type="text" hidden style="width:0" class="form-control" id="Cellulare" asp-for="Cellulare" name="Cellulare" value="@Model.Cellulare">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Telefono</label>
+                                        <input type="text" class="form-control" value="@Model.Telefono1" disabled />
+                                        <input type="text" hidden style="width:0" class="form-control" id="Telefono1" asp-for="Telefono1" name="Telefono1" value="@Model.Telefono1">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" value="@Model.Email" disabled />
+                                        <input type="text" hidden style="width:0" class="form-control" id="Email" asp-for="Email" name="Email" value="@Model.Email">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Email Certificata</label>
+                                        <input type="text" class="form-control" value="@Model.EmailCert" disabled />
+                                        <input type="text" hidden style="width:0" class="form-control" id="EmailCert" asp-for="EmailCert" name="EmailCert" value="@Model.Email">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row justify-content-end">
+                                <div class="col-sm-2" style="margin-right:40px">
+                                    <button type="submit" class="btn btn-block btn-outline-success btn-lg">Invia Richiesta</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

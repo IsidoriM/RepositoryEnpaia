@@ -1,0 +1,177 @@
+﻿@using TFI.OCM.Amministrativo
+@model EstrattoContoOCM
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+@{
+    ViewBag.Title = "Estratto Conto Iscritto";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+<title>Enpaia | Estratti Conto</title>
+<!-- Main content -->
+@using (Html.BeginForm("EstrattoContoIscritto", "Amministrativo"))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Estratti Conto Iscritto
+                        </div>
+                        <div class="card-body">
+
+                            <div class="input-group">
+                                <div class="col-lg-3">
+                                    <label>Matricola:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="mat" name="mat" asp-for="mat" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Nome:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="nom" name="nom" asp-for="nom">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Cognome:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="cog" name="cog" asp-for="cog">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <label>Codice fiscale:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="codfis" name="codfis" asp-for="codfis">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2">
+                                    <label>&nbsp;</label>
+                                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                                </div>
+
+                            </div>
+                        </div>
+                        @if (Model != null)
+                        {
+
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>Matricola</label>
+                                            <input type="text" class="form-control" value="@Model.isc.matrciola" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Nome</label>
+                                            <input type="text" class="form-control" value="@Model.isc.nome" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Cognome</label>
+                                            <input type="text" class="form-control" value="@Model.isc.cognome" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Codice Fiscale</label>
+                                            <input type="text" class="form-control" value="@Model.isc.codfis" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Indirizzo</label>
+                                            <input type="text" class="form-control" value=" VIA @Model.isc.Indirizzo  @Model.isc.NumeroCivico " disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label>Comune</label>
+                                            <input type="text" class="form-control" value="@Model.isc.comune" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>CAP</label>
+                                            <input type="text" class="form-control" value="@Model.isc.CAP
+                                           " disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>Provincia</label>
+                                            <input type="text" class="form-control" value="@Model.isc.prov
+                                           " disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card-body" style="height:300px; overflow:scroll;">
+                                <table id="example2" class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Anno</th>
+                                            <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Estratti Conto TFR/Fondo <br /> (Antecedente 2022)</th>
+                                            <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Estratti Conto TFR</th>
+                                            <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Estratti Conto Fondo</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+
+
+
+                                            foreach (var itm in Model.estrattiContoIsc)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:center;vertical-align:middle;font-size:20px"> @itm.Anno</td>
+                                                    <td style="text-align:center">
+                                                        @if (itm.Anno < 2022)
+                                                        {<a href="@Url.Action("FTP_DownloadFile","Amministrativo", new { path = itm.NomeFile})"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a>}
+                                                    </td>
+
+                                                    <td style="text-align:center">
+                                                        @if (itm.Anno >= 2022)
+                                                        {<a href="@Url.Action("FTP_DownloadFile","Amministrativo", new { path = itm.NomeFile})"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a>}
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @if (itm.Anno >= 2022)
+                                                        {<a href="@Url.Action("FTP_DownloadFile","Amministrativo", new { path = itm.NomeFile})"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a>}
+                                                    </td>
+
+
+                                                </tr>
+                                            }
+
+                                        }
+</table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <h4 style="text-align:center;font-weight:600;font-size:15px">Per una corretta visualizzazione degli Estratti Conto scaricare la versione Acrobat Reader 20.xx</h4>
+
+    <center> <a href="https://get.adobe.com/it/reader/"><img src="~/Images/adobeReader.jpg" style="height:35px" /></a></center>
+    <br />
+}

@@ -1,0 +1,123 @@
+﻿@model IEnumerable<TFI.OCM.AziendaConsulente.DatiPREV_TFR_OCM.PrevdaConf>
+@{
+    ViewBag.Title = "Conferma Prev";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+@if (Model != null)
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Elenco PREV/TFR da confermare
+                        </div>
+                        <div class="card-body" style="height:500px; overflow:scroll;">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Matricola</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Cognome</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Nome</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Data Iscrizione</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Data Cessazione</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle; width: 30%">Causale</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Compila</th>
+                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Ricevuta Cessazione RDL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btnNuovo">
+
+                                    @{
+
+                                        foreach (var GetTabella in Model)
+                                        {
+                                            using (Html.BeginForm("Conferma_Prev", "AziendaConsulente"))
+                                            {
+
+                                                <tr>
+
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Matricola
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Cognome
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Nome
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.DataIsc
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.DataCess
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        @GetTabella.Causale
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <a href="@Url.Action("Modprev01", "AziendaConsulente" , new {mat = GetTabella.Matricola, nom = GetTabella.Nome, cog = GetTabella.Cognome, prorap = GetTabella.Prorap , promod = GetTabella.Promod })" style="color:black;background-color:lightgray;text-align:center">
+                                                            <img src="~/Images/Modifica.jpg" />
+                                                        </a>
+                                                    </td>
+                                                    <td style="text-align:center">
+                                                        <a href="@GetTabella.NomeFile" alert="@GetTabella.NomeFile" class="linkRicevCess">
+                                                            <img src="~/Images/pdf-icon-png-adobe-acrobat.png" />
+                                                        </a>
+                                                    </td>
+                                                    <td style="display:none">
+                                                        @Html.Hidden(GetTabella.Prorap)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Promod)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Strprot)
+                                                    </td>
+                                                    <td style="display: none">
+                                                        @Html.Hidden(GetTabella.Datprot)
+                                                    </td>
+                                                </tr>
+
+                                            }
+
+                                        }
+                                    }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+@section JS{
+    
+    <script>
+
+        $(document).ready(function () {
+
+            $(".linkRicevCess").click(function () {
+                var path = $(this).attr("alert");
+                if (path == "#") {
+                    alert("Per questa cessazione non è presente la ricevuta");
+                }
+            });
+
+        });
+
+
+    </script>    
+}
+
+    

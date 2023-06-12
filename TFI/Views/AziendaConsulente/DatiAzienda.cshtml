@@ -1,0 +1,980 @@
+﻿@model TFI.OCM.AziendaConsulente.Azienda
+@{
+    ViewBag.Title = "Dati Azienda";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<style>
+    .autocomplete {
+        position: relative;
+        display: inline-block;
+    }
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+        background-color: #e9e9e9;
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+
+    .table td {
+        font-size: 100%;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #0c773c
+    }
+</style>
+
+
+<div class="card">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        Dati Azienda
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1" id="tabs" style="background-color: #0c773c;">
+                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                            <li class="col-4 col-sm-4">
+                                <a class="nav-link active" id="home-tab" href="#home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">POSIZIONE ASSICURATIVA</a>
+                            </li>
+                            <li class="col-4 col-sm-4">
+                                <a class="nav-link" id="profile-tab" href="#profile" role="tab" aria-controls="custom-tabs-one-active" aria-selected="false">RAPPRESENTANTE LEGALE</a>
+                            </li>
+                            <li class="col-4 col-sm-4">
+                                <a class="nav-link" id="sedi-tab" href="#sedi" role="tab" aria-controls="custom-tabs-one-active" aria-selected="false">CORRISPONDENZA</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("DatiAzienda", "AziendaConsulente", FormMethod.Post, new { id = "primoForm" }))
+                        {
+                            @Html.Hidden("DescrizioneTab", null, new { @id = "hfDescrizioneTab" })
+                            <div class="tab-content" id="myTabContent">
+                                @*Pannello Posizione assicurativa *@
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-4">
+                                                    <label>Ragione Sociale</label>
+                                                    <p id="RagioneSocialePA" name="RagioneSocialePA" asp-for="RagioneSocialePA" value="">@Model.posAss.RagioneSocialePA</p>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <label>Data Apertura</label>
+                                                    <p id="DataAperturaPA" name="DataAperturaPA" asp-for="DataAperturaPA">@Model.posAss.DataAperturaPA</p>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <label>Codice Fiscale</label>
+                                                    <p id="CodiceFiscalePA" name="CodiceFiscalePA" asp-for="CodiceFiscalePA">@Model.posAss.CodiceFiscalePA</p>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <label>Partita IVA</label>
+                                                    <p id="PartitaIVAPA" name="PartitaIVAPA" asp-for="PartitaIVAPA">@Model.posAss.PartitaIVAPA</p>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <label>Natura Giuridica</label>
+                                                    <p id="NaturaGiuridicaPA" name="NaturaGiuridicaPA" asp-for="NaturaGiuridicaPA">@Model.posAss.NaturaGiuridicaPA</p>
+                                                </div>
+                                            </div>
+                                            <hr />
+                                            <br />
+                                            <h5 class="font-weight-bold">INDIRIZZO SEDE LEGALE</h5>
+                                            <div class="mt-4">
+                                                <div class="form-row">
+                                                    <div class="form-group col-1">
+                                                        <label>DUG</label>
+                                                        <p id="CODDUGPA" name="CODDUGPA" asp-for="CODDUGPA">@Model.posAss.DENDUGPA</p>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label>Indirizzo</label>
+                                                        <p id="IndirizzoPA" name="IndirizzoPA" asp-for="IndirizzoPA">@Model.posAss.IndirizzoPA</p>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label>Numero Civico</label>
+                                                        <p id="NumeroCivicoPA" name="NumeroCivicoPA" asp-for="NumeroCivicoPA">@Model.posAss.NumeroCivicoPA</p>
+                                                    </div>
+                                                    <div class="form-group col-2 autocomplete">
+                                                        <label>Comune</label>
+                                                        <p id="ComunePA" name="ComunePA" asp-for="ComunePA">@Model.posAss.ComunePA</p>
+                                                    </div>
+                                                    <div class="form-group col-1">
+                                                        <label>CAP</label>
+                                                        <p id="CAPPA" name="CAPPA" asp-for="CAPPA">@Model.posAss.CAPPA</p>
+                                                    </div>
+                                                    <div class="form-group col-1">
+                                                        <label>Provincia</label>
+                                                        <p id="ProvinciaPA" name="ProvinciaPA" asp-for="ProvinciaPA">@Model.posAss.ProvinciaPA</p>
+                                                    </div>
+                                                    <div class="form-group col-2">
+                                                        <label>Località</label>
+                                                        <p id="LocalitaPA" name="LocalitaPA" asp-for="LocalitaPA">@Model.posAss.LocalitaPA</p>
+                                                    </div>
+                                                    @*<div class="form-group col-3">
+                                                            <label>Stato Estero</label>
+                                                            <input type="text" class="form-control" id="StatoEsteroPA" name="StatoEsteroPA" asp-for="StatoEsteroPA" value="@Model.posAss.StatoEsteroPA" readonly>
+                                                        </div>*@
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <hr />
+                                            <div class="form-row mt-5">
+                                                <div class="form-group col-3">
+                                                    <label>Telefono</label>
+                                                    <p id="Telefono1PA" name="Telefono1PA" asp-for="Telefono1PA">@Model.posAss.Telefono1PA</p>
+                                                </div>
+                                                <!--<div class="form-group col-2">
+                                                    <label>Fax</label>
+                                                    <input type="text" class="form-control" id="FaxPA" name="FaxPA" asp-for="FaxPA" value="@Model.posAss.FaxPA" readonly>
+                                                </div>-->
+                                                <div class="form-group col-3">
+                                                    <label>Email</label>
+                                                    <input type="email" class="form-control" id="EmailPA" name="EmailPA" asp-for="EmailPA" value="@Model.posAss.EmailPA" required maxlength="100">
+                                                    @Html.ValidationMessageFor(model => Model.posAss.EmailPA, "", new { @class = "text-danger" })
+
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <label>Email Certificata</label>
+                                                    <input type="email" class="form-control" id="EmailCertificataPA" name="EmailCertificataPA" asp-for="EmailCertificataPA" value="@Model.posAss.EmailCertificataPA" title="Inserisci un dominio valido (&#64;pec o &#64;legalmail)" pattern="(.+)@("@")(legalmail|pec)(\.{1}([a-zA-Z0-9-])+)*" maxlength="100" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group col-6">
+                                                    <label>Codice Attività</label>
+                                                    <p id="CodiceAttivitaAziPA" name="CodiceAttivitaAziPA" asp-for="CodiceAttivitaAziPA">@Model.posAss.CodiceAttivitaAziPA</p>
+                                                </div>
+                                                <div class="form-group col-4">
+                                                    <label>Codice Statistico</label>
+                                                    <p id="CodiceStatisticoAziPA" name="CodiceStatisticoAziPA" asp-for="CodiceStatisticoAziPA">@Model.posAss.CodiceStatisticoAziPA</p>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="form-row justify-content-end mt-3">
+                                                <a class="btn btn-block btn-outline-success col-3" id="next1">
+                                                    Avanti
+                                                </a>
+                                            </div>
+                                        </div>
+                                </div>
+                                @*Pannello Rappresentanza legale*@
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-3">
+                                            <label>Cognome</label>
+                                            <input type="text" class="form-control" id="CognomeRP" name="CognomeRP" asp-for="CognomeRP" value="@Model.rapLeg.CognomeRP" readonly>
+                                        </div>
+                                        <div class="form-group col-3">
+                                            <label>Nome</label>
+                                            <input type="text" class="form-control" id="NomeRP" name="NomeRP" asp-for="NomeRP" value="@Model.rapLeg.NomeRP" readonly>
+                                        </div>
+                                        <div class="form-group col-1">
+                                            <label>Sesso</label>
+                                            <input type="text" class="form-control" id="SessoRP" name="SessoRP" asp-for="SessoRP" value="@Model.rapLeg.SessoRP" readonly>
+                                        </div>
+                                        <div class="form-group col-3">
+                                            <label>Codice Fiscale</label>
+                                            <input type="text" class="form-control" id="CodFiscaleRP" name="CodFiscaleRP" asp-for="CodFiscaleRP" value="@Model.rapLeg.CodFiscaleRP" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-3">
+                                            <label>Data Nascita</label>
+                                            <input type="text" class="form-control" id="DataNascitaRP" name="DataNascitaRP" asp-for="DataNascitaRP" value="@Model.rapLeg.DataNascitaRP" readonly>
+                                        </div>
+                                        @if (Model.rapLeg.ProvinciaNascitaRP != "EE")
+                                        {
+                                            <div class="form-group col-3">
+                                                <label>Comune Nascita</label>
+                                                <input type="text" class="form-control" id="ComuneNascitaRP" name="ComuneNascitaRP" asp-for="ComuneNascitaRP" value="@Model.rapLeg.ComuneNascitaRP" readonly>
+                                            </div>
+                                            <div class="form-group col-2">
+                                                <label>Provincia Nascita</label>
+                                                <input type="text" class="form-control" id="ProvinciaNascitaRP" name="ProvinciaNascitaRP" asp-for="ProvinciaNascitaRP" value="@Model.rapLeg.ProvinciaNascitaRP" readonly>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group col-2">
+                                                <label>Stato Estero</label>
+                                                <input type="text" class="form-control" id="StatoEstero" value="@Model.rapLeg.StatoEsteroRP" readonly>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-3">
+                                            <label>Funzione</label>
+                                            <input type="text" class="form-control" id="FunzioneRP" name="FunzioneRP" asp-for="FunzioneRP" value="@Model.rapLeg.FunzioneRP" readonly>
+                                        </div>
+                                        <div class="form-group col-3">
+                                            <label>Decorrenza</label>
+                                            <input type="text" class="form-control" id="DecorrenzaRP" name="DecorrenzaRP" asp-for="DecorrenzaRP" value="@Model.rapLeg.DecorrenzaRP" readonly>
+                                        </div>
+                                    </div>
+
+                                    <hr />
+
+                                    <div class="form-row">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label>DUG</label>
+                                                <select id="TipoResidenza" asp-for="TipoResidenza" name="TipoIndirizzoRP" class="form-control" required>
+                                                    <option selected hidden value="@Model.rapLeg.CODDUGRP">@Model.rapLeg.TipoIndirizzoRP</option>
+                                                    @{
+                                                        foreach (var std in Model.vias)
+                                                        {
+                                                            <option value="@std.CODDUGV">@std.DENDUGV</option>
+                                                        }
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Indirizzo</label>
+                                                <input type="text" class="form-control" maxlength="80" id="Indirizzo" asp-for="Indirizzo" name="IndirizzoRP" value="@Model.rapLeg.IndirizzoRP" placeholder="Inserire indirizzo" required >
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label>Civico</label>
+                                                <input type="text" class="form-control" maxlength="10" id="NumeroCivico" asp-for="NumeroCivico" name="CivicoRP" value="@Model.rapLeg.CivicoRP" placeholder="Inserire il civico" required pattern="^(^\d+(\/[a-zA-Z])?[a-zA-Z]?$)|(SNC)$">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label>Provincia di Residenza</label>
+                                                <select required class="form-control" id="SigproResidenza" name="ProvinciaRP">
+                                                    <option value="">Selezionare la Provincia</option>
+                                                    @foreach (var prov in ViewBag.Provincie)
+                                                    {
+                                                        if (prov.SIGPRO != "EE")
+                                                        {
+                                                            <option value="@prov.SIGPRO" @(Model.rapLeg.ProvinciaRP == prov.SIGPRO ? "selected" : "")>@prov.SIGPRO</option>
+
+                                                        }
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Comune di Residenza</label>
+                                                <select required class="form-control" id="ComuneResidenza" name="CodiceComuneResidenzaRP">
+                                                    <option value="">Selezionare Comune</option>
+                                                    @foreach (var std in ViewBag.Comuni)
+                                                    {
+                                                        <option value="@std.CODCOM" @(Model.rapLeg.CodiceComuneResidenzaRP == std.CODCOM ? "selected" : "")>@std.DENCOM</option>
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Località</label>
+                                                <select required class="form-control" id="Localita" name="LocalitaRP">
+                                                    <option value="">Selezionare la Località</option>
+                                                    @foreach (var loc in ViewBag.Localitas)
+                                                    {
+                                                        <option value="@loc.DENLOC" @(Model.rapLeg.LocalitaRP == loc.DENLOC ? "selected" : "")>@loc.DENLOC</option>
+
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <div class="form-group">
+                                                        <label>CAP</label>
+                                                        <input type="text" class="form-control" pattern=".{5}" id="ShowCap" asp-for="ShowCap" name="ShowCap" value="@Model.rapLeg.CapRP" readonly required maxlength="9">
+                                                        <input type="text" class="form-control" pattern=".{5}" id="Cap" asp-for="Cap" name="CapRP" value="@Model.rapLeg.CapRP" hidden required maxlength="9">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label>Stato Estero di Residenza</label>
+                                                        <select required class="form-control" id="StatoEsteroResidenza" name="StatoEsteroRP">
+                                                            <option value="0">Inserire lo Stato Estero</option>
+                                                            @foreach (var se in ViewBag.ListaStatiEsteri)
+                                                            {
+                                                                <option value="@se" @(Model.rapLeg.StatoEsteroRP == se ? "selected" : "")>@se</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                <a class="btn btn-outline-success col-3" id="back1">
+                                                    Indietro
+                                                </a>
+                                                <a class="btn btn-block btn-outline-success col-3" id="next2">
+                                                    Avanti
+                                                </a>
+                                            </div>
+                                        </div>
+                                </div>
+                                @*Pannello sedi*@
+                                <div class="tab-pane fade" id="sedi" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                    <div class="card-body">
+                                        <form method="post">
+                                            <div class="form-row">
+                                                <div class="form-group col-3">
+                                                    <label>DUG</label>
+                                                    <select class="form-control" id="CODDUGS" name="CODDUGS" asp-for="CODDUGS" required title="Tipo di indirizzo non valido">
+                                                        @if (Model.sedi != null)
+                                                        {
+                                                            <option value="@Model.sedi.CODDUGS">@Model.sedi.IndirizzoS</option>
+                                                        }
+                                                        @foreach (var std in Model.vias)
+                                                        {
+                                                            <option value="@std.CODDUGV">@std.DENDUGV</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-6 align-items-end d-flex">
+                                                    <label>Indirizzo</label>
+                                                    <input type="text" id="ViaS" name="ViaS" class="form-control" value="@Model.sedi.ViaS" required title="Indirizzo non valido" placeholder="Inserire l'indirizzo" maxlength="80"/>
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <label>Civico</label>
+                                                    <input type="text" id="CivicoS" name="CivicoS" class="form-control" value="@Model.sedi.CivicoS" required title="Numero civico non valido" placeholder="Inserire il numero civico" maxlength="10" pattern="^(^\d+(\/[a-zA-Z])?[a-zA-Z]?$)|(SNC)$"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-3">
+                                                    <label>Provincia</label>
+                                                    <select required class="form-control" id="ProvinciaS" name="ProvinciaS">
+                                                        <option value="">Selezionare la Provincia</option>
+                                                        @foreach (var prov in ViewBag.ListaProvince)
+                                                        {
+                                                            if (prov.SIGPRO != "EE")
+                                                            {
+                                                                <option value="@prov.SIGPRO" @(Model.sedi.ProvinciaS == prov.SIGPRO ? "selected" : "")>@prov.SIGPRO</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <label>Comune</label>
+                                                    <select required class="form-control" id="ComuneS" name="ComuneS">
+                                                        <option value="">Selezionare Comune</option>
+                                                        @foreach (var std in ViewBag.ListaComuni)
+                                                        {
+                                                            <option value="@std.CODCOM" @(Model.sedi.ComuneS == std.DENCOM ? "selected" : "")>@std.DENCOM</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <label>Localit&agrave;</label>
+                                                    <select required class="form-control" id="LocalitaS" name="LocalitaS">
+                                                        <option value="">Selezionare la Località</option>
+                                                        @foreach (var loc in ViewBag.ListaLocalita)
+                                                        {
+                                                            <option value="@loc.DENLOC" @(Model.sedi.LocalitaS == loc.DENLOC ? "selected" : "")>@loc.DENLOC</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-3">
+                                                    <label>CAP</label>
+                                                    <input type="text" id="ShowCAPS" name="ShowCAPS" class="form-control" value="@Model.sedi.CAPS" readonly required maxlength="9"/>
+                                                    <input type="text" id="CAPS" name="CAPS" class="form-control" value="@Model.sedi.CAPS" hidden required maxlength="9"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-6">
+                                                    <label>Stato Estero</label>
+                                                    <select required class="form-control" id="StatoEsteroS" name="StatoEsteroS">
+                                                        <option value="0">Inserire lo Stato Estero</option>
+                                                        @foreach (var se in ViewBag.ListaStatiEsteri)
+                                                        {
+                                                            <option value="@se" @(Model.sedi.StatoEsteroS == se ? "selected" : "")>@se</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-6">
+                                                    <label>Telefono</label>
+                                                    <input type="tel" id="Telefono1S" name="Telefono1S" class="form-control" value="@Model.sedi.Telefono1S" required title="Telefono non valido" placeholder="Inserire il numero di telefono" maxlength="13"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                <a class="btn btn-block btn-outline-success col-3" id="back2">
+                                                    Indietro
+                                                </a>
+                                                <input type="submit" value="Salva" id="blocco" name="blocco" asp-for="blocco" class="btn btn-outline-success col-3">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="mt-3 alert alert-success" role="alert">
+                                    Per salvare i dati premere il tasto salva alla fine della procedura.
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function (e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) { return false; }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function (e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            (or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function (e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function (e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        /*An array containing all the country names in the world:*/
+        var listaComuni = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaComuni"]));
+        var listaStati = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaStati"]));
+
+
+
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        autocomplete(document.getElementById("ComuneS"), listaComuni);
+        autocomplete(document.getElementById("StatoEsteroS"), listaStati);
+        autocomplete(document.getElementById("LocalitaS"), listaComuni);
+
+
+</script>
+
+<script>
+
+    function setAllInputTextFieldsToUpper() {
+        let allInputsTypeText = document.querySelectorAll("input[type=text]");
+        allInputsTypeText.forEach(
+            (element) => element.oninput = function () {
+                this.value = this.value.toUpperCase();
+            });
+    }
+
+    $("#sedi-tab").click(function () {
+        $("#tutti").hide();
+    });
+    $("#home-tab,#profile-tab,#consulente-tab").click(function () {
+        $("#tutti").show();
+    });
+
+    function Modifica() {
+            alert("Sede Legale non può essere modificata da questo Utente");
+    };
+    function Elimina() {
+            alert("Sede Legale non può essere eliminata da questo Utente");
+    };
+
+    $(document).ready(function () {
+
+        setAllInputTextFieldsToUpper();
+
+        if ($("#StatoEsteroS").val() != "0")
+        {
+            $("#ComuneS").html('');
+            $("#LocalitaS").html('');
+            $("#CAPS").val('');
+            $("#ShowCAPS").val('');
+            $("#ProvinciaS").val('');
+            $("#ComuneS").attr("required", false);
+            $("#LocalitaS").attr("required", false);
+            $("#CAPS").attr("required", false);
+            $("#ShowCAPS").attr("required", false);
+            $("#ProvinciaS").attr("required", false);
+            $("#StatoEsteroS").attr("required", true);
+            $("#LocalitaS").attr("disabled", true);
+            $("#ComuneS").attr("disabled", true);
+        }
+        else
+        {
+            $('#ProvinciaS').attr("disabled", false);
+            $("#LocalitaS").attr("disabled", false);
+            $("#ComuneS").attr("disabled", false);
+            $("#ComuneS").attr("required", true);
+            $("#LocalitaS").attr("required", true);
+            $("#CAPS").attr("required", true);
+            $("#ShowCAPS").attr("required", true);
+            $("#ProvinciaS").attr("required", true);
+            $("#StatoEsteroS").attr("required", false);
+        }
+
+        if ($("#StatoEsteroResidenza").val() != "0")
+        {
+            $("#ComuneResidenza").html('');
+            $("#Localita").html('');
+            $("#Cap").val('');
+            $("#ShowCap").val('');
+            $("#SigproResidenza").val('');
+            $("#ComuneResidenza").attr("required", false);
+            $("#Localita").attr("required", false);
+            $("#Cap").attr("required", false);
+            $("#ShowCap").attr("required", false);
+            $("#SigproResidenza").attr("required", false);
+            $("#StatoEsteroResidenza").attr("required", true);
+            $("#Localita").attr("disabled", true);
+            $("#ComuneResidenza").attr("disabled", true);
+        }
+        else
+        {
+            $('#SigproResidenza').attr("disabled", false);
+            $("#Localita").attr("disabled", false);
+            $("#ComuneResidenza").attr("disabled", false);
+            $("#ComuneResidenza").attr("required", true);
+            $("#Localita").attr("required", true);
+            $("#Cap").attr("required", true);
+            $("#ShowCap").attr("required", true);
+            $("#SigproResidenza").attr("required", true);
+            $("#StatoEsteroResidenza").attr("required", false);
+        }
+    });
+
+    $("#ProvinciaS").change(function () {
+        if ($(this).val() == '') {
+            $("#ComuneS").html('');
+            $("#LocalitaS").html('');
+            $("#CAPS").val('');
+            $("#ShowCAPS").val('');
+            $("#ProvinciaS").val('');
+            $("#LocalitaS").attr("disabled", true);
+            $("#ComuneS").attr("disabled", true);
+            return;
+        }
+
+        $("#StatoEsteroS").val("0");
+        const uri = '@Url.Action("GetComune", "Iscritto")';
+        const provincia = $(this).val();
+
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { provincia: provincia },
+            success: function (data) {
+                debugger;
+                var s = '<option value="">Selezionare Comune</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].CODCOM + '">' + data[i].DENCOM + '</option>';
+                }
+                $("#ComuneS").html(s);
+                $("#LocalitaS").html('');
+                $("#CAPS").val('');
+                $("#ShowCAPS").val('');
+            },
+            error: function (result) {
+
+            }
+        });
+        
+        if ($(this).val() != "" && $("#StatoEsteroS").val() == "0") {
+            $('#ProvinciaS').attr("disabled", false);
+            $("#LocalitaS").attr("disabled", false);
+            $("#ComuneS").attr("disabled", false);
+            $("#ComuneS").attr("required", true);
+            $("#LocalitaS").attr("required", true);
+            $("#CAPS").attr("required", true);
+            $("#ShowCAPS").attr("required", true);
+            $("#ProvinciaS").attr("required", true);
+            $("#StatoEsteroS").attr("required", false);
+
+        }
+    });
+
+    $("#ComuneS").change(function () {
+        if ($(this).val() == '') {
+            $("#LocalitaS").html('');
+            $("#CAPS").val('');
+            $("#ShowCAPS").val('');
+            return;
+        }
+
+        const uri = '@Url.Action("GetLocalita", "Iscritto")';
+        const comune = $(this).val();
+
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { comune: comune },
+            success: function (data) {
+                debugger;
+                var s = '<option value="">Selezionare la Località</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].DENLOC + '">' + data[i].DENLOC + ' - ' + data[i].CAP +'</option>';
+                }
+                $("#LocalitaS").html(s);
+                $("#CAPS").val('');
+                $("#ShowCAPS").val('');
+            },
+            error: function (result) {
+
+            }
+        });        
+    });
+
+    $("#LocalitaS").change(function () {
+        if ($(this).val() == '') {
+            $("#CAPS").val('');
+            $("#ShowCAPS").val('');
+            return;
+        }
+
+        const uri = '@Url.Action("GetCap", "Iscritto")';
+        const LocalitaS = $(this).val();
+
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { loc: LocalitaS },
+            success: function (data) {
+                debugger;
+                const loc = $("select#LocalitaS>option:selected").text();
+                const locArray = loc.split("-");
+                if (locArray !== undefined && locArray.length == 2) {
+                    const CAPS = locArray[1].trim();
+                    indexCAPS = data.findIndex(x => x.CAP === CAPS);
+                    if (indexCAPS > 0) {
+                        $("#CAPS").val(data[indexCAPS].CAP);
+                        $("#ShowCAPS").val(data[indexCAPS].CAP);
+                    }
+                    else {
+                        $("#CAPS").val(data[0].CAP);
+                        $("#ShowCAPS").val(data[0].CAP);
+                    }
+                }
+                else {
+                    $("#CAPS").val(data[0].CAP);
+                    $("#ShowCAPS").val(data[0].CAP);
+                }
+            },
+            error: function (result) {
+        
+            },
+            complete: function () {
+            },
+        });
+        
+    });
+    $("#StatoEsteroS").change(function ()
+        {
+            if ($(this).val() != "0")
+            {
+                $("#ComuneS").html('');
+                $("#LocalitaS").html('');
+                $("#CAPS").val('');
+                $("#ShowCAPS").val('');
+                $("#ProvinciaS").val('');
+                $("#ComuneS").attr("required", false);
+                $("#LocalitaS").attr("required", false);
+                $("#CAPS").attr("required", false);
+                $("#ShowCAPS").attr("required", false);
+                $("#ProvinciaS").attr("required", false);
+                $("#StatoEsteroS").attr("required", true);
+                $("#LocalitaS").attr("disabled", true);
+                $("#ComuneS").attr("disabled", true);
+            }
+            else
+            {
+                $('#ProvinciaS').attr("disabled", false);
+                $("#LocalitaS").attr("disabled", false);
+                $("#ComuneS").attr("disabled", false);
+                $("#ComuneS").attr("required", true);
+                $("#LocalitaS").attr("required", true);
+                $("#CAPS").attr("required", true);
+                $("#ShowCAPS").attr("required", true);
+                $("#ProvinciaS").attr("required", true);
+                $("#StatoEsteroS").attr("required", false);
+            }
+    });
+
+    $("#SigproResidenza").change(function () {
+        if ($(this).val() == '') {
+            $("#ComuneResidenza").html('');
+            $("#Localita").html('');
+            $("#Cap").val('');
+            $("#ShowCap").val('');
+            $("#SigproResidenza").val('');
+            $("#Localita").attr("disabled", true);
+            $("#ComuneResidenza").attr("disabled", true);
+            return;
+        }
+        
+        $("#StatoEsteroResidenza").val("0");
+        const uri = '@Url.Action("GetComune", "Iscritto")';
+        const provincia = $(this).val();
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { provincia: provincia },
+            success: function (data) {
+                debugger;
+                var s = '<option value="">Selezionare Comune</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].CODCOM + '">' + data[i].DENCOM + '</option>';
+                }
+                $("#ComuneResidenza").html(s);
+                $("#Localita").html('');
+                $("#Cap").val('');
+                $("#ShowCap").val('');
+            },
+            error: function (result) { }
+        });
+        
+        if ($(this).val() != "" && $("#StatoEsteroResidenza").val() == "0") {
+            $('#SigproResidenza').attr("disabled", false);
+            $("#Localita").attr("disabled", false);
+            $("#ComuneResidenza").attr("disabled", false);
+            $("#ComuneResidenza").attr("required", true);
+            $("#Localita").attr("required", true);
+            $("#Cap").attr("required", true);
+            $("#ShowCap").attr("required", true);
+            $("#SigproResidenza").attr("required", true);
+            $("#StatoEsteroResidenza").attr("required", false);
+        }
+    });
+
+    $("#ComuneResidenza").change(function () {
+        if ($(this).val() == '') {
+            $("#Localita").html('');
+            $("#Cap").val('');
+            $("#ShowCap").val('');
+            return;
+        }
+
+        const uri = '@Url.Action("GetLocalita", "Iscritto")';
+        const comune = $(this).val();
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { comune: comune },
+            success: function (data) {
+                debugger;
+                var s = '<option value="">Selezionare la Località</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].DENLOC + '">' + data[i].DENLOC + ' - ' + data[i].CAP +'</option>';
+                }
+                $("#Localita").html(s);
+                $("#Cap").val('');
+                $("#ShowCap").val('');
+            },
+            error: function (result) { }            
+        });        
+    });
+
+    $("#Localita").change(function () {
+        if ($(this).val() == '') {
+            $("#Cap").val('');
+            $("#ShowCap").val('');
+            return;
+        }
+
+        const uri = '@Url.Action("GetCap", "Iscritto")';
+        const localita = $(this).val();
+        $.ajax({
+            cache: false,
+            url: uri,
+            type: 'GET',
+            data: { loc: localita },
+            success: function (data) {
+                debugger;
+                const loc = $("#Localita option:selected").text();
+                const locArray = loc.split("-");
+                if (locArray !== undefined && locArray.length == 2) {
+                    const cap = locArray[1].trim();
+                    indexCap = data.findIndex(x => x.CAP === cap);
+                    if (indexCap > 0) {
+                        $("#ShowCap").val(data[indexCap].CAP)
+                        $("#Cap").val(data[indexCap].CAP)
+                    }
+                    else {
+                        $("#ShowCap").val(data[0].CAP)
+                        $("#Cap").val(data[0].CAP)
+                    }
+                }
+                else {
+                    $("#ShowCap").val(data[0].CAP)
+                    $("#Cap").val(data[0].CAP)
+                }
+            },
+            error: function (result) { }            
+        });        
+    });
+
+    $("#StatoEsteroResidenza").change(function () {
+             if ($(this).val() != "0") {
+                 $("#ComuneResidenza").html('');
+                 $("#Localita").html('');
+                 $("#Cap").val('');
+                 $("#ShowCap").val('');
+                 $("#SigproResidenza").val('');
+                 $("#ComuneResidenza").attr("required", false);
+                 $("#Localita").attr("required", false);
+                 $("#Cap").attr("required", false);
+                 $("#ShowCap").attr("required", false);
+                 $("#SigproResidenza").attr("required", false);
+                 $("#StatoEsteroResidenza").attr("required", true);
+                 $("#Localita").attr("disabled", true);
+                 $("#ComuneResidenza").attr("disabled", true);
+             }
+             else {
+                 $('#SigproResidenza').attr("disabled", false);
+                 $("#Localita").attr("disabled", false);
+                 $("#ComuneResidenza").attr("disabled", false);
+                 $("#ComuneResidenza").attr("required", true);
+                 $("#Localita").attr("required", true);
+                 $("#Cap").attr("required", true);
+                 $("#ShowCap").attr("required", true);
+                 $("#SigproResidenza").attr("required", true);
+                 $("#StatoEsteroResidenza").attr("required", false);
+             }
+    });
+
+    $('#next1').click(function (e) {
+        if (document.getElementById('EmailPA').reportValidity() && document.getElementById('EmailCertificataPA').reportValidity())
+            $('#profile-tab').tab('show');
+    });
+    $('#next2').click(function (e) {
+        if (document.getElementById('TipoResidenza').reportValidity() && document.getElementById('Indirizzo').reportValidity() && document.getElementById('NumeroCivico').reportValidity()
+            && document.getElementById('SigproResidenza').reportValidity() && document.getElementById('ComuneResidenza').reportValidity() && document.getElementById('Localita').reportValidity()
+            && document.getElementById('Cap').reportValidity() && document.getElementById('ShowCap').reportValidity() && document.getElementById('StatoEsteroResidenza').reportValidity())            
+            $('#sedi-tab').tab('show');
+    });
+    $('#back1').click(function () {
+        $('#home-tab').tab('show');
+    });
+    $('#back2').click(function () {
+        $('#profile-tab').tab('show');
+    });
+
+</script>
+
+

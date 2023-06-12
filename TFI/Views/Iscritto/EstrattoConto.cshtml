@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Estratto Conto";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<title>Enpaia | Estratti Conto</title>
+
+@if (Model == null)
+{
+    <p>Non sono presenti documenti da visualizzare</p>
+}
+else
+{
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Estratto Conto
+                        </div>
+                        <!-- <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>Matricola</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["Matricola"]" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-group">
+                                            <label>Nominativo</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["NomeCognome"]" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-group">
+                                            <label>Codice Fiscale</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["CodiceFis"]" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Comune</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["Comune2"]" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <div class="form-group">
+                                            <label>Indirizzo</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["Indirizzo"]" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>CAP</label>
+
+                                            <input type="text" class="form-control datetimepicker-input" value="@HttpContext.Current.Items["Cap"]" disabled>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label>Provincia</label>
+                                            <input type="text" class="form-control" value="@HttpContext.Current.Items["Provincia2"]" disabled>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" style="height:300px; overflow:scroll;">
+                            <table id="example2" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background: #0c773c; color: white; width: 50; text-align: center; vertical-align: middle; font-size: 17px">Anno</th>
+                                        <th style="background: #0c773c; color: white; width: 50; text-align: center; vertical-align: middle; font-size: 17px">Estratti Conto</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var listaEstrattiConto in Model)
+                                    {
+
+                                        <tr>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @listaEstrattiConto.Anno</td>
+                                            <td style="text-align:center">
+                                                <a href="@Url.Action("FTP_DownloadFile","Iscritto",new { path = listaEstrattiConto.NomeFile })" target="_blank"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <h4 style="text-align:center;font-weight:600;font-size:15px">Per una corretta visualizzazione degli Estratti Conto scaricare la versione Acrobat Reader 20.xx</h4>
+    <center>
+        <a href="https://get.adobe.com/it/reader/" target="_blank">
+            <img src="~/Images/adobeReader.jpg" />
+        </a>
+    </center>
+}
+
+<br />
+
+
+
+
+

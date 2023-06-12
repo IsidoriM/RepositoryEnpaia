@@ -1,0 +1,66 @@
+﻿@using System.Globalization
+@model List<OCM.TFI.OCM.Iscritto.Pratica>
+@{
+    ViewBag.Title = "Visualizzazione Pratiche";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    var it = new CultureInfo("it-IT");
+}
+
+<title>Enpaia | Visualizzazione Pratiche</title>
+
+@if (Model.Count == 0)
+{
+    <p>Non sono presenti pratiche da visualizzare</p>
+}
+else
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Visualizzazione Pratiche
+                        </div>
+                        <div class="card-body">
+                            <table id="pratiche" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Posizione - Ragione Sociale</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Nominativo</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Data Inizio RDL</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Data Fine RDL</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Tipo Pratica</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Stato Pratica</th>
+                                        <th style="background: #0c773c; color: white; width: auto; text-align: center; vertical-align: middle; font-size: 17px">Dettaglio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var pratica in Model)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Posizione - @pratica.Ragione_Sociale</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Nominativo.ToUpper()</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Data_Inizio_RDL</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Data_Fine_RDL</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Tipo_Pratica</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @pratica.Stato_Pratica</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px">
+                                                <a href="@Url.Action("DettaglioPratica", "Iscritto", new { IdPratica = pratica.Id})">
+                                                    <i class="fas fa-arrow-right" style="color: #343a40"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}

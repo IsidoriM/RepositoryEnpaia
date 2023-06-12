@@ -1,0 +1,313 @@
+﻿@model TFI.OCM.Amministrativo.RettifichePA_CA_OCM
+
+@{
+    ViewBag.Title = "Rettifiche PA/AC";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    body.wait *, body.wait {
+        cursor: progress !important;
+    }
+</style>
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Rettifiche PA/CA</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("RettifichePA_AC", "Amministrativo", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-2>
+                        <label>Codice Posizione:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Codpos" name="Codpos" asp-for="Codpos" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" required>
+                        </div>
+                    </div>
+                    <div class=col-lg-6>
+                        <label>Ragione Sociale:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="RagSoc2" name="RagSoc2" asp-for="RagSoc2" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" readonly>
+                            <input class="form-control" type="text" id="RagSoc" name="RagSoc" asp-for="RagSoc" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" hidden>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class=col-sm-2>
+                    <label>Da Anno</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="AnnoDA" name="AnnoDA" asp-for="AnnoDA" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" required>
+                    </div>
+                </div>
+                <div class=col-sm-2>
+                    <label>Mese</label>
+                    <div class="form-group">
+                        <select class="form-control" id="MeseDA" name="MeseDA" asp-for="MeseDA" required>
+                            <option selected></option>
+                            <option value="1">Gennaio</option>
+                            <option value="2">Febbraio</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Aprile</option>
+                            <option value="5">Maggio</option>
+                            <option value="6">Giugno</option>
+                            <option value="7">Luglio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Settembre</option>
+                            <option value="10">Ottobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Dicembre</option>
+                        </select>
+                    </div>
+                </div>
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                <div class=col-sm-2>
+                    <label>Ad Anno</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="AnnoA" name="AnnoA" asp-for="AnnoA" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-sm-2>
+                    <label>Mese</label>
+                    <div class="form-group">
+                        <select class="form-control" id="MeseA" name="MeseA" asp-for="MeseA">
+                            <option selected></option>
+                            <option value="1">Gennaio</option>
+                            <option value="2">Febbraio</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Aprile</option>
+                            <option value="5">Maggio</option>
+                            <option value="6">Giugno</option>
+                            <option value="7">Luglio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Settembre</option>
+                            <option value="10">Ottobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Dicembre</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-lg-2">
+                    <label>&nbsp;</label>
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+
+        }
+        <br />
+
+        @if (Model != null)
+        {
+            TempData["List"] = Model.list_rett;
+
+            using (Html.BeginForm("RettifichePA_AC", "Amministrativo", FormMethod.Post))
+            {
+                if (Model.list_rett.Count > 0)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class=col-lg-6>
+                                    <label>Occorrenze trovate: @Model.search_rett.Occorrenze</label>
+                                </div>
+                            </div>
+                            <div style="width: 100%; height: 500px; overflow: scroll; margin-top: 1%;">
+                                <div id="dvData">
+                                    <table id="tb_rett" class="table table-bordered table-hover table-striped">
+                                        <tr>
+
+                                            <th>Posizione</th>
+                                            <th>Matricola</th>
+                                            <th>Cod. Fiscale</th>
+                                            <th>Nome</th>
+                                            <th>Cognome</th>
+                                            <th>Data Inizio</th>
+                                            <th>Data Fine</th>
+                                            <th>PA</th>
+                                            <th>AC</th>
+                                            <th hidden></th>
+
+                                        </tr>
+
+                                        @foreach (var a in Model.list_rett)
+                                        {
+                                            <tbody>
+                                                <tr>
+
+                                                    <td class="codpostd">@a.Codpos</td>
+                                                    <td class="mattd">@a.Mat</td>
+                                                    <td class="codfistd">@a.Codfis</td>
+                                                    <td class="nomtd">@a.Nom</td>
+                                                    <td class="cogtd">@a.Cog</td>
+                                                    <td class="datdectd">@a.DatDec</td>
+                                                    <td class="datcestd">@a.DatCes</td>
+                                                    @if (a.PA == "S")
+                                                    {
+                                                        <td><input class="patd" type="checkbox" name="PA" id="PA" checked /></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><input class="patd" type="checkbox" name="PA" id="PA" /></td>
+                                                    }
+                                                    @if (a.AC == "S")
+                                                    {
+                                                        <td><input class="actd" type="checkbox" name="AC" id="AC" checked /></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td><input class="actd" type="checkbox" name="AC" id="AC" /></td>
+                                                    }
+
+                                                    <td hidden class="proraptd">@a.prorap</td>
+
+                                                </tr>
+                                            </tbody>
+                                        }
+                                    </table>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <label>&nbsp;</label>
+                                    <button name="salva" id="salva" asp-for="salva" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Salva</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                }
+            }
+        }
+
+
+    </div>
+</div>
+
+<script>
+
+    function GetDataFromTableRows() {
+
+        var obj;
+        var codPos;
+        var codfis;
+        var mat;
+        var nom;
+        var cog;
+        var datdec;
+        var datfin;
+        var Prorap;
+        var pa;
+        var ac;
+        var objList = [];
+
+        $("#tb_rett tbody tr").each(function () {
+
+
+            codPos = $(this).find(".codpostd").html();
+            codfis = $(this).find(".codfistd").html();
+            mat = $(this).find(".mattd").html();
+            nom = $(this).find(".nomtd").html();
+            cog = $(this).find(".cogtd").html();
+            datdec = $(this).find(".datdectd").html();
+            datfin = $(this).find(".datfintd").html();
+            Prorap = $(this).find(".proraptd").html();
+            pa = $(this).find(".patd").prop("checked");
+            ac = $(this).find(".actd").prop("checked");
+
+            obj = {
+                CodPos: codPos,
+                Codfis: codfis,
+                Mat: mat,
+                Nom: nom,
+                Cog: cog,
+                DatDec: datdec,
+                Datfin: datfin,
+                prorap: Prorap,
+                PAbool: pa,
+                ACbool: ac
+            }
+
+            objList.push(obj);
+
+        });
+
+        return objList;
+    }
+
+    $("#salva").click(function () {
+
+        $('body').addClass('wait');
+        $('selector').click(false);
+        var data = GetDataFromTableRows();
+
+        $.ajax({
+            url: "/Amministrativo/RettifichePA",
+            dataType: "json",
+            method: "POST",
+            data: { "objList": JSON.stringify(data) },
+            beforeSend: function () {
+                // Show image container
+                $('.pannelloOpaco').fadeIn()
+                //
+            },
+            success: function () {
+
+            },
+            error: function () {
+
+
+            },
+            complete: function () {
+
+                location.reload();
+                $('body').removeClass('wait');
+                $('selector').click(true);
+                // Hide image container
+                $('.pannelloOpaco').fadeOut();
+                //
+            },
+        });
+
+
+
+    });
+
+    $("#Codpos").blur(function () {
+
+        var value = $(this).val();
+
+        $.ajax({
+            url: "/Amministrativo/VisualizzaRagioneSociale1",
+            dataType: "text",
+            method: "POST",
+            data: { "codPos": value },
+            success: function (result) {
+                var ragioneSociale = result;
+                $("#RagSoc2").val(ragioneSociale);
+                $("#RagSoc").val(ragioneSociale);
+            }
+        });
+    });
+
+</script>

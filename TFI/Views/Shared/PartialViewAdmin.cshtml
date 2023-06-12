@@ -1,0 +1,92 @@
+﻿<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #0c773c">
+    <!-- Brand Logo -->
+
+    <center style="background:whitesmoke"> <img style="max-width:100%;height:auto" src="~/Images/Logo-Fondazione-Enpaia.png" alt="Enpaia"></center>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/Images/user.png" class="img-circle elevation-2" alt="User Image" />
+            </div>
+            <div class="info">
+                @{ TFI.OCM.Utente.Utente utente = Session["utente"] as TFI.OCM.Utente.Utente;}
+                <a href="#" name="Utente" class="d-block"> @utente.Denominazione</a>
+            </div>
+        </div>
+
+
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="@Url.Action("Index","Admin")" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Utenti</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("AnagraficaGruppoUtente","Admin")" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Anagrafica Gruppo Utente</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="@Url.Action("AnagraficaFunzionalita","Admin")" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Anagrafica Funzionalità</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-tools"></i>
+                        <p>Funzionalita'</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>Configurazioni</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+
+                    <a href='@Url.Action("LogOut", "Login")' class="nav-link primary">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+@{
+    ViewBag.Title = "_AdminWebGrid";
+    var webGrid = new WebGrid(Session["ListaAdmin"] as List<TFI.OCM.Admin>);
+}
+
+<style>
+      #WebGrid a{
+        color:white;
+    }
+    #WebGrid a:hover {
+        color: red;
+    }
+    #WebGrid a:checked {
+        color: red;
+    }
+</style>
+
+
+
+}

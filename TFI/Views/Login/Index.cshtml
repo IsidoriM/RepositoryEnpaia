@@ -1,0 +1,112 @@
+﻿
+@model List<SelectListItem>
+
+@{ ViewBag.Title = "Enpaia | Login";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml"; }
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Enpaia | Log in</title>
+</head>
+<body class="hold-transition login-page" style="background:whitesmoke">
+    @{ Html.RenderPartial("PartialViewShowMessages");
+        Html.RenderPartial("PartialViewOTPModal"); }
+
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="~/Images/Logo-Fondazione-Enpaia.png" style="width:250px;height:250px" />
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body" style="background:#0c773c">
+                <center>
+                    <img src="~/Images/user.png" />
+                </center>
+                <hr style="border: 3px solid grey;background:grey" />
+                <h3 class="login-box-msg" style="color:white;padding:0">Accedi</h3>
+                <hr style="border: 3px solid grey;background:grey" />
+
+                @using (Html.BeginForm("TryToLogin", "Login", FormMethod.Post, new { @id = "form_login" }))
+                {
+                    <div class="row">
+                        <div class="col-12 cont_input">
+                            <select name="TipoUtente" class="input_login" id="TipoUtente" required>
+                                @foreach (SelectListItem item in Model)
+                                {
+                                    <text>
+                                        <option value="@item.Value"> @item.Text</option>
+                                    </text>}
+                            </select>
+                        </div>
+                        <div class="col-12 cont_input">
+                            @Html.TextBox("Username", String.Empty, new { @placeholder = "Username", @class = "input_login", @id = "Username", required = "required" })
+                        </div>
+                        <div class="col-12 cont_input">
+                            @Html.Password("Password", String.Empty, new { @placeholder = "Password", @class = "input_login", @id = "Password", required = "required" })
+                        </div>
+                        <div>
+                            @Html.Hidden("TipoAccesso", ViewData["tipoAccesso"], new { @id = "hd_tipoAccesso"})
+                        </div>
+                    </div>
+                    <hr style="border: 3px solid grey;background: grey" />
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-dark">
+                                <input type="checkbox" id="remember">
+                                <label for="remember" style="color:white">
+                                    Ricordami
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-light btn-block">Login</button>
+                        </div>
+                    </div>}
+            </div>
+            <!-- /.login-card-body -->
+        </div>
+    </div>
+    <!-- /.login-box -->
+
+    @section JS{
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $('.toast').toast('show');
+
+                $(document).on("change", "#TipoUtente", function () {
+                    var value = $(this).val();
+                    if (value === "I") {
+                        $("#Username").prop("placeholder", "Codice Fiscale");
+                    }
+                    else if (value === "A" || value === "C") {
+                        $("#Username").prop("placeholder", "Partita IVA");
+                    }
+                    else if (value === "AD" || value === "E") {
+                        $("#Username").prop("placeholder", "Username");
+                    }
+                });
+
+                @if((string)ViewData["modal"] == "si")
+                {
+                    <text> $('#otp_modal').modal({ backdrop: 'static' });</text>
+                }
+
+                 @if((string)TempData["modalOTPDeleghe"] == "si")
+                {
+                    <text> $('#modalOTPDeleghe').modal({ backdrop: 'static'});</text>
+                }
+            });
+
+
+        </script>
+
+        @*@Scripts.Render("~/Common")*@
+    }
+
+</body>
+</html>

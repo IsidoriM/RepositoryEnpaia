@@ -1,0 +1,279 @@
+﻿@{ ViewBag.Title = "ScadenzarioFondo";
+    Layout = "~/Views/Shared/_AmministrativoLayout.cshtml"; }
+
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .cancelBtn::after {
+        visibility: visible;
+        background-color: #0c773c;
+        color: white;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .applyBtn::after {
+        background-color: #0c773c;
+        color: white;
+        visibility: visible;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+<div class="card" style="background-color:white">
+    <div class="card-body">
+        <div class="input-group">
+            <div class="form-group" style="margin-left:100px">
+                <label>Matricola:</label>
+                <div class="input-group">
+                    <input class="form-control" id="searchMat" placeholder="Ricerca per matricola..." autocomplete="off" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nominativo:</label>
+                <div class="input-group">
+                    <input class="form-control" id="search" placeholder="Ricerca per nominativo..." autocomplete="off" autofocus>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tipo:</label>
+                <div class="input-group">
+                    <button type="button" class="btn dropdown-toggle" href="javascript:void(0)" onclick="searchTableDevice('all')" style="border-color:#0c773c;margin-right:20px;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            id="deviceSelector">
+                        --Seleziona--
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Ordinarie</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Anticipazioni</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Suppletive</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Invalidità</a>
+                        <a class="dropdown-item" href="javascript:void(0)" onclick="searchTableDevice(this.innerHTML)">Assegno di morte</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Periodo:</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="background:#0c773c;color:white">
+                            <i class="far fa-calendar-alt"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control float-right" id="reservation">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Azienda:</label>
+                <div class="input-group">
+                    <input class="form-control" id="searchAzienda" placeholder="Ricerca per azienda..." autocomplete="off" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-block btn-outline-success">Cerca</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table id="table" class="table table-hover table-striped">
+            <thead>
+                <tr class="header" style="background:#0c773c;color:white">
+                    <th>Matricola</th>
+                    <th>Nominativo</th>
+                    <th>Data Inizio</th>
+                    <th>Data Cessazione</th>
+                    <th>Tipo</th>
+                    <th>Posizione Azienda</th>
+                    <th>Ragione Sociale</th>
+                    <th>Trattenute</th>
+                    <th>TFR Pagato</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1234</td>
+                    <td>Marco Nisticò</td>
+                    <td>06/07/2006</td>
+                    <td>06/08/2011</td>
+                    <td>Ordinarie</td>
+                    <td>243</td>
+                    <td>Società Agricola</td>
+                    <td><a href="@Url.Action("ProspettoCartaEnpaia","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a href="@Url.Action("ProspettoFondo","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1235</td>
+                    <td>Davide Lizzeri</td>
+                    <td>10/08/2006</td>
+                    <td>06/08/2010</td>
+                    <td>Suppletive</td>
+                    <td>245</td>
+                    <td>Società Agricola</td>
+                    <td><a href="#"><img width="30" src="~/Images/Sign-X.png" /></a></td>
+                    <td><a href="@Url.Action("ProspettoPREV","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1236</td>
+                    <td>Francesco Guarracino</td>
+                    <td>12/01/2007</td>
+                    <td>31/04/2012</td>
+                    <td>Anticipazioni</td>
+                    <td>246</td>
+                    <td>Agro-Carota</td>
+                    <td><a href="@Url.Action("ProspettoCartaEnpaia","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a href="@Url.Action("ProspettoFondo","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica  Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1237</td>
+                    <td>Lanfranco Romei</td>
+                    <td>12/12/2012</td>
+                    <td>23/05/2017</td>
+                    <td>Ordinarie</td>
+                    <td>249</td>
+                    <td>Società Vinicola</td>
+                    <td><a href="#"><img width="30" src="~/Images/Sign-X.png" /></a></td>
+                    <td><a href="@Url.Action("ProspettoPREV","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1238</td>
+                    <td>Mario Rossi</td>
+                    <td>12/12/2012</td>
+                    <td>23/05/2017</td>
+                    <td>Invalidità</td>
+                    <td>249</td>
+                    <td>Società Vinicola</td>
+                    <td><a href="#"><img width="30" src="~/Images/Sign-X.png" /></a></td>
+                    <td><a href="@Url.Action("ProspettoPREV","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>1239</td>
+                    <td>Giuseppe Verdi</td>
+                    <td>12/12/2012</td>
+                    <td>23/05/2017</td>
+                    <td>Assegno di morte</td>
+                    <td>249</td>
+                    <td>Società Vinicola</td>
+                    <td><a href="#"><img width="30" src="~/Images/Sign-X.png" /></a></td>
+                    <td><a href="@Url.Action("ProspettoPREV","Amministrativo")"><img width="32" src="~/Images/Sign-check.jpg" /></a></td>
+                    <td><a title="Liquidazione" href="@Url.Action("Liquidazione", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Liquidazione.jpg" /></a></td>
+                    <td><a title="Modifica Anagrafica" href="@Url.Action("Anagrafica", "Amministrativo")" style="color:black;background-color:lightgray"> <img width="32" src="~/Images/Modifica.jpg" /></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#search').on('input', function () {
+            searchRow();
+        });
+        $('#searchMat').on('input', function () {
+            searchRow();
+        });
+        $('#searchAzienda').on('input', function () {
+            searchRow();
+        });
+
+    })
+    function searchRow() {
+        var $rows = $('#table > tbody > tr').not(".header");
+        var val1 = $.trim($('#search').val()).replace(' ').toLowerCase();
+        var val2 = $.trim($("#deviceSelector").text()).toLowerCase();
+        var val3 = $.trim($('#searchMat').val()).replace(' ').toLowerCase();
+        var val4 = $.trim($('#searchAzienda').val()).replace(' ').toLowerCase();
+        val2 = (val2 === "--seleziona--") ? "" : val2;
+
+        $rows.show().filter(function () {
+            var text1 = $(this).find('td:nth-child(2)').text().replace(' ').toLowerCase();
+            var text2 = $(this).find('td:nth-child(5)').text().replace(' ').toLowerCase();
+            var text3 = $(this).find('td:nth-child(1)').text().replace(' ').toLowerCase();
+            var text4 = $(this).find('td:nth-child(7)').text().replace(' ').toLowerCase();
+            return !~text1.indexOf(val1) || !~text2.indexOf(val2) || !~text3.indexOf(val3) || !~text4.indexOf(val4);
+        }).hide();
+    }
+    function searchTableDevice(device) {
+        var filter, table, tr, td, i;
+
+        $("#deviceSelector").html(device);
+
+        if (device == "all") {
+            $("#deviceSelector").html("--Seleziona--");
+        }
+
+        searchRow();
+    }
+</script>
+
+<script>
+    $(function () {
+        //Date range picker
+        $('#periodoRDL').daterangepicker({
+            "locale":
+            {
+                "format": "DD/MM/yyyy",
+                "applyLabel": "Applica",
+                "cancelLabel": "Esci",
+                "daysOfWeek": [
+                    "Dom",
+                    "Lun",
+                    "Mar",
+                    "Mer",
+                    "Gio",
+                    "Ven",
+                    "Sab"
+                ],
+                "monthNames": [
+                    "Gennaio",
+                    "Febbraio",
+                    "Marzo",
+                    "Aprile",
+                    "Maggio",
+                    "Giugno",
+                    "Luglio",
+                    "Agosto",
+                    "Settembre",
+                    "Ottobre",
+                    "Novembre",
+                    "Dicembre"
+                ]
+            }
+        });
+    })
+</script>

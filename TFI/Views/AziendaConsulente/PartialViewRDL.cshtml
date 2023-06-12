@@ -1,0 +1,174 @@
+﻿@using OCM.TFI.OCM.AziendaConsulente;
+
+<table id="dtRDL" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr class="header">
+            <th onclick="OrderBy(1, @(Model.OrderDesc ? "false" : "true"))">
+                Matricola
+                @if (Model.OrderBy == OrderByType.Matricola)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th onclick="OrderBy(2, @(Model.OrderDesc ? "false" : "true"))">
+                Cognome
+                @if (Model.OrderBy == OrderByType.Cognome)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th onclick="OrderBy(3, @(Model.OrderDesc ? "false" : "true"))">
+                Nome
+                @if (Model.OrderBy == OrderByType.Nome)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th onclick="OrderBy(4, @(Model.OrderDesc ? "false" : "true"))">
+                Codice Fiscale
+                @if (Model.OrderBy == OrderByType.CodiceFiscale)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th onclick="OrderBy(5, @(Model.OrderDesc ? "false" : "true"))">
+                Iscrizione
+                @if (Model.OrderBy == OrderByType.DataIscrizione)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th onclick="OrderBy(6, @(Model.OrderDesc ? "false" : "true"))">
+                Cessazione
+                @if (Model.OrderBy == OrderByType.DataCessazione)
+                {
+                    if (Model.OrderDesc)
+                    {
+                        <i class="fa fa-arrow-down"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-arrow-up"></i>
+                    }
+                }
+            </th>
+            <th>Modifica</th>
+            <th>Sospensioni</th>
+            <th>Carriera</th>
+            <th hidden></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var itm in Model.Rapporti)
+        {
+            <tr class="dataRow">
+                <td style="text-align:center;vertical-align:middle">@itm.Matricola</td>
+                <td>@itm.Cognome</td>
+                <td>@itm.Nome</td>
+                <td>@itm.CodFis</td>
+                <td>@itm.Iscrizione</td>
+                <td>
+                    @(itm.TipoRDL == TipoRDL.RDLAttivo || itm.DataCessazione == null ? "" : itm.DataCessazione.ToString("dd/MM/yyyy"))
+                </td>
+                <td>
+                    @if (itm.TipoRDL == TipoRDL.RDLAttivo || itm.DataCessazione == null)
+                    {
+                        <a href="@Url.Action("SchedaIscritto", "AziendaConsulente", new { matricola = @itm.Matricola, prorap = @itm.Prorap })">
+                            <i class="far fa-edit fa-lg"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a onclick="Modifica()"><i class="far fa-edit fa-lg"></i></a>
+                    }
+
+                </td>
+                <td>
+                    @if (itm.TipoRDL == TipoRDL.RDLAttivo || itm.DataCessazione == null)
+                    {
+                        <a href="@Url.Action("Sospensioni", "AziendaConsulente", new { matricola = @itm.Matricola, nome = @itm.Nome, cognome = itm.Cognome, prorap = itm.Prorap })"><i class="far fa-calendar-times fa-lg"></i></a>
+                    }
+                    else
+                    {
+                        <a onclick="Sospensioni()"><i class="far fa-calendar-times fa-lg"></i></a>
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("CarrieraRapportiLavoro", "AziendaConsulente", new { matricola = @itm.Matricola, prorap = @itm.Prorap })"><i class="far fa-calendar-times fa-lg"></i></a>
+                </td>
+                <td hidden>@itm.Prorap</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (Model.Rapporti.Count == 0)
+{
+
+
+    <h4 class="text-center">
+        NON CI SONO RAPPORTI DI LAVORO CON QUESTO FILTRO
+    </h4>
+}
+else
+{
+    <div class="row d-flex justify-content-end w-100 align-items-center">
+        <div>
+            <select id="pageSize" class="page-link page-number m-3" aria-label="Default select example" onchange="HttpCallFilterPagination(1)">
+                <option value="10" selected="@(Model.PageSize == 10)">10</option>
+                <option value="25" selected="@(Model.PageSize == 25)">25</option>
+                <option value="50" selected="@(Model.PageSize == 50)">50</option>
+            </select>
+
+        </div>
+        <div>
+            <nav class="m-3" aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><button class="page-link" href="#" value="" onclick="PreviousPage(@Model.PageNumber, 10, '@Model.OrderBy', @(Model.OrderDesc ? "true" : "false"))"><<</button></li>
+                    <li class="page-item"><button class="page-link" href="#" value="" onclick="PreviousPage(@Model.PageNumber, 1, '@Model.OrderBy', @(Model.OrderDesc ? "true" : "false"))"><</button></li>
+                    <li class="page-item"><button class="page-link" href="#" value="" onclick="NextPage(@Model.PageNumber, @Model.TotalPage, 1, '@Model.OrderBy', @(Model.OrderDesc ? "true" : "false"))">></button></li>
+                    <li class="page-item"><button class="page-link" href="#" value="" onclick="NextPage(@Model.PageNumber, @Model.TotalPage, 10, '@Model.OrderBy', @(Model.OrderDesc ? "true" : "false"))">>></button></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-end w-100 align-items-center">
+        <div>
+            @Model.PageNumber / @Model.TotalPage
+        </div>
+    </div>
+}

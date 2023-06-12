@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewBag.Title = "Contabilizzazione Notifiche";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+<div class="modal" tabindex="-1" id="confirm_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="cont_messages">
+
+                </div>
+                <table style="width: 100%;">                   
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.ActionLink("SI", "Contabilizza_Step2", null, new { @class = "btn btn_official" })
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn_official" data-dismiss="modal">NO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        <h3>Contabilizzazione Notifiche di Ufficio</h3>
+    </div>
+    <div class="card-body">
+        <div id="contabilizzazioneNotifiche">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <b>Elenco delle notifiche da contabilizzare - Causale @ViewBag.lblCausale</b>
+                        </div>
+                        <div class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    @Html.Label("Seleziona tutte")
+                                    @Html.RadioButton("seleziona", "TUTTE", true, new { @class = "rb_seleziona" })
+                                </div>
+                                <div class="col-6">
+                                    @Html.Label("Deseleziona tutte")
+                                    @Html.RadioButton("seleziona", "NESSUNA", false, new { @class = "rb_seleziona" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <p>Occorrenze trovate: @ViewBag.occorrenze</p>
+                                <input hidden value="@ViewBag.occorrenze" id="totOccorrenze" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" style="height:300px; overflow:scroll;">
+                                <table class="table" id="tabellaContabilizza">
+                                    <thead>
+                                        <tr>
+                                            <th>CodPos</th>
+                                            <th>Ragione Sociale</th>
+                                            <th>Anno</th>
+                                            <th>Mese</th>
+                                            <th>ImpDis</th>
+                                            <th>ImpSanDet</th>
+                                            <th>ImpCon</th>
+                                            <th>ImpAddRec</th>
+                                            <th>ImpAbb</th>
+                                            <th>SanSotSog</th>
+                                            <th>ImpAssCon</th>
+                                            <th>Seleziona</th>
+                                            <th>Dettaglio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (TFI.OCM.Amministrativo.CercaNotifiche cercaNotifiche in Model)
+                                        {
+                                        <tr>
+                                            <td>@cercaNotifiche.CodPos</td>
+                                            <td>@cercaNotifiche.RagSoc</td>
+                                            <td>@cercaNotifiche.AnnDen</td>
+                                            <td>@cercaNotifiche.DenMese</td>
+                                            <td>@cercaNotifiche.ImpDis</td>
+                                            <td>@cercaNotifiche.ImpSanDet</td>
+                                            <td>@cercaNotifiche.ImpCon</td>
+                                            <td>@cercaNotifiche.ImpAddRec</td>
+                                            <td>@cercaNotifiche.ImpAbb</td>
+                                            <td>@cercaNotifiche.SanSotSog</td>
+                                            <td>@cercaNotifiche.ImpAssCon</td>
+                                            <td>@Html.CheckBox("ckb_seleziona", true, new { @class = "ckb_seleziona" })</td>
+                                            <td><a href="@Url.Action("DettaglioDenuncia","Amministrativo",new {Codpos=cercaNotifiche.CodPos,AnnDen=cercaNotifiche.AnnDen,MesDen=cercaNotifiche.MesDen,ProDen=cercaNotifiche.ProDen})"><i class="fas fa-search fa-lg"></i></a></td>
+                                            <td hidden class="hd_codPos">@cercaNotifiche.CodPos</td>
+                                            <td hidden class="hd_ragSoc">@cercaNotifiche.RagSoc</td>
+                                            <td hidden class="hd_annDen">@cercaNotifiche.AnnDen</td>
+                                            <td hidden class="hd_mesDen">@cercaNotifiche.MesDen</td>
+                                            <td hidden class="hd_proDen">@cercaNotifiche.ProDen</td>
+                                            <td hidden class="hd_impDis">@cercaNotifiche.ImpDis</td>
+                                            <td hidden class="hd_impSanDet">@cercaNotifiche.ImpSanDet</td>
+                                            <td hidden class="hd_impCon">@cercaNotifiche.ImpCon</td>
+                                            <td hidden class="hd_impAddRec">@cercaNotifiche.ImpAddRec</td>
+                                            <td hidden class="hd_impAbb">@cercaNotifiche.ImpAbb</td>
+                                            <td hidden class="hd_sanSotSog">@cercaNotifiche.SanSotSog</td>
+                                            <td hidden class="hd_impAssCon">@cercaNotifiche.ImpAssCon</td>
+                                            <td hidden class="hd_datSca">@cercaNotifiche.DatSca</td>
+                                            <td hidden class="hd_codCauSan">@cercaNotifiche.CodCauSan</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" id="buttons">                            
+                            <div class="col-4">
+                                <button type="button" id="btn_stampa" class="btn_official">Stampa video</button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" id="btn_contabilizza" class="btn_official">Contabilizza notifiche</button>
+                            </div>
+                            <div class="col-4">                                
+                                <button type="button" id="btn_chiudi" class="btn_official">Annulla Notifiche</button>                                
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+
+    <script>
+        $(document).ready(function () {
+
+            $(".rb_seleziona").change(function () {
+                Seleziona_Deseleziona($(this));
+            });
+
+            $("#btn_stampa").click(function () {
+                window.print();
+            });
+
+            $("#btn_contabilizza").click(function () {
+
+                var data = GetDataFromTableRows();
+
+                $.ajax({
+                    url: "/Amministrativo/Contabilizza",
+                    dataType: "text",
+                    method: "POST",
+                    data: { "jsonString": JSON.stringify(data) },
+                    success: function (result) {
+
+                        var stringArray;
+                       
+                        if (result.includes("|")) {
+
+                            $("#confirm_modal").modal("show");
+                            stringArray = result.split("|");
+                         
+                            for (var i in stringArray) {
+                                $("#confirm_modal table tbody").append("<tr><td>" + stringArray[i] + "</td></tr>");
+                            };
+                        }
+                        else {
+                            alert(result);
+                        }
+
+                    }
+
+
+                });
+
+
+            });
+
+            $("#btn_chiudi").click(function () {
+                if (confirm("Tutte le Notifiche visualizzate (da contabilizzare) saranno annullate. Sei sicuro?")) {
+
+                    var data = GetDataFromTableRows();
+
+                    $.ajax({
+                        url: "/Amministrativo/ContabilizzazioneNotifiche_exit",
+                        dataType: "text",
+                        method: "POST",
+                        data: { "jsonString": JSON.stringify(data) },
+                        success: function (result) {
+                            window.location.href = "GeneraNotifiche/Amministrativo";
+                        }
+
+                    });
+
+                }
+            });
+
+        });
+
+
+        function GetDataFromTableRows() {
+
+            var obj;
+            var codPos;
+            var annDen;
+            var mesDen;
+            var proDen;
+            var impDis;
+            var impSanDet;
+            var impCon;
+            var impAddRec;
+            var impAbb;
+            var sanSotSog;
+            var impAssCon;
+            var datSca;
+            var codCauSan;
+            var checked;
+            var totOccorrenze = $("#totOccorrenze").val();
+            var objList = [];
+
+
+            $("#tabellaContabilizza tbody tr").each(function () {
+
+                var chkBox = $(this).find(".ckb_seleziona");
+
+                if (chkBox.prop("checked")) {
+                    checked = "S";
+                }
+                else {
+                    checked = "N";
+                }
+
+                codPos = $(this).find(".hd_codPos").html();
+                annDen = $(this).find(".hd_annDen").html();
+                mesDen = $(this).find(".hd_mesDen").html();
+                proDen = $(this).find(".hd_proDen").html();
+                impDis = $(this).find(".hd_impDis").html();
+                impSanDet = $(this).find(".hd_impSanDet").html();
+                impCon = $(this).find(".hd_impCon").html();
+                impAddRec = $(this).find(".hd_impAddRec").html();
+                impAbb = $(this).find(".hd_impAbb").html();
+                sanSotSog = $(this).find(".hd_sanSotSog").html();
+                impAssCon = $(this).find(".hd_impAssCon").html();
+                datSca = $(this).find(".hd_datSca").html();
+                codCauSan = $(this).find(".hd_codCauSan").html();
+
+                obj = {
+                    CodPos: codPos,
+                    AnnDen: annDen,
+                    MesDen: mesDen,
+                    ProDen: proDen,
+                    ImpDis: impDis,
+                    ImpSanDet: impSanDet,
+                    ImpCon: impCon,
+                    ImpAddRec: impAddRec,
+                    ImpAbb: impAbb,
+                    SanSotSog: sanSotSog,
+                    ImpAssCon: impAssCon,
+                    DatSca: datSca,
+                    CodCauSan: codCauSan,
+                    Checked: checked,
+                    TotOccorrenze: totOccorrenze
+                }
+
+                objList.push(obj);
+                
+            });
+
+            return objList;
+        }
+
+        function Seleziona_Deseleziona(radioButton) {
+
+            if (radioButton.val() == "TUTTE") {
+                $(".ckb_seleziona").prop("checked", true);
+            }
+            else {
+                $(".ckb_seleziona").prop("checked", false);
+            }
+        }
+
+
+
+    </script>
+}

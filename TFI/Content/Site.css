@@ -1,0 +1,694 @@
+﻿
+/*SOLUTION*/
+.messageStyle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    margin-top: 10px;
+    margin-right: 10px;
+    color: white;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.user-panel {
+    border-bottom: 1px solid #fff !important;
+}
+
+#cont_associamento {
+    width: 100%;
+    padding-left: 27px;
+}
+
+#cont_associamento #lblAzienda,
+#cont_associamento #lblAssociamento {
+    color: #4cff00;
+    font-size: 13px;
+}
+
+#cont_associamento #linkDissociaAzienda i {
+    color: #ff0000;
+}
+
+.card_h {
+    background: #0c773c;
+    text-align: center;
+    width: 100%;
+    color: white;
+}
+
+.btn_official {
+    min-width: 30%;
+    display: block;
+    color: #0c773c;
+    border: 1px solid #0c773c;
+    background-color: #fff;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 4px;
+    /*    margin-left: 33%;*/
+    text-align: center;
+}
+
+.btn_official:hover {
+    color: #fff;
+    background-color: #0c773c;
+}
+
+.btn_official:hover {
+    color: #fff;
+}
+
+.paginate_button .page-link {
+    background-color: #fff;
+    color: #0c773c;
+}
+
+.page-item.active .page-link {
+    background-color: #0c773c;
+    color: #fff;
+}
+
+.spunta {
+    color: #0c773c;
+}
+
+#opaco {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1;
+}
+
+.intestazioneAzzurra {
+    background-color: rgb(0,102,255);
+    color: #fff;
+}
+
+
+
+/*---------------------------------------------------------------------------------------------*/
+
+
+/*LOGIN*/
+
+.cont_input {
+    height: 40px;
+    margin-bottom: 16px;
+}
+
+.cont_input:nth-child(3) {
+    margin-bottom: 0;
+}
+
+.input_login {
+    width: 95%;
+    height: 40px;
+    line-height: 30px;
+    border-radius: 5px;
+    border: 1px solid #0c773c;
+    padding-left: 10px;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+
+/*DENUNCIA MENSILE*/
+
+#ddl_sceltaAnno {
+    margin-left: 10px;
+    width: 100px;
+    height: 30px;
+}
+
+.table {
+    margin-bottom: 20px;
+}
+
+.table th, .table td {
+    padding: 3px;
+    text-align: center;
+}
+
+.table th {
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #0c773c;
+}
+
+.table td {
+    font-size: 80%;
+    color: #000000;
+}
+
+#denunceAnnuali .table td:first-child {
+    text-align: left;
+}
+
+#denunceAnnuali .table td:nth-child(11) a {
+    background-color: transparent;
+    border: none;
+}
+
+#tb_DenunceAnnuali button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#denunceAnnuali .btn_denunceAnnuali {
+    width: 25%;
+    height: 30px;
+    margin-left: 25%;
+    color: #fff;
+    padding: 0;
+}
+
+#denunceAnnuali #cont_sceltaAnno {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#tb_DenunceAnnuali .btn_inserisci {
+    cursor: pointer;
+}
+#tb_DenunceAnnuali .rettifiche{
+    color:red;
+}
+
+#form_sceltaDipa {
+    position: relative;
+}
+
+#lblArretrato {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+#cont_lblArretrato {
+    padding: 0px;
+}
+
+#cont_lblArretrato #cBox_arretrato {
+    margin-top: 6px;
+    margin-left: 10px;
+    transform: scale(1.2);
+}
+
+#denunceAnnuali .btn_official,
+#denunciaMensile_Upload .btn_official {
+    margin-left: 33%;
+}
+
+#denunciaMensile_nuova .btn_official {
+    margin-left: 30%;
+    width: 40%;
+}
+
+#sospensioni_modal .btn_official {
+    margin-right: 35%;
+}
+
+#denunciaMensile_nuova #tb_DenunciaMensile tbody tr td button {
+    border: none;
+    background-color: transparent;
+}
+
+#denunciaMensile_nuova #dataDenuncia {
+    width: 100px;
+}
+#denunciaMensile_lettura #btn_rettifiche{
+    width:30%;
+    margin-left:10%;
+}
+
+#denunciaMensile_lettura #barraBassa label{
+    color:#fff;
+    margin-right:10px;
+}
+
+#denunciaMensile_lettura #barraBassa {
+    padding:10px;
+}
+#denunciaMensile_lettura #tb_DenunciaMensile_filter label {
+    float: right;
+}
+
+#denunciaMensile_nuova #headRow1 div,
+#denunciaMensile_nuova #headRow2 div,
+#denunciaMensile_lettura #headRow1 div,
+#denunciaMensile_lettura #headRow2 div {
+    font-size: 15px;
+}
+
+#denunciaMensile_nuova #headRow1 div:last-child,
+#denunciaMensile_nuova #headRow2 div:last-child,
+#denunciaMensile_lettura #headRow2 div:last-child {
+    text-align: right;
+}
+
+#denunciaMensile_nuova #headRow2 div:nth-child(2),
+#denunciaMensile_lettura #headRow2 div:nth-child(2) {
+    text-align: center;
+}
+
+#denunciaMensile_nuova #tb_DenunciaMensile #impRet,
+#denunciaMensile_nuova #tb_DenunciaMensile #impOcc,
+#denunciaMensile_nuova #tb_DenunciaMensile #impFig {
+    width: 100px;
+}
+
+#denunciaMensile_nuova #tb_DenunciaMensile .link_sosp,
+#denunciaMensile_lettura #tb_DenunciaMensile .link_sosp {
+    color: #0c773c;
+    cursor: pointer;
+}
+
+#denunciaMensile_lettura #btn_totali,
+#denunciaMensile_lettura #btn_chiudi {
+    width: 60%;
+    margin-left: 20%;
+}
+
+#denunciaMensile_nuova #tb_DenunciaMensile .txt_impRet,
+#denunciaMensile_nuova #tb_DenunciaMensile .txt_impOcc,
+#denunciaMensile_nuova #tb_DenunciaMensile .txt_impFig,
+#denunciaMensile_nuova #tb_DenunciaMensile tbody tr .td_impCon {
+    text-align: right;
+}
+
+#denunciaMensile_nuova #tb_DenunciaMensile tbody tr td:nth-child(2) {
+    text-align: left;
+}
+
+#denunciaMensile_nuova .boxTotali,
+#arretrati-box-totali .boxTotali {
+    margin-top: 20px;
+    background-color: #0c773c;
+}
+
+#denunciaMensile_nuova .boxTotali b {
+    color: #fff;
+}
+
+#sospensioni_modal .modal-header {
+    -webkit-justify-content: left;
+    justify-content: left;
+}
+
+#sospensioni_modal #cont_tbSospensioni {
+    max-height: 300px;
+    overflow: auto;
+}
+
+#tb_sospensioni {
+    display: table;
+}
+
+#tb_DenunciaMensile_paginate {
+    margin-left: -100px;
+}
+
+#btn_paginazione {
+    width: 30%;
+    margin-left: 34.9%;
+    margin-right: 34.9%;
+}
+
+#btn_paginazione tr td {
+    border: 1px solid #bdbdbd;
+    padding: 2px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#btn_paginazione tr td:visited {
+    background-color: #0c773c;
+    color: #fff;
+}
+
+#btn_paginazione tr .number {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#denunciaMensile_lettura #barraBassa {
+    background-color: #0c773c;
+}
+
+#denunciaMensile_lettura #barraBassa p,
+#denunciaMensile_lettura #barraBassa b {
+    color: #fff;
+}
+
+#denunciaMensile_totali .card-header {
+    width: 100%;
+    background-color: #fff;
+}
+
+#denunciaMensile_totali .card-header .row:first-child {
+    width: 100%;
+    background-color: #fff;
+}
+
+#denunciaMensile_totali .card-header .row:nth-child(2) {
+    width: 100%;
+    background-color: #0c773c;
+}
+
+#denunciaMensile_totali #form_totaliDenuncia {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#denunciaMensile_totali #form_totaliDenuncia,
+#denunciaMensile_totali #tb_Totali,
+#datiDenuncia #tbTotali {
+    width: 100%;
+}
+
+#denunciaMensile_totali #tb_Totali tr td button,
+#datiDenuncia #tbTotali tr td button {
+    width: 90%;
+    margin-left: 10%;
+    color: #0c773c;
+    border: 2px solid #808080;
+    background-color: #fff;
+    text-align: center;
+}
+
+#denunciaMensile_totali #tb_Totali tr td button:hover,
+#datiDenuncia #tbTotali tr td button:hover {
+    color: #fff;
+    background-color: #0c773c;
+}
+
+#denunciaMensile_totali #tb_Totali tr td input,
+#datiDenuncia #tbTotali tr td input {
+    text-align: right;
+}
+
+#denunciaMensile_totali #tb_Totali tr td label,
+#datiDenuncia #tbTotali tr td label,
+#denunciaMensile_totali #tb_Totali tr td input,
+#datiDenuncia #tbTotali tr td input{
+    width: 100%;
+}
+
+#denunciaMensile_totali #tb_Totali td:nth-child(1),
+#datiDenuncia #tbTotali td:nth-child(1) {
+    width: 250px;
+}
+
+#denunciaMensile_totali #tb_Totali td:nth-child(2),
+#datiDenuncia #tbTotali td:nth-child(2) {
+    width: 200px;
+}
+
+#denunciaMensile_totali #tb_Totali td:nth-child(3),
+#datiDenuncia #tbTotali td:nth-child(3) {
+    width: 200px;
+}
+
+#denunciaMensile_totali #tb_Totali td:nth-child(5),
+#datiDenuncia #tbTotali td:nth-child(5) {
+    width: 150px;
+}
+
+#denunciaMensile_totali #cont_btnTotali,
+#datiDenuncia #cont_btnTotali,
+#denunciaMensile_totali #cont_btnPagamento,
+#datiDenuncia #cont_btnPagamento {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#denunciaMensile_totali #cont_btnPagamentoSanitario {
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+#denunciaMensile_totali #cont_btnTotali button,
+#datiDenuncia #cont_btnTotali button,
+#denunciaMensile_totali #cont_btnPagamento button,
+#denunciaMensile_totali #cont_btnPagamentoSanitario button {
+    border: 2px solid #808080;
+    text-align: center;
+}
+
+#denunciaMensile_totali #cont_btnTotali button,
+#datiDenuncia #cont_btnTotali button {
+    width: 60%;
+    margin-left: 20%;
+    color: #0c773c;
+    background-color: #fff;
+}
+
+#denunciaMensile_totali #cont_btnTotali button:hover,
+#datiDenuncia #cont_btnTotali button:hover {
+    color: #fff;
+    background-color: #0c773c;
+}
+
+#denunciaMensile_totali #cont_btnPagamento button {
+    width: 80%;
+    margin-left: 10%;
+    background-color: #fff;
+    color: #0c773c;
+}
+
+#denunciaMensile_totali #cont_btnPagamento button:hover {
+    background-color: #0c773c;
+    color: #fff;
+}
+
+#denunciaMensile_totali #cont_btnPagamentoSanitario button {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#tbIntestazionePagamento #tbPagamento,
+#pagamentoSanitario #tbPagamentoSanitario {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+#tbIntestazionePagamento #tbPagamento tr td:first-child,
+#tbIntestazionePagamento #tbPagamento tr td:nth-child(3),
+#pagamentoSanitario #tbPagamentoSanitario tr td:first-child,
+#pagamentoSanitario #tbPagamentoSanitario tr td:nth-child(3) {
+    width: 250px;
+}
+
+#tbIntestazionePagamento #tbPagamento input,
+#pagamentoSanitario #tbPagamentoSanitario input {
+    text-align: right;
+    margin-left: 10px;
+}
+
+#pagamentoSanitario .intestazioneAzzurra {
+    text-align: center;
+}
+
+.FS_body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #8ac3e3;
+}
+
+#fondoSanitario input {
+    width: 150px;
+    font-weight: bold;
+}
+
+#denunciaMensile_Upload #titolo,
+#UploadArretrati #titolo {
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-size: 20px;
+}
+
+#denunciaMensile_Upload .modal-header,
+#UploadArretrati  .modal-header {
+    background: #0c773c;
+}
+
+    #denunciaMensile_Upload .modal-header button,
+    #UploadArretrati .modal-header button {
+        color: #fff;
+    }
+
+#denunciaMensile_Upload .cont_data,
+#UploadArretrati .cont_data {
+    padding-bottom: 20px;
+}
+
+#denunciaMensile_Upload #upload_anno,
+#UploadArretrati #anno,
+#denunciaMensile_Upload #upload_mese {
+    width: 100%;
+    height: 40px;
+}
+
+#denunciaMensile_Upload #fileUpload,
+#UploadArretrati #fileUpload {
+    width: 80%;
+    height: 40px;
+}
+#denunciaMensile_rettifiche #headRow2 div:nth-child(2) {
+    text-align: center;
+}
+#denunciaMensile_rettifiche #headRow2 div:nth-child(3) {
+    text-align:right;
+}
+#denunciaMensile_rettifiche #totali #barraBassa {
+    background-color: #0c773c;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+#denunciaMensile_rettifiche #totali .row {
+    margin-left:0;
+    margin-right:0;
+}
+
+#ricercaAzienda {
+    width: 70%;
+    margin-left: 15%;
+    box-shadow: 10px 5px 5px #bdbdbd;
+    margin-bottom: 50px;
+    border-radius: 0 0 30px 0;
+}
+
+    #ricercaAzienda #cerca {
+        width: 30%;
+        margin-left: 35%;
+        margin-top: 20px;
+    }
+
+#tabella_Aziende .btn_seleziona {
+    color: #0c773c;
+    border: none;
+    background-color: transparent;
+}
+
+a img {
+    height: 30px;
+}
+
+#annullamentoDenunce .row{
+    margin-bottom: 10px;
+}
+#annullamentoDenunce label {
+    margin-right: 10px;
+}
+#annullamentoDenunce input[type=text]{
+    display:inline;
+    width: 65%;
+}
+#annullamentoDenunce select{
+    display: inline;
+    width: 65%;
+}
+#annullamentoDenunce_tabella button{
+    width: 80%;
+    margin-left:10%;
+}
+#annullamentoDenunce_tabella #btn_annullaMovimenti{
+    width: 60%;
+    margin-left:20%;
+}
+#generaNotifiche_filtro{
+    margin-bottom: 20px;
+}
+
+#generaNotifiche_filtro .codPos_label {
+    width: 50%;
+    float: left;
+}
+#generaNotifiche_filtro .lbl {
+    width: 30%;
+    float: left;
+}
+
+#generaNotifiche_filtro #codPos_da,
+#generaNotifiche_filtro #codPos_a{
+    width: 50%;
+    margin-bottom: 10px;
+}
+#generaNotifiche_filtro #anno,
+#generaNotifiche_filtro #mese_da,
+#generaNotifiche_filtro #mese_a{
+    width: 60%;
+}
+#generaNotifiche_buttons{
+    padding-top: 20px;
+}
+#generaNotifiche_buttons .btn_official {
+    width: 80%;
+    margin-left: 10%;
+}
+#contabilizzazioneNotifiche #buttons {
+    margin-top: 20px;
+}
+#contabilizzazioneNotifiche #buttons button{
+    width: 70%;
+    margin-left: 15%;
+}
+.pannelloOpaco {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 1040;
+}
+
+.loading-image {
+    position: relative;
+    margin: auto;
+    width: 12%;
+    height: 20%;
+    top: 40%;
+    left: 0;
+    right: 0;
+}
+
+#notifiche_dettaglioDenuncia #buttons button,
+#notifiche_dettaglioDenuncia #buttons a {
+    width: 60%;
+    margin-left:20%;
+}
+
+.input-validation-error{
+    border: 1px solid red;
+    background: #FEF1EC;
+}
+
+.not-interactive {
+    cursor: default;
+    pointer-events: none;
+}
+
+.field-validation-error {
+    color: red;
+}

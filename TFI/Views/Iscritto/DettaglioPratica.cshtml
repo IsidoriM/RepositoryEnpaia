@@ -1,0 +1,204 @@
+﻿@using System.Globalization
+@model OCM.TFI.OCM.Iscritto.DettaglioPratica
+@{
+    ViewBag.Title = "Dettaglio Pratica";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    var it = new CultureInfo("it-IT");
+}
+
+<title>Enpaia | Dettaglio Pratica</title>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Dettaglio Pratica
+                    </div>
+                    <div class="row d-flex justify-content-around">
+                        <div class="card-body col-5">
+                            <table class="table table-striped">
+                                @if (@Model.Id != null && !string.IsNullOrWhiteSpace(@Model.Id.ToString()) && @Model.Id.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Numero Pratica</b></td>
+                                        <td>@Model.Id</td>
+                                    </tr>
+                                }
+                                @if (@Model.Nominativo != null && !string.IsNullOrWhiteSpace(@Model.Nominativo.ToString()) && @Model.Nominativo.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Nominativo</b></td>
+                                        <td>@Model.Nominativo</td>
+                                    </tr>
+                                }
+                                @if (@Model.Tipo_Pratica != null && !string.IsNullOrWhiteSpace(@Model.Tipo_Pratica.ToString()) && @Model.Tipo_Pratica.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Tipo Pratica</b></td>
+                                        <td>@Model.Tipo_Pratica</td>
+                                    </tr>
+                                }
+                                @if (@Model.Stato_Pratica != null && !string.IsNullOrWhiteSpace(@Model.Stato_Pratica.ToString()) && @Model.Stato_Pratica.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Stato Pratica</b></td>
+                                        <td>@Model.Stato_Pratica</td>
+                                    </tr>
+                                }
+                                @if (@Model.Modalità_Pagamento != null && !string.IsNullOrWhiteSpace(@Model.Modalità_Pagamento.ToString()) && @Model.Modalità_Pagamento.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Modalità Pagamento</b></td>
+                                        <td>@Model.Modalità_Pagamento</td>
+                                    </tr>
+                                }
+                                @if (@Model.Iban != null && !string.IsNullOrWhiteSpace(@Model.Iban.ToString()) && @Model.Iban.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Iban</b></td>
+                                        <td>@Model.Iban
+                                        <td>
+                                    </tr>
+                                }
+                                @if (@Model.Swift != null && !string.IsNullOrWhiteSpace(@Model.Swift.ToString()) && @Model.Swift.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Swift</b></td>
+                                        <td>@Model.Swift</td>
+                                    </tr>
+                                }
+                                @if (@Model.Importo_TFR != null && !string.IsNullOrWhiteSpace(@Model.Importo_TFR.ToString()) && @Model.Importo_TFR.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Importo TFR</b></td>
+                                        <td>@Model.Importo_TFR</td>
+                                    </tr>
+                                }
+                                @if (@Model.Percentuale_TFR != null && !string.IsNullOrWhiteSpace(@Model.Percentuale_TFR.ToString()) && @Model.Percentuale_TFR.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Percentuale TFR</b></td>
+                                        <td>@Model.Percentuale_TFR</td>
+                                    </tr>
+                                }
+                                @if (@Model.Posizione != null && !string.IsNullOrWhiteSpace(@Model.Posizione.ToString()) && @Model.Posizione.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Posizione</b></td>
+                                        <td>@Model.Posizione</td>
+                                    </tr>
+                                }
+                                @if (@Model.Ragione_Sociale != null && !string.IsNullOrWhiteSpace(@Model.Ragione_Sociale.ToString()) && @Model.Ragione_Sociale.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Ragione Sociale</b></td>
+                                        <td>@Model.Ragione_Sociale</td>
+                                    </tr>
+                                }
+                                @if (@Model.Data_Inizio_RDL != null && !string.IsNullOrWhiteSpace(@Model.Data_Inizio_RDL.ToString()) && @Model.Data_Inizio_RDL.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Data inizio RDL</b></td>
+                                        <td>@Model.Data_Inizio_RDL</td>
+                                    </tr>
+                                }
+                                @if (@Model.Data_Fine_RDL != null && !string.IsNullOrWhiteSpace(@Model.Data_Fine_RDL.ToString()) && @Model.Data_Fine_RDL.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Data fine RDL</b></td>
+                                        <td>@Model.Data_Fine_RDL</td>
+                                    </tr>
+                                }
+                                @if (@Model.Motivo_Anticipazione != null && !string.IsNullOrWhiteSpace(@Model.Motivo_Anticipazione.ToString()) && @Model.Motivo_Anticipazione.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Motivazione Anticipazione</b></td>
+                                        <td>@Model.Motivo_Anticipazione</td>
+                                    </tr>
+                                }
+                                @if (@Model.Utente_Richiesta != null && !string.IsNullOrWhiteSpace(@Model.Utente_Richiesta.ToString()) && @Model.Utente_Richiesta.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Utente Richiesta</b></td>
+                                        <td>@Model.Utente_Richiesta</td>
+                                    </tr>
+                                }
+                                @if (@Model.Data_Richiesta != null && !string.IsNullOrWhiteSpace(@Model.Data_Richiesta.ToString()) && @Model.Data_Richiesta.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Data richiesta</b></td>
+                                        <td>@Model.Data_Richiesta</td>
+                                    </tr>
+                                }
+                                @if (@Model.Utente_Conferimento != null && !string.IsNullOrWhiteSpace(@Model.Utente_Conferimento.ToString()) && @Model.Utente_Conferimento.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Utente conferimento</b></td>
+                                        <td>@Model.Utente_Conferimento</td>
+                                    </tr>
+                                }
+                                @if (@Model.Data_Conferimento != null && !string.IsNullOrWhiteSpace(@Model.Data_Conferimento.ToString()) && @Model.Data_Conferimento.ToString().ToUpper() != "NULL")
+                                {
+                                    <tr>
+                                        <td><b>Data conferimento</b></td>
+                                        <td>@Model.Data_Conferimento</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <div class="card-body col-4 bg-light h-100 border m-4">
+                            <h1>NOTE</h1>
+                            @if (@Model.Note == null || string.IsNullOrWhiteSpace(@Model.Note.Id.ToString()))
+                            {
+                                <p class="text-bold">Note non presenti</p>
+                            }
+                            else
+                            {
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p class="text-bold">Contenuto Nota:</p>
+                                        </td>
+                                        <td>
+                                            <p>@Model.Note.ContenutoNota</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-bold">Data:</p>
+                                        </td>
+                                        <td>
+                                            <p>@Model.Note.DataDiInserimento</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-bold">Utente:</p>
+                                        </td>
+                                        <td>
+                                            <p>@Model.Note.UtenteInserimento</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        DOCUMENTI ALLEGATI
+                    </div>
+                    <div class="row">
+                        <div class="card-body col-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

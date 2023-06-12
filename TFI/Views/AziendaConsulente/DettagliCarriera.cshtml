@@ -1,0 +1,654 @@
+﻿
+@model TFI.OCM.AziendaConsulente.RapportiLavoro
+
+@{
+    ViewBag.Title = "Dettaglio Carriera";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+@{
+    var dettagli = Model.detCar;
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Visualizzazione Dettaglio Carriera Matricola: @dettagli.matricola
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card card-success card-tabs">
+                                    <div class="card-header p-0 pt-1" style="background-color: #0c773c;">
+                                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                            <li class="nav-item col-sm-3">
+                                                <a class="nav-link not-interactive" id="datiAnagraficiTab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Anagrafici</a>
+                                            </li>
+                                            <li class="nav-item col-sm-3">
+                                                <a class="nav-link not-interactive active" id="datiContrattualiTab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Dati Contrattuali</a>
+                                            </li>
+                                            <li class="nav-item col-sm-3">
+                                                <a class="nav-link not-interactive" id="datiRetributiviTab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Dati Retributivi</a>
+                                            </li>
+                                        @if (ViewBag.IsAziSomm)
+                                        {
+                                            <li class="nav-item col-sm-3">
+                                                <a class="nav-link not-interactive" id="aziendaUtilizzatriceTab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Azienda utilizzatrice</a>
+                                            </li>
+                                        }
+                                        </ul>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="tab-content" id="custom-tabs-one-tabContent">
+                                            <div class="tab-pane fade" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="datiAnagraficiTab">
+                                                <form id="formModAnag" autocomplete="off" method="post">
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Matricola</label>
+                                                                <input type="text" class="form-control" value="@dettagli.matricola" disabled>
+                                                                <input type="text" class="form-control" id="prot" value="@dettagli.prot" hidden>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Cognome</label>
+                                                                <input type="text" class="form-control" value="@dettagli.cognome" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Nome</label>
+                                                                <input type="text" class="form-control" value="@dettagli.nome" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Codice Fiscale</label>
+                                                                <input type="text" class="form-control" value="@dettagli.codFis" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Data Nascita</label>
+                                                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                                                    <input type="date" class="form-control datetimepicker-input" value="@dettagli.dataNas" data-target="#reservationdate" disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Sesso</label>
+                                                                <select class="form-control" disabled>
+                                                                    <option selected>@(dettagli.sesso == "1" ? "M":"F")</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <input type="text" class="form-control" value="@dettagli.comuneN" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input type="text" class="form-control" value="@dettagli.provinciaN" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Stato Estero</label>
+                                                                <input type="text" class="form-control" value="@dettagli.statoEsN" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group autocomplete">
+                                                                <label>Titolo di Studio</label>
+                                                                <select id="TitoloStudio" asp-for="TitoloStudio" name="TitoloStudio" class="form-control" required disabled>
+                                                                    <option selected disabled>@dettagli.titoloStudio</option>
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>DUG</label>
+                                                                <select class="form-control" disabled>
+                                                                    <option selected>@dettagli.indirizzo</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo di Residenza</label>
+                                                                <input type="text" class="form-control" id="Indirizzo" asp-for="Indirizzo" name="Indirizzo" value="@dettagli.via" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input type="text" class="form-control" id="NumeroCivico" asp-for="NumeroCivico" name="NumeroCivico" value="@dettagli.numCiv" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input type="text" class="form-control" pattern=".{2}" id="Provincia2" asp-for="Provincia2" name="Provincia2" value="@(dettagli.provincia != "EE" ? dettagli.provincia : "")" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <input type="text" class="form-control" id="Comune2" asp-for="Comune2" name="Comune2" value="@dettagli.comune" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <input type="text" class="form-control" id="Localita" asp-for="Localita" name="Localita" value="@dettagli.localita" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Cap</label>
+                                                                <input type="text" class="form-control" pattern=".{5}" id="Cap" asp-for="Cap" name="Cap" value="@dettagli.cap" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Stato Estero</label>
+                                                                <input type="text" class="form-control" id="StatoEstero2" asp-for="StatoEstero2" name="StatoEstero2" value="@dettagli.statoEs" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>C/O</label>
+                                                                <input type="text" class="form-control" value="@dettagli.co" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="email" class="form-control" id="Email" asp-for="Email" name="Email" value="@dettagli.email" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Posta Elettronica Certificata</label>
+                                                                <input type="email" class="form-control" id="EmailCert" asp-for="EmailCert" name="EmailCert" value="@dettagli.pec" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Fax</label>
+                        <input type="tel" class="form-control" id="Fax" asp-for="Fax" name="Fax" value="@dettagli.fax" disabled>
+                    </div>
+                </div>-->
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Telefono</label>
+                                                                <input type="tel" class="form-control" id="Tel1" asp-for="Tel1" name="Tel1" value="@dettagli.tel" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Cellulare</label>
+                                                                <input type="tel" class="form-control" pattern=".{10}" id="Cellulare" asp-for="Cellulare" name="Cellulare" value="@dettagli.cell" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+
+                                                </form>
+                                                <div class="form-row justify-content-end mt-3" style="column-gap : 10px">
+                                                    <a class="btn btn-block btn-outline-success col-3" id="datiAnagraficiNext">
+                                                        Avanti
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade show active" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="datiContrattualiTab">
+                                                <div class="row d-flex flex-row justify-content-start align-items-center">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label>Data iscrizione</label>
+                                                            <input type="date" class="form-control" value="@dettagli.datIsc" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label>Data Inizio</label>
+                                                            <input type="date" class="form-control" id="datIni" value="@dettagli.datIni" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex flex-row justify-content-start align-items-center">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label>Tipo rapporto</label>
+                                                            <select class="form-control" disabled>
+                                                                <option selected>@dettagli.tipRap</option>
+                                                            </select>
+                                                            <input type="text" id="codTipRap" value="@dettagli.codTipRap" hidden />
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group" style="display: none;" name="" id="data_termine">
+                                                            <label> Data Termine</label>
+                                                            <input type="date" value="@dettagli.datTerm" id="datTerm" name="datTerm" asp-for="datTerm" class="form-control" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <div style="display: none" name="periododll" id="periododll">
+                                                                <label>Durata mesi</label>
+                                                                <input type="text" class="form-control" name="periodo" asp-for="periodo" id="periodo" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row d-flex flex-row justify-content-start align-items-center">
+                                                    <div class="form-group col-4" style="display: none;" name="part_time" id="part_time">
+                                                        <label>% Part-Time</label>
+                                                        <input type="number" value="@dettagli.PercPT" id="PercPT" name="PercPT" class="form-control" min="0" max="100" readonly />
+                                                    </div>
+                                                    <div class="col-8" style="display: none;" name="da_al" id="da_al">
+                                                        <div class="form-group align-items-center col-4">
+                                                            <label>Data Termine</label>
+                                                            <input type="date" value="@dettagli.datTerm" class="form-control" name="alal" id="alal" asp-for="alal" readonly />
+                                                        </div>
+                                                        <div class="form-group col-4">
+                                                            <label>% Periodo</label>
+                                                            <input type="number" value="@dettagli.perce" class="form-control" name="perce" id="perce" asp-for="perce1" min="0" max="100" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="display: none;" name="mesi" id="mesi">
+                                                    <div class="form-group spazioCheckMesi d-flex flex-row justify-content-between align-items-baseline pt-1 pl-3" style="column-gap: 10px">
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="1" @(dettagli.meseSel.Contains("1") ? "checked" : "") disabled />
+                                                            <label>Gen</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="2" @(dettagli.meseSel.Contains("2") ? "checked" : "") disabled />
+                                                            <label>Feb</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="3" @(dettagli.meseSel.Contains("3") ? "checked" : "") disabled />
+                                                            <label>Mar</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="4" @(dettagli.meseSel.Contains("4") ? "checked" : "") disabled />
+                                                            <label>Apr</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="5" @(dettagli.meseSel.Contains("5") ? "checked" : "") disabled />
+                                                            <label>Mag</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="6" @(dettagli.meseSel.Contains("6") ? "checked" : "") disabled />
+                                                            <label>Giu</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="7" @(dettagli.meseSel.Contains("7") ? "checked" : "") disabled />
+                                                            <label>Lug</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="8" @(dettagli.meseSel.Contains("8") ? "checked" : "") disabled />
+                                                            <label>Ago</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="9" @(dettagli.meseSel.Contains("9") ? "checked" : "") disabled>
+                                                            <label>Set</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="10" @(dettagli.meseSel.Contains("10") ? "checked" : "") disabled />
+                                                            <label>Ott</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="11" @(dettagli.meseSel.Contains("11") ? "checked" : "") disabled />
+                                                            <label>Nov</label>
+                                                        </div>
+                                                        <div>
+                                                            <input type="checkbox" name="MeseSel[]" value="12" @(dettagli.meseSel.Contains("12") ? "checked" : "") disabled />
+                                                            <label>Dic</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Contratto</label>
+                                                            <select class="form-control" disabled>
+                                                                <option selected>@dettagli.contratto</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Livello</label>
+                                                            <select class="form-control" disabled>
+                                                                <option selected>@dettagli.livello</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Qualifica</label>
+                                                            <input type="text" class="form-control" value="@dettagli.qualifica" disabled>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Numero mensilità</label>
+                                                            <input type="text" class="form-control" value="@dettagli.numMes" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Mese corrispondente</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>14°</label>
+                                                            <input type="text" class="form-control" value="@dettagli.m14" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>15°</label>
+                                                            <input type="text" class="form-control" value="@dettagli.m15" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>16°</label>
+                                                            <input type="text" class="form-control" value="@dettagli.m16" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Aliquota contributiva</label>
+                                                            <select class="form-control" disabled>
+                                                                <option selected>@dettagli.aliqCont</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Valore aliquota</label>
+                                                            <input type="text" class="form-control" value="@dettagli.aliquota" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-4" style="text-align:center">
+                                                        <div class="form-group">
+                                                            <label>Fap</label>
+                                                            <input type="checkbox" name="fap" id="fap" asp-for="fap" class="form-control" value="true" @(dettagli.fap ? "checked" : "") disabled />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <div class="icheck-success d-inline">
+                                                                @if (@dettagli.assCon == true)
+                                                                {
+                                                                    <input type="checkbox" name="flexRadioDefault1" id="flexRadioDefault1" asp-for="flexRadioDefault1" class="form-control" checked required disabled>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <input type="checkbox" name="flexRadioDefault1" id="flexRadioDefault1" asp-for="flexRadioDefault1" class="form-control" required disabled>
+                                                                }
+                                                                @*<input type="radio" value="@dettagli.assCon" name="flexRadioDefault" id="flexRadioDefault1">*@
+                                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                                    Assistenza contrattuale
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                    <a class="btn btn-outline-success col-3" id="datiContrattualiBack">
+                                                        Indietro
+                                                    </a>
+                                                    <a class="btn btn-block btn-outline-success col-3" id="datiContrattualiNext">
+                                                        Avanti
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Emolumenti contrattuali (€)</label>
+                                                                <input class="form-control" value="@dettagli.emolumenti" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Retribuzione dichiarata (€)</label>
+                                                                <input class="form-control" value="@dettagli.retribuzione" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Scatti di anzianità</label>
+                                                                <input type="number" class="form-control" value="@dettagli.scattiAnz" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Ultimo</label>
+                                                                <input type="@(string.IsNullOrEmpty(dettagli.dataUltSc) ? "" : "date")" class="form-control" value="@dettagli.dataUltSc" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Prossimo</label>
+                                                                <input type="@(string.IsNullOrEmpty(dettagli.prossimoSc) ? "" : "date")" class="form-control" value="@dettagli.prossimoSc" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <label>Importo €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.importoSc" disabled>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <label>Emolumenti extracontrattuali per n° mensilità:</label>
+                                                                <br />
+                                                                <label>12 €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.S12" disabled>
+                                                                <label>13 €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.S13" disabled>
+                                                                <label>14 €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.S14" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <label style="height:17px"></label>
+                                                                <br />
+                                                                <label>15 €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.S15" disabled>
+                                                                <label>16 €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.S16" disabled>
+                                                                <label>Totale €</label>
+                                                                <input type="text" class="form-control" value="@dettagli.totaleS" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <div class="form-row justify-content-@(ViewBag.IsAziSomm ? "between" : "start") mt-3" style="column-gap : 10px">
+                                                    <a class="btn btn-outline-success col-3" id="datiRetributiviBack">
+                                                        Indietro
+                                                    </a>
+                                                    @if (ViewBag.IsAziSomm) 
+                                                    { 
+                                                        <a class="btn btn-block btn-outline-success col-3" id="datiRetributiviNext">
+                                                            Avanti
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Posizione</label>
+                                                            <input type="text" class="form-control" value="@dettagli.pozioneAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Ragione sociale</label>
+                                                            <input type="text" class="form-control" value="@dettagli.ragsocAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Codice fiscale</label>
+                                                            <input type="text" class="form-control" value="@dettagli.cfAz" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Partita IVA</label>
+                                                            <input type="text" class="form-control" value="@dettagli.piAZ" disabled>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <label>Indirizzo di Residenza</label>
+                                                            <select class="form-control" disabled>
+                                                                <option selected>@dettagli.residenzaAZ</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>&nbsp;</label>
+                                                            <input type="text" class="form-control" value="@dettagli.indirizzoAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <div class="form-group">
+                                                            <label>Civico</label>
+                                                            <input type="text" class="form-control" value="@dettagli.numCivAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Comune</label>
+                                                            <input type="text" class="form-control" value="@dettagli.comuneAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>CAP</label>
+                                                            <input type="text" class="form-control" value="@dettagli.capAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Provincia</label>
+                                                            <input type="text" class="form-control" value="@dettagli.provinciaAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label>Località</label>
+                                                            <input type="text" class="form-control" id="localitaAZ" asp-for="localitaAZ" name="localitaAZ" value="@dettagli.localitaAZ" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row justify-content-start mt-3" style="column-gap : 10px">
+                                                    <a class="btn btn-outline-success col-3" id="aziendaUtilizzatriceBack">
+                                                        Indietro
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between" style="margin-top:2%">
+                            <div class="col-sm-3" style="float: right;">
+                                <button type="button" onclick="history.go(-1)" class="btn btn-outline-success hover btn-lg">Torna alla lista</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/dist/js/pages/Azienda/DettagliCarriera.js"></script>

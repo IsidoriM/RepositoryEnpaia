@@ -1,0 +1,18 @@
+@using TFI.OCM.Utente
+@{
+    ViewBag.Title = "Infortuni";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<div class="container">
+    @{
+        if (((Utente)Session["utente"]).Tipo == "A")
+        {
+            <h1>Lista Infortuni</h1>
+        }
+        if (((Utente)Session["utente"]).Tipo == "I")
+        {
+            <h1>Lista Infortuni Iscritto</h1>
+        }
+    }
+</div>

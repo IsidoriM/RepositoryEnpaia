@@ -1,0 +1,135 @@
+﻿@using TFI.OCM.AziendaConsulente
+@model AnagraficaEstrattiContoAzienda
+
+@{
+    ViewBag.Title = "Estratti Conto";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+<title>Enpaia | Estratti Conto</title>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            @*<div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Dati Azienda
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Posizione</label>
+
+
+                                    <input type="text" class="form-control" value="@Model.Posizione" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Ragione Sociale</label>
+                                    <input type="text" class="form-control" value="@Model.RagioneSociale" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Codice Fiscale</label>
+                                    <input type="text" class="form-control" value="@Model.CodiceFis" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Partita IVA</label>
+                                    <input type="text" class="form-control" value="@Model.PartitaIva" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group">
+                                    <label>Indirizzo Sede Amm.</label>
+                                    <input type="text" class="form-control" value=" VIA @Model.Indirizzo  @Model.NumeroCivico " disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label>Comune</label>
+                                    <input type="text" class="form-control" value="@Model.Comune" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>CAP</label>
+                                    <input type="text" class="form-control" value="@Model.CAP
+                                           " disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Provincia</label>
+                                    <input type="text" class="form-control" value="@Model.Provincia
+                                           " disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Estratti Conto TFR
+                    </div>
+                    <div class="card-body" style=" overflow:scroll;">
+                        <table id="example2" class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Saldo al 31/12</th>
+                                    <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Estratti Conto TFR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+
+
+
+                                    foreach (var itm in Model.estrattiContos)
+                                    {
+                                        <tr>
+                                            <td style="text-align:center"> @itm.Anno</td>
+                                            <td style="text-align:center"><a href="@Url.Action("FTP_DownloadFile","AziendaConsulente",new { path = @itm.NomeFile })"><img src="~/Images/pdf-icon-png-adobe-acrobat.png" /></a></td>
+                                        </tr>
+                                    }
+
+                                }
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<h4 style="text-align:center;font-weight:600;font-size:15px">Per una corretta visualizzazione degli Estratti Conto scaricare la versione Acrobat Reader 20.xx</h4>
+
+<center> <a href="https://get.adobe.com/it/reader/"><img src="~/Images/adobeReader.jpg" style="height:35px" /></a></center><br />
+

@@ -1,0 +1,132 @@
+﻿@model TFI.OCM.Amministrativo.TrasferimentiRdlOCM
+@{
+    ViewBag.Title = "Ricerca Trasferimenti";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Annulla Trasferimenti RDL</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("RicercaTrasferimentiRDL", "Amministrativo", FormMethod.Post))
+        {
+            <div class="input-group">
+                <div class=col-lg-4>
+                    <label>Codice posizione</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="CodPos" name="CodPos" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-8>
+                    <label>Ragione Sociale</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="RagSoc" name="RagSoc" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class=col-lg-4>
+                    <label>Codice Posizione dopo il trasferimento</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="CodPosTra" name="CodPosTra" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-8>
+                    <label>Ragione Sociale dopo il trasferimento</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="RagSocTra" name="RagSocTra" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class=col-lg-4>
+                    <label>Matricola</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Matricola" name="Matricola" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Cognome</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Cognome" name="Cognome" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-2">
+                    <button name="ricerca" id="ricerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca" style="float: right;margin-top:30px; margin-right:20px">Ricerca</button>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12" style="height:300px; overflow:scroll;">
+                        <table id="table" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Matricola </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Data Trasferimento</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Codice Posizione(D.T.)</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Cognome </th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Nome </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Codice Fiscale </th>
+                                    <th style="background: #0c773c; color: white; width: 30%; text-align: center; vertical-align: middle"> Ragione Sociale(D.T.)</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Annullamento </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var i in Model.datiTrasferimentoList)
+                                    {
+                                        <tr>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.CodPos) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.ProRap) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.ProRapTra) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.ProTraRap) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.DatAnn) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Gruppo) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.ProSos) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.RagSoc) </td>
+                                            <td style="text-align: center; vertical-align: middle"> @(i.Matricola == null ? "Dato non disponibile" : i.Matricola) </td>
+                                            <td style="text-align: center; vertical-align: middle"> @(i.DatTra == null ? "Dato non disponibile" : i.DatTra) </td>
+                                            <td style="text-align: center; vertical-align: middle">@(i.CodPosTra) </td>
+                                            <td style="text-align: center; vertical-align: middle">@(i.Cognome) </td>
+                                            <td style="text-align: center; vertical-align: middle">@(i.Nome) </td>
+                                            <td style="text-align: center; vertical-align: middle">@(i.CodFis) </td>
+                                            <td style="text-align: center; vertical-align: middle"> @(i.RagSocTra == null ? "Dato non disponibile" : i.RagSocTra) </td>
+                                            <td style="vertical-align: middle;">
+                                                <a style="height:auto;" href='@Url.Action("AnnullamentoTrasferimenti", "Amministrativo",
+                                                        new {CodPos = i.CodPos, CodPosTra = i.CodPosTra, RagSoc = i.RagSoc, RagSocTra= i.RagSocTra,
+                                                            Matricola = i.Matricola, Nome= i.Nome, Cognome = i.Cognome,ProRap = i.ProRap,ProRapTra = i.ProRapTra,
+                                                            DatTra = i.DatTra, Gruppo = i.Gruppo, ProSos = i.ProSos,DatAnn = i.DatAnn,CodFis=i.CodFis,ProTraRap=i.ProTraRap })'>
+                                                    <i class="fas fa-eraser fa"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}
+

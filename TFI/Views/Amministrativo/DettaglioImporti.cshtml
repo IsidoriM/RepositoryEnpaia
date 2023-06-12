@@ -1,0 +1,122 @@
+﻿@model List<TFI.OCM.Amministrativo.NotificheUfficioOCM>
+@{
+    ViewBag.Title = "Dettaglio Importi";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Dettaglio Importi</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="input-group">
+                <div class="col-lg-4">
+                    <label>Posizione</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="CodPos" name="CodPos" value="@ViewBag.CodPos">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>Ragione Sociale</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="RagSoc" name="RagSoc" value="@ViewBag.RagSoc">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>Matricola</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Matricola" name="Matricola" value="@ViewBag.Matricola">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>Nominativo</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Nominativo" name="Nominativo" value="@ViewBag.Nominativo">
+                    </div>
+                </div>
+                <div class=col-lg-3>
+                    <label>Periodo</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Periodo" name="Periodo" asp-for="Periodo" value="@ViewBag.Periodo">
+                    </div>
+                </div>
+                <div class=col-lg-3>
+                    <label>Tipo</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="TipMov" name="TipMov" asp-for="TipMov" value="@ViewBag.TipMov">
+                    </div>
+                </div>
+                <div class="row justify-content-end" style="margin-top:2%">
+                    <div class="col-3">
+                        <button type="button" id="btn_stampa" class="btn_official">Stampa video</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@if (Model != null)
+{
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div>
+                        <table id="" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center;vertical-align:central; ">
+                            <thead>
+                                <tr class="header">
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Posizione</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Matricola</th>
+                                    <th style="background: #0c773c; color: white; width: 20%; text-align: center; vertical-align: middle">Anno Denuncia</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Mese Denuncia</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Aliquota</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">DenForAss</th>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">ImpCon</th>
+                          
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (TFI.OCM.Amministrativo.NotificheUfficioOCM i in Model)
+                                {
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td style="text-align:center;vertical-align:middle">@i.CodPos</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.Matricola</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.AnnDen</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.MesDen</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.Aliq</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.DENFORASS</td>
+                                    <td style="text-align:center;vertical-align:middle">@i.Impcon</td>
+                                   
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $("#btn_stampa").click(function () {
+            window.print();
+        });
+    }
+</script>
+
+

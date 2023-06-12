@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "Seleziona Azienda";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    //var webGrid = new WebGrid(Model);
+}
+
+@model List<TFI.OCM.AziendaConsulente.Azienda>
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .cancelBtn::after {
+        visibility: visible;
+        background-color: #0c773c;
+        color: white;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .applyBtn::after {
+        background-color: #0c773c;
+        color: white;
+        visibility: visible;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .webgrid-footer {
+        text-align: center;
+        background-color: #0c773c;
+        color: white;
+    }
+
+    .webgrid-header {
+        font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        background-color: #0c773c;
+        color: white;
+    }
+
+        .webgrid-header a {
+            font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            color: white;
+        }
+
+    #cerca {
+        text-align: center;
+    }
+
+        #cerca:hover {
+            text-align: center;
+            background-color: #0c773c;
+        }
+
+    #cancella:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+
+    #inserisci:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+</style>
+
+@{ Html.RenderPartial("PartialViewShowMessages"); }
+
+
+@using (Html.BeginForm("Index", "UtenteEnpaia", FormMethod.Post))
+{
+    <div class="card" style="background-color:white" id="ricercaAzienda">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Cerca Azienda</h3>
+        </div>
+        <div class="card-body" id="filtroRicerca">
+            <div class="row">
+                <div class="col-6 row" style="margin-right:20px;">
+                    <label>Codice Posizione:</label>
+                    <input class="form-control" type="text" id="posizione" name="posizione" autocomplete="off"/>
+                </div>
+                <div class="col-6 row">
+                    <label>Ragione Sociale:</label>
+                    <input class="form-control" type="text" id="ragioneSociale" name="ragioneSociale" autocomplete="off" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 row" style="margin-right:20px;">
+                    <label>Codice Fiscale:</label>
+                    <input class="form-control" type="text" id="codiceFiscale" name="codiceFiscale" autocomplete="off" />
+                </div>
+                <div class="col-6 row">
+                    <label>Partita IVA:</label>
+                    <input class="form-control" type="text" id="partitaIVA" name="partitaIVA" autocomplete="off" />
+                </div>
+            </div>
+            <div>                               
+                <button name="submit_button" id="cerca" type="submit" class="btn_official">Cerca</button>                        
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("SelezionaAzienda", "UtenteEnpaia", FormMethod.Post, new { id = "form_selezionaAzienda" }))
+{
+    if (Model != null)
+    {
+        if (Model.Count != 0)
+        {
+            <table class="table table-striped" id="tabella_Aziende">
+                <thead>
+                    <tr>
+                        <th>Codice Posizione</th>
+                        <th>Ragione Sociale</th>
+                        <th>Codice Fiscale</th>
+                        <th>Partita Iva</th>
+                        <th>&emsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (TFI.OCM.AziendaConsulente.Azienda azi in Model)
+                    {
+                        <text>
+                            <tr>
+                                <td class="codPos">@azi.codicePosizione</td>
+                                <td class="ragSoc">@azi.utenzaConsulente</td>
+                                <td>@azi.codiceFiscale</td>
+                                <td>@azi.partitaIVA</td>
+                                <td>
+                                    <button type="button" class="btn_seleziona" title="associa azienda">
+                                        <i class="fas fa-angle-right"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </text>
+                    }                                       
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>@Html.Hidden("posizione", "", new { id = "codPosizione" })</td>                        
+                        <td>@Html.Hidden("ragioneSociale", "", new { id = "ragSociale" })</td>                        
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+    }
+}
+
+@section JS{
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#tabella_Aziende").DataTable({ "paging": true, "ordering": false, "lengthChange": false, "responsive": false, "autoWidth": false, "info": false, "searching": false });
+
+            $("#tabella_Aziende .btn_seleziona").click(function () {
+                var datiRiga = GetDatiRiga($(this).closest("tr"));
+
+                $("#tabella_Aziende #codPosizione").val(datiRiga.codPosizione);
+                $("#tabella_Aziende #ragSociale").val(datiRiga.ragSociale);
+                $("#form_selezionaAzienda").submit();
+            });
+
+			$(document).on("input", "#posizione", function (evt) {
+				var input = $(evt.target),
+					val = input.val();
+
+				if (val.length > 8) {
+					alert("Superato il limite massimo di caratteri!");
+					input.val(val.substring(0, 8));
+					return false;
+				}
+			});
+
+        });
+
+        function GetDatiRiga(riga) {
+
+            var obj;
+            var codPos = riga.children(".codPos").html();
+            var ragSoc = riga.children(".ragSoc").html();
+
+            obj = {
+                codPosizione: codPos,
+                ragSociale: ragSoc
+            }
+
+            return obj;
+        }
+
+                //$(function Cerca() {
+
+                //    var posizione = sessionStorage.getItem("posizione");
+                //    var ragioneSociale = sessionStorage.getItem("ragioneSociale");
+                //    var partitaIVA = sessionStorage.getItem("partitaIVA");
+                //    var codiceFiscale = sessionStorage.getItem("codiceFiscale");
+
+                //    if (posizione != null || ragioneSociale != null || partitaIVA != null || codiceFiscale != null) {
+
+                //        $("input[id=posizione]").val(posizione);
+                //        $("input[name=ragioneSociale]").val(ragioneSociale);
+                //        $("input[name=partitaIVA]").val(partitaIVA);
+                //        $("input[name=codiceFiscale]").val(codiceFiscale);
+                //    }
+
+                //    $("input[name=posizione]").on("change", function () {
+                //        sessionStorage.setItem("posizione", $(this).val());
+                //    });
+                //    $("input[name=ragioneSociale]").on("change", function () {
+                //        sessionStorage.setItem("ragioneSociale", $(this).val());
+                //    });
+                //    $("input[name=partitaIVA]").on("change", function () {
+                //        sessionStorage.setItem("partitaIVA", $(this).val());
+                //    });
+                //    $("input[name=codiceFiscale]").on("change", function () {
+                //        sessionStorage.setItem("codiceFiscale", $(this).val());
+                //    });
+
+                //});
+
+    </script>
+}
+
+

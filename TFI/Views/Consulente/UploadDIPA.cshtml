@@ -1,0 +1,100 @@
+@{
+    ViewBag.Title = "Seleziona Azienda";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@{
+    Html.RenderPartial("PartialViewShowMessages");
+}
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <div class="modal" tabindex="-1" id="denunciaArretrati_Upload_Errors">
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Errori nel caricamento tramite file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="text-center text-white" style="background-color: #0c773c; font-size: 17px">
+                            <tr>
+                                <th>Errore</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var err in ViewBag.ErrorsInFile)
+                            {
+                                <tr>
+                                    <td style="font-size: 16px">@Html.Raw(@err)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card" style="background-color:white" id="Titolo">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Upload Dipa Multiaziendale</h3>
+    </div>
+</div>
+
+
+<div class="d-flex justify-content-center">
+    <div class="card" style="background-color:white; max-width:60%">
+        <div class="card-body col-lg-12">
+            <div class="text-center">
+                <h5 id="titolo" class="h5"><strong>Caricamento Tracciato Record Denuncia Mensile</strong></h5>
+            </div>
+            @using (Html.BeginForm("UploadDIPA", "Consulente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div>
+                    <div class="row d-flex justify-content-around">
+                        <div class="cont_data d-flex my-2">
+                            @Html.Label("annoDenuncia", "Anno: ", new { @class = "mr-2" })
+                            @Html.TextBox("annoDenuncia", null, new { required = "required", id = "upload_anno", @placeholder = "Inserire Anno DIPA" })
+                            @Html.Label("meseDenuncia", "Mese: ", new { @class = "mx-2" })
+                            <select id="upload_mese" name="meseDenuncia" required>
+                                @foreach (SelectListItem mese in ViewBag.listaMesi)
+                                {
+                                    if (mese.Value == "0")
+                                    {
+                                        <option value="">@mese.Text.ToUpper()</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@mese.Value">@mese.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-12 cont_data d-flex justify-content-center my-2">
+                            <div id="cont_file">
+                                @Html.Label("File")
+                                <input type="file" id="fileUpload" name="fileUpload" required accept=".txt" class="ml-3" />
+                                <p id="fileUpload_errorMsg" class="text-red" hidden>* Formato file non valido</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 cont_btn d-flex justify-content-center my-2">
+                        <button type="submit" class="btn_official" id="upload_btnConferma">Conferma</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <script>
+        $('#denunciaArretrati_Upload_Errors').modal('show');
+    </script>
+}

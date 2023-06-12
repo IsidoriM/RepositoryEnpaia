@@ -1,0 +1,928 @@
+﻿@model TFI.OCM.AziendaConsulente.RicercaArretrati
+
+@{
+    ViewBag.Title = "Ricerca Arretrati";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<div class="modal fade" tabindex="-1" id="UploadArretrati">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="titolo">Caricamento Tracciato Record Denuncia Arretrati</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			@using (Html.BeginForm("UploadArretrato", "AziendaConsulente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12 cont_data">
+                            @Html.DropDownList("anno", (IEnumerable<SelectListItem>)ViewBag.ListaAnniCompetenzaNonPrescritti,"Seleziona anno competenza...", new { id = "anno", required = "required" })
+                        </div>
+						<div class="col-12 cont_data">
+							<div id="cont_file">
+								@Html.Label("File")
+								<input type="file" id="fileUpload" name="fileUpload" required accept=".txt"/>
+								<p id="fileUpload_errorMsg" class="text-red" hidden>* Formato file non valido</p>
+							</div>
+						</div>
+					</div>
+					<div style="display:none">
+						@{ string proDen = ViewBag.proDen;}
+						@Html.TextBox("proDen", proDen, new { id = "upload_proDen" })
+					</div>
+					<div class="col-12 cont_btn">
+						<button type="submit" class="btn_official m-auto" id="upload_btnConferma">Conferma</button>
+						<div id="btnConfermaIsVisible" style="display:none">@ViewBag.btnConfermaIsVisible</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="col-12">
+
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <div class="modal" tabindex="-1" id="denunciaArretrati_Upload_Errors" >
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Errori nel caricamento tramite file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="text-center text-white" style="background-color: #0c773c; font-size: 17px">
+                        <tr>
+                            <th>Errore</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var err in ViewBag.ErrorsInFile)
+                        {
+                            <tr>
+                                <td style="font-size: 16px">@Html.Raw(@err)</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="card card-default" id="ricArr">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            Ricerca Arretrati
+        </h3>
+    </div>
+</div>
+
+@if (!Model.IsAnniCompetenzaListEmpty)
+{
+    using (Html.BeginForm("RicercaArretrati", "AziendaConsulente", FormMethod.Post, new { id = "ricercaArretrati" }))
+    {
+
+        <INPUT id="hdnParametro" type="hidden" name="Hidden1">
+        <INPUT id="hdnSQL" type="hidden" name="Hidden1">
+        <INPUT id="hdnStato" type="hidden" name="Hidden1">
+
+        @Html.HiddenFor(model => model.PageSize)
+        @Html.HiddenFor(model => model.PageNumber)
+        @Html.HiddenFor(model => model.SelectedColumnForSorting)
+        @Html.HiddenFor(model => model.IsSortingAscending)
+        @Html.HiddenFor(model => model.IsAnnoComSelected)
+        @Html.HiddenFor(model => model.IsAnnoDenSelected)
+        @Html.HiddenFor(model => model.IsMatricolaSelected)
+        @Html.HiddenFor(model => model.selectedRadioButton)
+
+        <section>
+            <div class="card" style="background-color:white">
+                <div style="width:100%; margin-top:1em">
+                    <div style="width:50%; margin-left:25%">
+                        <div class="row">
+                            <div class="col-1" hidden>
+                                <input id="rbtnDenuncia" type="radio" name="radioButtonVal" value="0" class="radioB pointer" @(Model.selectedRadioButton == 0 ? "checked" : "") onclick="enableElement()" />
+                            </div>
+                            <div class="col-1 form-check">
+                                <input id="annoDenCheckBox" type="checkbox" name="annoComCheckBox" class="form-check-input" @(Model.IsAnnoDenSelected ? "checked" : "") />
+                            </div>
+                            <div class="col-5">
+                                @Html.Label("annoDenCheckBox", "Anno Denuncia", new { @class = "w-100", @style = "cursor:pointer;" })
+                            </div>
+                            <div class="col-5">
+                                <select id="ddlAnno" name="ddlAnno" class="w-100" @(Model.IsAnnoDenSelected ? "" : "disabled")>
+
+                                    @foreach (var item in ViewBag.ListaAnniDen)
+                                    {
+                                        if (item.Selected)
+                                        {
+                                            <option selected="selected" value="@item.Value">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1" hidden>
+                                <input id="rbtnCompetenza" type="radio" name="radioButtonVal" class="radioB pointer" value="1" @(Model.selectedRadioButton == 1 ? "checked" : "") onclick="enableElement()" />
+                            </div>
+                            <div class="col-1 form-check">
+                                <input id="annoComCheckBox" type="checkbox" name="annoComCheckBox" class="form-check-input" @(Model.IsAnnoComSelected ? "checked" : "") />
+                            </div>
+                            <div class="col-5">
+                                @Html.Label("annoComCheckBox", "Anno Competenza", new { @class = "w-100", @style = "cursor:pointer;" })
+                            </div>
+                            <div class="col-5">
+                                <select id="ddlAnnCom" name="ddlAnnCom" class="w-100" @(Model.IsAnnoComSelected ? "" : "disabled")>
+
+                                    @foreach (var item in ViewBag.ListaAnniComp)
+                                    {
+                                        if (item.Selected)
+                                        {
+                                            <option selected="selected" value="@item.Value">@item.Text</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Value">@item.Text</option>
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1" hidden>
+                                <input id="rbtnMatricola" type="radio" name="radioButtonVal" class="radioB pointer" value="2" @(Model.selectedRadioButton == 2 ? "checked" : "") onclick="enableElement()" />
+                            </div>
+                            <div class="col-1 form-check">
+                                <input id="matricolaCheckBox" type="checkbox" name="matricolaCheckBox" class="form-check-input" @(Model.IsMatricolaSelected ? "checked" : "") />
+                            </div>
+                            <div class="col-5">
+                                @Html.Label("matricolaCheckBox", "Matricola", new { @class = "w-100", @style = "cursor:pointer;" })
+                            </div>
+                            <div class="col-5">
+                                <input type="text" name="txtMatricola" id="txtMatricola" class="w-100" value="@Model.txtMatricola" @(Model.IsMatricolaSelected ? "" : "disabled") />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body row">
+                    <div class="col-5">
+                    </div>
+                    <div class="col-2">
+                        <input id="btnCerca" name="btnCerca" value="Cerca" class="btn btn-block btn_official" onclick="checkThenSubmit()" />
+                    </div>
+                    <div class="col-5">
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+@if (Model.lbldatiNulliisVisible)
+{
+    <div class="card card-default" id="lbldatiNulli" style="text-align: center; color: #0c773c">
+        @if (Model.IsAnniCompetenzaListEmpty)
+        {
+            <div class="card-body">
+                @Html.Label("", "Non ci sono arretrati da visualizzare.")
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                @Html.Label("", "Nessun risultato per il criterio selezionato.")
+            </div>
+        }
+    </div>
+}
+
+<div class="col-12" style="color:green; text-align:center">
+    @if (Model.listaDatiRicerca != null)
+    {
+        if (Model.lblIntestazioneisVisible)
+        {
+            @Html.Label(Model.listaDatiRicerca[0].lblIntestazione, new { id = "intestazione" })
+        }
+    }
+</div>
+@if (!String.IsNullOrEmpty(Model.ModVisualizzazione))
+{
+    using (Html.BeginForm("VerificaArretrati", "AziendaConsulente", FormMethod.Post))
+    {
+        <section>
+            <div class="card col-12" style="max-height:400px; overflow:scroll">
+                <table class="table table-bordered table-hover table-striped" id="tbArretrati">
+                    <thead>
+                        @if (Model.ModVisualizzazione == "Dettaglio")
+                        {
+                            if (Model.ModDettaglio == 1)
+                            {
+                                <tr class="sticky-top">
+                                    <th hidden>Id</th>
+                                    <th>Anno Competenza</th>
+                                    <th hidden>Anno Denuncia</th>
+                                    <th hidden>Mese Denuncia</th>
+                                    <th hidden>Proden</th>
+                                    <th>Matricola</th>
+                                    <th hidden>Dal</th>
+                                    <th hidden>Al</th>
+                                    <th>Retribuzioni</th>
+                                    <th>Occasionali</th>
+                                    <th hidden>Figurativa</th>
+                                    <th>Contributi</th>
+                                    <th>Stato Denuncia</th>
+                                    <th>Dettaglio</th>
+                                    @if (Model.AreArretratiNonConfermati)
+                                    {
+                                        <th>Modifica</th>
+                                        <th>Elimina</th>
+                                    }
+                                    <th hidden>Data Erogazione</th>
+                                    <th hidden>&emsp;</th>
+                                    <th hidden>Rettifiche</th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr class="sticky-top">
+                                    <th hidden>Id</th>
+                                    <th>Anno Competenza</th>
+                                    <th>Anno Denuncia</th>
+                                    <th>Mese Denuncia</th>
+                                    <th hidden>Proden</th>
+                                    <th hidden>Matricola</th>
+                                    <th hidden>Dal</th>
+                                    <th hidden>Al</th>
+                                    <th>Retribuzioni</th>
+                                    <th>Occasionali</th>
+                                    <th hidden>Figurativa</th>
+                                    <th>Contributi</th>
+                                    <th>Stato Denuncia</th>
+                                    <th>Dettaglio</th>
+                                    @if (Model.AreArretratiNonConfermati)
+                                    {
+                                        <th>Modifica</th>
+                                        <th>Elimina</th>
+                                    }
+                                    <th hidden>Data Erogazione</th>
+                                    <th hidden>&emsp;</th>
+                                    <th hidden>Rettifiche</th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                    <th hidden></th>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="sticky-top">
+                                <th hidden>Id</th>
+                                <th>Anno Denuncia</th>
+                                <th>Mese Denuncia</th>
+                                <th>Data Denuncia</th>
+                                <th>Conferma</th>
+                                <th>Dovuto</th>
+                                <th>Sanzioni</th>
+                                <th>Rettifiche</th>
+                                <th>Sanzioni</th>
+                                <th>Totale</th>
+                                <th hidden>Tipo</th>
+                                <th hidden>&emsp;</th>
+                                <th hidden>TipOpe</th>
+                                <th hidden>MesDen</th>
+                                <th hidden>ProDen</th>
+                                <th hidden></th>
+                                <th hidden></th>
+                                <th hidden></th>
+                                <th hidden></th>
+                                <th hidden></th>
+                                <th hidden></th>
+                            </tr>
+                        }
+
+                    </thead>
+                    @*datden,anncom,date,*@
+                    <tbody>
+                        @foreach (TFI.OCM.AziendaConsulente.RicercaArretrati_Data rad in Model.listaDatiRicerca)
+                        {
+
+                            if (Model.ModVisualizzazione == "Dettaglio")
+                            {
+                                if (Model.ModDettaglio == 1)
+                                {
+                                    <text>
+                                        <tr>
+                                            <td hidden>@rad.Id</td>
+                                            <td id="annoC">@rad.AnnCom</td>
+                                            <td hidden id="anno">@rad.AnnDen</td>
+                                            <td hidden>@rad.meseSettato</td>
+                                            <td hidden>@rad.ProDen</td>
+                                            <td>@rad.Mat</td>
+                                            <td hidden>@rad.Dal</td>
+                                            <td hidden>@rad.Al
+                                            <td>@rad.ImpOcc</td>
+                                            <td hidden>@rad.ImpFig</td>
+                                            <td>@rad.ImpCon</td>
+                                            <td>@rad.StaDen</td>
+                                            <td>
+                                                <a class="btn_dettaglioFromTabella" style="cursor:pointer;">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                            @if (Model.AreArretratiNonConfermati)
+                                            {
+                                                <td>
+                                                    @if (rad.StaDen == "Non Confermata")
+                                                    {
+                                                        <a class="btn_modificaFromTabella" style="cursor:pointer;">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (rad.StaDen == "Non Confermata")
+                                                    {
+                                                        <a class="btn_eliminaFromTabella" style="cursor:pointer;">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                            }
+                                            <td hidden>@rad.DatEroArr</td>
+                                            @*<td>@Html.RadioButton("radio", new { @onclick = "selItem()" })</td>*@
+                                            @*<td><input type="radio" name="imgRadio" value="0" onclick="selItem()" /></td>*@
+                                            <td hidden>@Html.RadioButton("selezRecord", rad.Id.ToString(), false, new { @class = "radioB" })</td>
+                                            <td hidden id="rettifiche">@rad.ImpRtf</td>
+                                            @*hidden values*@
+                                            <td hidden id="progressivo">@rad.ProDen</td>
+                                            <td hidden id="mese">@rad.MesDen</td>
+                                            <td hidden id="staDen">@rad.StaDen</td>
+                                            <td hidden id="matricola">@rad.Mat</td>
+                                            @*<td hidden id="all">@rad.all</td>*@
+                                            <td hidden id="parm">@rad.hdnParametro</td>
+                                            <td hidden id="result">true</td>
+                                        </tr>
+                                    </text>
+                                }
+                                else
+                                {
+                                    <text>
+                                        <tr>
+                                            <td hidden>@rad.Id</td>
+                                            <td id="annoC">@rad.AnnCom </td>
+                                            <td id="anno">@rad.AnnDen</td>
+                                            <td>@rad.meseSettato</td>
+                                            <td hidden>@rad.ProDen</td>
+                                            <td hidden>@rad.Mat</td>
+                                            <td hidden>@rad.Dal</td>
+                                            <td hidden>@rad.Al</td>
+                                            <td>@rad.ImpRet</td>
+                                            <td>@rad.ImpOcc</td>
+                                            <td hidden>@rad.ImpFig</td>
+                                            <td>@rad.ImpCon</td>
+                                            <td>@rad.StaDen</td>
+                                            <td>
+                                                <a class="btn_dettaglioFromTabella" style="cursor:pointer;">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                            @if (Model.AreArretratiNonConfermati)
+                                            {
+                                                <td>
+                                                    @if (rad.StaDen == "Non Confermata")
+                                                    {
+                                                        <a class="btn_modificaFromTabella" style="cursor:pointer;">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @if (rad.StaDen == "Non Confermata")
+                                                    {
+                                                        <a class="btn_eliminaFromTabella" style="cursor:pointer;">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    }
+                                                </td>
+                                            }
+                                            <td hidden>@rad.DatEroArr</td>
+                                            @*<td>@Html.RadioButton("radio", new { @onclick = "selItem()" })</td>*@
+                                            <td hidden>@Html.RadioButton("selezRecord", rad.Id.ToString(), false, new { @class = "radioB" })</td>
+                                            <td hidden id="rettifiche">@rad.ImpRtf</td>
+                                            @*hidden values*@
+                                            <td hidden id="progressivo">@rad.ProDen</td>
+                                            <td hidden id="mese">@rad.MesDen</td>
+                                            <td hidden id="staDen">@rad.StaDen</td>
+                                            <td hidden id="matricola">@rad.Mat</td>
+                                            @*<td hidden id="all">@rad.all</td>*@
+                                            <td hidden id="parm">@rad.hdnParametro</td>
+                                            <td hidden id="result">true</td>
+
+                                        </tr>
+                                    </text>
+                                }
+                            }
+                            else
+                            {
+                                <text>
+                                    <tr>
+                                        <td hidden>@rad.Id</td>
+                                        <td id="anno">@rad.AnnDen</td>
+                                        <td>@rad.meseSettato</td>
+                                        <td>@rad.DatApe</td>
+                                        <td>@rad.DatChi</td>
+                                        <td>@rad.ImpDis</td>
+                                        <td>@rad.ImpSanDet</td>
+                                        <td id="rettifiche">@rad.ImpRtf</td>
+                                        <td>@rad.ImpSanRet</td>
+                                        <td>@rad.ImpTot</td>
+                                        <td hidden>@rad.UteChi</td>
+                                        @*<td>
+                                                @Html.RadioButton("radio", new { @onclick = "selItem()" })
+                                            </td>*@
+                                        @*<th>@rad.TipOpe</th>*@
+                                        @*<td><input type="radio" name="imgRadio" value="0" onclick="SetRadioButtons()" /></td>*@
+                                        <td hidden>@Html.RadioButton("selezRecord", rad.Id.ToString(), false, new { @class = "radioB" })</td>
+                                        <td hidden>@Html.Label("lblTIPOPE", new { id = "lblTIPOPE" })</td>
+                                        <td hidden>@rad.meseSettato</td>
+                                        <td hidden>@rad.ProDen</td>
+                                        @*hidden values*@
+                                        <td hidden id="progressivo">@rad.ProDen</td>
+                                        <td hidden id="mese">@rad.MesDen</td>
+                                        <td hidden id="staDen">@rad.StaDen</td>
+                                        <td hidden id="matricola">@rad.Mat</td>
+                                        @*<td hidden id="all">@rad.all</td>*@
+                                        <td hidden id="parm">@rad.hdnParametro</td>
+                                        <td hidden id="result">true</td>
+                                    </tr>
+                                </text>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+    <section id="paginazione">
+        <div class="row d-flex justify-content-end w-100 align-items-center mb-0 h-75">
+            <div>
+                <select id="pageSizeContainer" class="page-link page-number m-3 pagination" aria-label="Default select example">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                </select>
+            </div>
+            <div>
+                <nav class="m-3" aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item"><button type="button" class="page-link" value="1" id="primaPagina"><<</button></li>
+                        <li class="page-item"><button type="button" class="page-link" value="-1" id="indietro"><</button></li>
+                        <li class="page-item"><button type="button" class="page-link" value="1" id="avanti">></button></li>
+                        <li class="page-item"><button type="button" class="page-link" value="@Model.TotalePagine" id="ultimaPagina">>></button></li>
+                    </ul>
+                </nav>
+            </div>
+            <div id="pageCount">
+                @Model.PageNumber/@Model.TotalePagine
+            </div>
+        </div>
+    </section>
+}
+@section JS{
+    @Scripts.Render("~/dist/js/pages/RicercaArretrati.js")
+}
+@using (Html.BeginForm("VerificaArretrati", "AziendaConsulente", FormMethod.Post, new { id = "dettaglioArretrati" }))
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-white">
+                <div class="card-body" id="btnDiv" name="btnDiv">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-3">
+                            @if (!Model.AreArretratiNonConfermati)
+                            {
+                                @Html.ActionLink("Nuovo Arretrato", "InsDenunciaArretrati", new {}, new {@class = "btn btn-block btn-outline-success m-auto w-50"})
+
+                            }
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-block btn-outline-success m-auto w-50" onclick="showUploadArretratiModal()">Carica Arretrati</button>
+                        </div>
+                        <input type="hidden" class="form-check-label" id="hdnSelectedIndex" />
+                    </div>
+                </div>
+                <div style="display:none">
+                    @Html.TextBox("selectedYear", 0, new { @class = "selectedYear", id = "selectedYear" })
+                    @Html.TextBox("selectedMonth", 0, new { @class = "selectedMonth", id = "selectedMonth" })
+                    @Html.TextBox("selectedProgressivo", 0, new { @class = "selectedProgressivo", id = "selectedProgressivo" })
+                    @Html.TextBox("selectedDescrizione", 0, new { id = "selectedDescrizione" })
+                    @Html.TextBox("selectedParametro", 0, new { id = "selectedParametro" })
+                    @Html.TextBox("selectedMatricola", 0, new { id = "selectedMatricola" })
+                    @Html.TextBox("selectedAnnoCompetenza", 0, new { id = "selectedAnnoCompetenza" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@{
+    if (Model.ArretratoNonConfermato != null)
+    {
+        using (Html.BeginForm("InsDenunciaArretrati", "AziendaConsulente", FormMethod.Post, new { @id = "hiddenFormModifica" }))
+        {
+            <div style="display:none">
+                @Html.TextBox("txtAnno", Model.ArretratoNonConfermato.AnnCom)
+                @Html.TextBox("txtDataDenuncia", "")
+                @Html.TextBox("lblPeriodo", "Inserimento Denuncia Arretrati")
+                @Html.TextBox("datApe", Model.ArretratoNonConfermato.DatApe)
+            </div>
+        }
+
+        using (Html.BeginForm("EliminaArretrato", "AziendaConsulente", FormMethod.Get, new { @id = "hiddenFormElimina" }))
+        {
+            <div style="display:none">
+                @Html.TextBox("aDen", Model.ArretratoNonConfermato.AnnDen)
+                @Html.TextBox("mDen", Model.ArretratoNonConfermato.MesDen)
+                @Html.TextBox("pDen", Model.ArretratoNonConfermato.ProDen)
+            </div>
+        }
+    }
+}
+
+@if (ViewBag.arretratoDeletingMessage != null)
+{
+    <script>
+        $(document).ready(() => {
+            $('.preloader').on('transitionend', () => setTimeout(() => alert('@ViewBag.arretratoDeletingMessage'), 100))
+        });
+    </script>
+}
+
+<script>
+
+    $(document).ready(function () {
+
+        setUpEvents();
+        setUpTableHeaders();
+        modifyElements();
+
+        function setUpEvents() {
+            $('#avanti').click(e => goToPage(e));
+            $('#indietro').click(e => goToPage(e));
+            $('#primaPagina').click(e => goToFirstOrLastPage(e));
+            $('#ultimaPagina').click(e => goToFirstOrLastPage(e));
+            $('#pageSizeContainer').change(e => changePageSize(e));
+            $('#txtMatricola').change(e => checkMatricolaInserita(e));
+            $('#annoComCheckBox').click(e => checkboxFunction(e));
+            $('#matricolaCheckBox').click(e => checkboxFunction(e));
+            $('#annoDenCheckBox').click(e => checkboxFunction(e));
+            $('.btn_dettaglioFromTabella').click(e => clickDettaglio(e));
+            $('.btn_modificaFromTabella').click(e => modificaArretratoNonConfermato(e));
+            $('.btn_eliminaFromTabella').click(e => {
+                if (confirm("Confermi l'eliminazione dell'arretrato?")) eliminaArretratoNonConfermato(e)
+            });
+        }
+
+        function setUpTableHeaders() {
+            let laFreccia = ' <i class="fa fa-arrow-@(Model.IsSortingAscending ? "up" : "down")" style="pointer-events: none;"></i>';
+            const selectedColumn = $('#SelectedColumnForSorting').val().trim();
+            let thNotHiddenArray = Array.from($('th:visible'));
+            if (thNotHiddenArray.length <= 0)
+                return;
+
+            let colonnaDaFrecciare = thNotHiddenArray.find(th => th.innerText.trim() == selectedColumn);
+            thNotHiddenArray.forEach(th => setUp(th));
+            colonnaDaFrecciare.innerHTML = selectedColumn + ' ' + laFreccia;
+
+            function setUp(th) {
+                if (checkIfThShouldBeMadeClickable(th))
+                    return;
+
+                th.onclick = (e) => sortByColumn(e);
+                th.setAttribute('style', 'cursor: pointer');
+                th.classList.add('thVisibili');
+
+                function checkIfThShouldBeMadeClickable(th) {
+                    return !th.innerText.trim() || th.innerText.trim() == 'Dettaglio'
+                            || th.innerText.trim() == 'Modifica' || th.innerText.trim() == 'Elimina';
+                }
+            }
+        }
+
+        function modifyElements() {
+            $('#ddlAnnCom').val(@Model.SelectedAnnoComp);
+            $('#ddlAnno').val(@Model.SelectedAnnoDen);
+            $('#pageSizeContainer').val(@Model.PageSize);
+            $('#rbtnDenuncia').attr('disabled', true);
+            $('#rbtnMatricola').attr('disabled', true);
+            $('#rbtnCompetenza').attr('disabled', true);
+        }
+        
+        let fileUpload = $("#fileUpload");
+        	
+        $('#upload_btnConferma').on('click', function (e) {
+        	checkFields(e);
+        });
+
+        function checkFields(e) {
+        	let anno = $('#anno option:selected')
+        	if (anno.val() === '') {
+        		alert("Inserire l'anno di competenza!");
+        		anno.select();
+        		e.preventDefault();
+        		return false;
+        	}
+        	
+        	if (fileUpload.val() === "") {
+        		alert("Selezionare un file per il caricamento!");
+        		fileUpload.focus();
+        		e.preventDefault();
+        	}
+        }
+        
+        let fileUploadErrorMessage = $("#fileUpload_errorMsg");
+        fileUpload.change(function () {
+        		if (fileUpload.val() === '')
+        			return;
+        
+        		if (fileUpload.val().match(/.+(.txt)/)) {
+        			fileUploadErrorMessage.attr('hidden', true);
+        		}
+        		else {
+        			fileUpload.val('');
+        			fileUploadErrorMessage.attr('hidden', false);
+        		}
+        });
+        
+        fileUpload.blur(function (e) {
+        	if (e.target.files.length === 0) {
+        		fileUploadErrorMessage.attr('hidden', true);
+        		fileUpload.val('');
+        	}
+        });
+    });
+
+    function goToPage({ target }) {
+        const paginaCorrente = @Model.PageNumber;
+        const totalePagine = @Model.TotalePagine;
+        const pageSize = @Model.PageSize;
+        const nextPage = paginaCorrente + parseInt(target.value);
+
+        if (nextPage <= 0 || nextPage > totalePagine)
+            return;
+
+        setPagingParametersAndSubmitForm(nextPage);
+    }
+
+    function goToFirstOrLastPage({ target }) {
+        setPagingParametersAndSubmitForm(target.value);
+    }
+
+    function setPagingParametersAndSubmitForm(destinationPage) {
+        $('#PageNumber').val(destinationPage);
+        checkThenSubmit();
+    }
+
+    function changePageSize({ target }) {
+        $('#PageNumber').val(1);
+        $('#PageSize').val(target.value);
+        checkThenSubmit();
+    }
+
+    function sortByColumn({ target }) {
+        removeArrowFromColumns();
+        setParametersAndSubmitForm();
+
+        function removeArrowFromColumns() {
+            let thVisibili = Array.from($('.thVisibili'));
+            thVisibili.forEach(th => ifPresentRemoveArrowFrom(th));
+
+            function ifPresentRemoveArrowFrom(th) {
+                if (!th.firstElementChild)
+                    return;
+                th.removeChild(th.firstElementChild);
+                th.innerHTML.trim();
+            }
+        }
+
+        function setParametersAndSubmitForm() {
+            let currentSelectedColumn = target.innerText.trim();
+            let previousSelectedColumn = $('#SelectedColumnForSorting').val();
+
+            setParametersAndSubmit(currentSelectedColumn, previousSelectedColumn);
+
+            function setParametersAndSubmit(currentSelectedColumn, previousSelectedColumn) {
+                setIsSortingAscending(currentSelectedColumn, previousSelectedColumn);
+                $('#SelectedColumnForSorting').val(currentSelectedColumn);
+                $('#PageNumber').val(1);
+                checkThenSubmit();
+
+                function setIsSortingAscending(currentSelectedColumn, previousSelectedColumn) {
+                    let isSortingAscendingElem = document.getElementById('IsSortingAscending');
+                    if (currentSelectedColumn != previousSelectedColumn) {
+                        isSortingAscendingElem.value = 'false';
+                        return;
+                    }
+
+                    let isSortingAscendingValue = isSortingAscendingElem.value;
+                    let isSortingAscendingBool = (isSortingAscendingValue === 'true');
+                    isSortingAscendingElem.value = !isSortingAscendingBool;
+                }
+            }
+        }
+    }
+
+    function checkboxFunction({ target }) {
+        let checkBoxId = target.id;
+        let isItChecked = target.checked;
+
+        manageDisableAndGiveValueToBindingParameters();
+
+        function manageDisableAndGiveValueToBindingParameters() {
+            switch (checkBoxId) {
+                case 'annoDenCheckBox': {
+                    manageDisableAndGiveValueToBindingParameterOfIsAnnDenSelected();
+                    break;
+
+                    function manageDisableAndGiveValueToBindingParameterOfIsAnnDenSelected() {
+                        let annDenBindingElement = document.getElementById('ddlAnno');
+                        annDenBindingElement.disabled = !isItChecked;
+                        if (!isItChecked)
+                            annDenBindingElement.value = -1;
+                        $('#IsAnnoDenSelected').val(isItChecked);
+                    }
+                }
+
+                case 'matricolaCheckBox': {
+                    manageDisableAndGiveValueToBindingParameterOfIsMatricolaSelected();
+                    break;
+
+                    function manageDisableAndGiveValueToBindingParameterOfIsMatricolaSelected() {
+                        let matricolaBindingElement = document.getElementById('txtMatricola');
+                        matricolaBindingElement.disabled = !isItChecked;
+                        if (!isItChecked)
+                            matricolaBindingElement.value = '';
+                        $('#IsMatricolaSelected').val(isItChecked);
+                    }
+                }
+
+                default: {
+                    manageDisableAndGiveValueToBindingParameterOfIsAnncomSelected();
+                    break;
+
+                    function manageDisableAndGiveValueToBindingParameterOfIsAnncomSelected() {
+                        let annComBindingElement = document.getElementById('ddlAnnCom');
+                        annComBindingElement.disabled = !isItChecked;
+                        if (!isItChecked)
+                            annComBindingElement.value = -1;
+                        $('#IsAnnoComSelected').val(isItChecked);
+                    }
+                }
+            }
+        }
+    }
+
+    function checkThenSubmit() {
+        if (!areSearchParametersReadyBeforeSubmit()) {
+            putTheArrowBackAndSetCorrectSelectedColumn();
+            return;
+        }
+
+        $('#ricercaArretrati').submit();
+
+        function areSearchParametersReadyBeforeSubmit() {
+            const annoDenuncia = document.getElementById('ddlAnno').value;
+            const annoCompetenza = document.getElementById('ddlAnnCom').value;
+            const matricola = document.getElementById('txtMatricola').value;
+            const isAnnoDenunciaChecked = document.getElementById('annoDenCheckBox').checked;
+            const isAnnoCompetenzaChecked = document.getElementById('annoComCheckBox').checked;
+            const isMatricolaChecked = document.getElementById('matricolaCheckBox').checked;
+            let areParametersReady = true;
+
+            if (isAnnoDenunciaChecked) {
+                if (isAnnoDenunciaInvalid())
+                    setAlertMsgAndParametersAreNotReady('Selezionare un anno di denuncia!');
+            }
+            if (isMatricolaChecked) {
+                if (!matricola)
+                    setAlertMsgAndParametersAreNotReady('Inserire la matricola!')
+            }
+            if (isAnnoCompetenzaChecked) {
+                if (isAnnoCompetenzaInvalid())
+                    setAlertMsgAndParametersAreNotReady('Selezionare un anno di competenza!');
+            }
+
+            return areParametersReady;
+
+            function isAnnoCompetenzaInvalid() {
+                return annoCompetenza == -1 || !annoCompetenza;
+            }
+
+            function isAnnoDenunciaInvalid() {
+                return annoDenuncia == -1 || !annoDenuncia;
+            }
+
+            function setAlertMsgAndParametersAreNotReady(alertMsg) {
+                alert(alertMsg);
+                areParametersReady = false;
+            }
+        }
+
+        function putTheArrowBackAndSetCorrectSelectedColumn() {
+            let laFreccia = ' <i class="fa fa-arrow-@(Model.IsSortingAscending ? "up" : "down")" style="pointer-events: none;"></i>';
+            const selectedColumn = '@Model.SelectedColumnForSorting';
+            let thNotHiddenArray = Array.from($('th:visible'));
+            let colonnaDaFrecciare = thNotHiddenArray.find(th => th.innerText.trim() == selectedColumn);
+            $('#SelectedColumnForSorting').val(colonnaDaFrecciare.innerText);
+            colonnaDaFrecciare.innerHTML = selectedColumn + ' ' + laFreccia;
+        }
+    }
+
+    function checkMatricolaInserita({ target }) {
+        const matricolaInserita = target.value;
+        if (containsOnlyNumbers(matricolaInserita))
+            return;
+        target.value = "";
+        alert('Inserire unicamente numeri nel campo matricola!');
+    }
+
+    function containsOnlyNumbers(str) {
+        return /^\d+$/.test(str);
+    }
+
+    function clickDettaglio({ target }) {
+        const rigaSelezionata = target.closest('tr');
+        const selectedYear = rigaSelezionata.children['anno'].innerHTML;
+        const selectedMonth = rigaSelezionata.children['mese'].innerHTML;
+        const selectedProgressivo = rigaSelezionata.children['progressivo'].innerHTML;
+        const selectedParametro = rigaSelezionata.children['parm'].innerHTML;
+        const selectedMatricola = rigaSelezionata.children['matricola'].innerHTML;
+        const selectedAnnoCompetenza = rigaSelezionata.children['annoC'].innerHTML;
+        let selectedDescrizione = rigaSelezionata.children['staDen'].innerHTML;
+
+        selectedDescrizione.toUpperCase() == "NON CONFERMATA" ? selectedDescrizione = "N" : selectedDescrizione = "A";
+
+        fillHiddenFieldsInFormVerificaArretrati(
+            selectedYear, selectedMonth, selectedProgressivo, selectedMatricola, selectedParametro, selectedDescrizione, selectedAnnoCompetenza);
+
+        $('#dettaglioArretrati').submit();
+    }
+
+    function modificaArretratoNonConfermato() {
+        $('#hiddenFormModifica').submit();
+    }
+
+    function eliminaArretratoNonConfermato() {
+        $('#hiddenFormElimina').submit();
+    }
+
+    function fillHiddenFieldsInFormVerificaArretrati(anno, mese, progressivo, matricola, parm, descrizione, anncom) {
+        $("#selectedYear").val(anno);
+        $("#selectedMonth").val(mese);
+        $("#selectedParametro").val(parm);
+        $("#selectedMatricola").val(matricola);
+        $("#selectedDescrizione").val(descrizione);
+        $("#selectedProgressivo").val(progressivo);
+        $("#selectedAnnoCompetenza").val(anncom);
+    }
+
+    showUploadArretratiModal = () => $('#UploadArretrati').modal('show');
+</script>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <script>
+    	$('#denunciaArretrati_Upload_Errors').modal('show');
+    </script>
+}

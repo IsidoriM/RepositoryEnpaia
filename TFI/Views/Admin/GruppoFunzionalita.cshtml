@@ -1,0 +1,90 @@
+﻿@model IEnumerable<TFI.OCM.Admin>
+@{
+    ViewBag.Title = "GruppoFunzionalita";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table thead th {
+        background: #0c773c;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+</style>
+@using (Html.BeginForm("GruppoFunzionalita", "Admin", FormMethod.Get))
+{
+    if (Model != null)
+    {
+
+        <section class="content" id="btnNuovo">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body" id="tabUtenti">
+                                <table class="table table-bordered table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Gestione Gruppo: Funzionalità</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="btnNuovo">
+
+
+
+                                        @foreach (var GetTabella in Model)
+                                        {
+
+                                            <tr>
+
+                                                <td style="text-align:center">
+
+                                                    @Html.Label(@GetTabella.denGru, new { style = "class=label", @id = "oldGrup" })
+
+                                                </td>
+
+                                              
+                                            </tr>
+
+                                        }
+
+                                </table>
+
+                            </div>
+
+                            <!-- /.card-body -->
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col-3">
+                        <button class="Cancel btn btn-outline-success" type="button" style="display: none; width: 30%;">Indietro</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    }
+
+}

@@ -1,0 +1,126 @@
+﻿@model TFI.OCM.Amministrativo.DiffideOCM
+@{
+    ViewBag.Title = "RicercaDiffide";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+@using (Html.BeginForm("RicercaDiffide", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Diffide</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-4">
+                        <label>Posizione</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="CodPos" name="CodPos" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="RagSoc" name="RagSoc" readonly>
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Anno</label>
+                        <div class="input-group">
+                            <input class="form-control" type="number" id="Anno" name="Anno" asp-for="Anno" >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end" style="margin-top:2%">
+                <div class="col-sm-2">
+                    <button name="cercaRdl" id="cercaRdl" asp-for="cercaRdl" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    if (Model != null)
+    {
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div style="height:300px; overflow:scroll;">
+                            <table id="" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center;vertical-align:central; ">
+                                <thead>
+                                    <tr class="header">
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Anno</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Posizione</th>
+                                        <th style="background: #0c773c; color: white; width: 20%; text-align: center; vertical-align: middle">Ragione Sociale</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Codice Fiscale</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Partita Iva</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Data Consegna</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Codice Univoco</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Visualizza</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.ListaDiffide)
+                                    {
+                                    <tr style="vertical-align:middle;text-align:center">
+                                        <td style="text-align:center;vertical-align:middle">@i.Anno</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.CodPos</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.RagSoc</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.CodFis</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.ParIva</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.DatConsegna.Substring(0, 10)</td>
+                                        <td style="text-align:center;vertical-align:middle">@i.CodUnivoco</td>
+                                        <td> <a href="@Url.Action("FTP_DownloadFile","Amministrativo",new { path = TFI.CRYPTO.Crypto.Cypher.CryptPassword(i.Nfile) })"><img src="/Images/pdf-icon-png-adobe-acrobat.png"></a></td>
+                                        <td hidden>@i.Nfile</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+
+
+}
+
+<script>
+    $("#CodPos").on('change', function () {
+
+        var codposAz = $('#CodPos').val();
+
+            $.ajax({
+
+                  url:'@Url.Action("CercaAzienda", "Amministrativo")',
+                     data: { 'codposAz': codposAz },
+                  success: function (data)
+                  {
+
+                      $("#RagSoc").val(data.ragsocAz);
+
+
+                    },
+                     error: function ()
+                     {
+                         alert('Per questa posizione non é stata trovata nessuna azienda');
+                     },
+                 complete: function ()
+                     {
+
+
+                     },
+              })
+    });
+</script>

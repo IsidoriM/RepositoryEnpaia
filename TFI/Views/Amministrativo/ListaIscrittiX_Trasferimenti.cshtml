@@ -1,0 +1,277 @@
+﻿@model TFI.OCM.Amministrativo.TrasferimentiRdlOCM
+@{
+    ViewBag.Title = "Trasferimento Rapporti di Lavoro";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+
+@using (Html.BeginForm("ListaIscrittiX_Trasferimenti", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Trasferimento Rapporto di Lavoro</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-4">
+                        <label>Posizione</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="CodPos" name="CodPos">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="RagSoc" name="RagSoc" readonly>
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Data decorrenza trasferimento</label>
+                        <div class="input-group">
+                            <input class="form-control" type="date" id="DatDec" name="DatDec" asp-for="DatDec">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between" style="margin-top:2%">
+                <div class="col-sm-2">
+                    <button name="cercaRdl" id="cercaRdl" asp-for="cercaRdl" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca Rdl Attivi</button>
+                </div>
+                <div class="col-sm-2">
+                    <button name="Btn_TrasferisciRdl" id="Btn_TrasferisciRdl" asp-for="Btn_TrasferisciRdl" type="button" class="btn btn-block btn-outline-success float-end" @*value="TrasferisciRdl"*@>Trasferisci Rdl</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    if (Model != null)
+    {
+        <div class="row">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.Label("Seleziona tutte", new { style = "margin-right: 10px;", @for = "rb_selezionaTutte" })
+                        @Html.RadioButton("seleziona", 1, false, new { @class = "rb_seleziona" })
+                    </div>
+                    <div class="col-6">
+                        @Html.Label("Deseleziona tutte", new { style = "margin-right: 10px;", @for = "rb_deselezionaTutte" })
+                        @Html.RadioButton("seleziona", 0, false, new { @class = "rb_seleziona" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12" style="height: 400px; overflow:scroll;">
+                        <div>
+                            <table id="tb_EseguiTrasferimento" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center; ">
+                                <thead>
+                                    <tr class="header">
+                                        <th>Seleziona</th>
+                                        <th>Codice Posizione </th>
+                                        <th>Matricola</th>
+                                        <th>Nome</th>
+                                        <th>Cognome</th>
+                                        <th>Codice Fiscale</th>
+                                        <th>Data Iscrizione</th>
+                                        @*<th>Trasferisci</th>*@
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.ListaIscrittis)
+                                    {
+                                        <tr style="vertical-align:middle;text-align:center">
+                                            <td>@Html.CheckBox("chk_Seleziona", false, new { @class = "chk_Seleziona" })</td>
+                                            <td class="CodPos">@i.CodPos</td>
+                                            <td class="Matricola">@i.Matricola</td>
+                                            <td class="Nome">@i.Nome</td>
+                                            <td class="Cognome">@i.Cognome</td>
+                                            <td class="CodFis">@i.CodFis</td>
+                                            <td class="DatIsc">@i.DatIsc.Substring(0, 10)</td>
+                                            <td hidden class="ProRap">@i.ProRap</td>
+                                            <td hidden class="DatDec">@i.DatDec</td>
+                                            <td hidden class="RagSoc">@i.RagSoc</td>
+                                            @*<td><a href="@Url.Action("EseguiTrasferimentiRdl","Amministrativo", new {CodPos=i.CodPos,CodFis=i.CodFis,Matricola=i.Matricola,Nome=i.Nome,Cognome=i.Cognome,DatIsc=i.DatIsc,DatDec=i.DatDec,ProRap=i.ProRap,RagSoc=i.RagSoc})"><i class="fas fa-people-arrows"></i></a></td>*@
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+
+
+}
+<script>
+    $("#CodPos").on('change', function () {
+
+        var codposAz = $('#CodPos').val();
+
+            $.ajax({
+
+                  url:'@Url.Action("CercaAzienda", "Amministrativo")',
+                     data: { 'codposAz': codposAz },
+                  success: function (data)
+                  {
+
+                      $("#RagSoc").val(data.ragsocAz);
+
+
+                    },
+                     error: function ()
+                     {
+                         alert('Per questa posizione non é stata trovata nessuna azienda');
+                     },
+                 complete: function ()
+                     {
+
+
+                     },
+              })
+    });
+
+    $("#DatDec").on('change', function () {
+        var dataP = $("#DatDec").val();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        var doggi = yyyy + '-' + mm + '-' + dd;
+
+        if (new Date(dataP) > new Date(doggi)) {
+            $("#DatDec").val(null);
+            alert('La Data Decorrenza non può essere maggiore della data odierna');
+        }
+
+
+
+    });
+
+    $(".rb_seleziona").change(function () {
+        Seleziona_Deseleziona($(this));
+    });
+
+    $("#Btn_TrasferisciRdl").click(function () {
+
+        if (CiSonoRecordCeccati()) {
+            var data = GetDataFromTableRows();
+
+            $.ajax({
+                url: "/Amministrativo/TrasferimentoRdl",
+                dataType: "json",
+                method: "POST",
+                data: { "objList": JSON.stringify(data) },
+                beforeSend: function () {
+                    // Show image container
+                    $('.pannelloOpaco').fadeIn()
+                    //
+                },
+                success: function (result) {
+                    window.location.href ='/Amministrativo/EseguiTrasferimentiRdl';
+                },
+                complete: function () {
+
+                    // Hide image container
+                    $('.pannelloOpaco').fadeOut();
+                    //
+                }
+            });
+        }
+
+
+    });
+
+    function Seleziona_Deseleziona(radioButton) {
+
+        if (radioButton.val() == 1) {
+
+            $(".chk_Seleziona").prop("checked", true);
+        }
+        else {
+            $(".chk_Seleziona").prop("checked", false);
+        }
+    }
+
+
+    function CiSonoRecordCeccati() {
+        var n = 0;
+
+        $("#tb_EseguiTrasferimento tbody tr").each(function () {
+
+            if ($(this).find(".chk_Seleziona").prop("checked")) {
+                n++;
+            }
+        });
+
+        if (n == 0) {
+            alert("Nessuna rapporto di lavoro da trasferire.");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+
+    function GetDataFromTableRows() {
+
+        var obj;
+        var codPos;
+        var Matricola;
+        var Nome;
+        var Cognome;
+        var CodFis;
+        var DatIsc;
+        var ProRap;
+        var DatDec;
+        var RagSoc;
+        var objList = [];
+
+        $("#tb_EseguiTrasferimento tbody tr").each(function () {
+            var chkBox = $(this).find(".chk_Seleziona");
+            if (chkBox.prop("checked")) {
+
+                codPos = $(this).find(".codPos").html();
+                Matricola = $(this).find(".Matricola").html();
+                Nome = $(this).find(".Nome").html();
+                Cognome = $(this).find(".Cognome").html();
+                CodFis = $(this).find(".CodFis").html();
+                DatIsc = $(this).find(".DatIsc").html();
+                ProRap = $(this).find(".ProRap").html();
+                DatDec = $(this).find(".DatDec").html();
+                RagSoc = $(this).find(".RagSoc").html();
+
+
+                obj = {
+                    codPos: codPos,
+                    Matricola: Matricola,
+                    Nome: Nome,
+                    Cognome: Cognome,
+                    CodFis: CodFis,
+                    DatIsc: DatIsc,
+                    ProRap: ProRap,
+                    DatDec: DatDec,
+                    RagSoc: RagSoc,
+                }
+
+                objList.push(obj);
+            }
+        });
+
+        return objList;
+    }
+
+</script>

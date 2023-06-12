@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Infortuni";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+<style>    
+    .table th {
+        text-align: center;
+    }
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<div class="card">
+    <div class="card-body">
+        <table id="table" class="table table-hover table-striped">
+            <thead>
+                <tr class="header" style="background:#0c773c;color:white">
+                    <th>Id Infortunio</th>
+                    <th>Data infortunio</th>
+                    <th>Data denuncia infortunio</th>
+                    <th>Stato</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>14</td>
+                    <td>06/07/2006</td>
+                    <td>06/08/2011</td>
+                    <td>Completato</td>
+                    <td><a type="button" class=" btn  btn-outline-secondary btn-lg " href='@Url.Action("DettaglioInfortuni", "Iscritto")' /> Dettaglio</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>15</td>
+                    <td>10/08/2006</td>
+                    <td>06/08/2010</td>
+                    <td>Completato</td>
+                    <td><a type="button" class=" btn  btn-outline-secondary btn-lg " href='@Url.Action("DettaglioInfortuni", "Iscritto")' /> Dettaglio</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>16</td>
+                    <td>12/01/2007</td>
+                    <td>31/04/2012</td>
+                    <td>In corso</td>
+                    <td><a type="button" class=" btn  btn-outline-secondary btn-lg " href='@Url.Action("DettaglioInfortuni", "Iscritto")' /> Dettaglio</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>17</td>
+                    <td>12/12/2012</td>
+                    <td>23/05/2017</td>
+                    <td>In corso</td>
+                    <td><a type="button" class=" btn  btn-outline-secondary btn-lg " href='@Url.Action("DettaglioInfortuni", "Iscritto")' /> Dettaglio</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+

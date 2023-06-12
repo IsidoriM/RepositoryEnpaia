@@ -1,0 +1,78 @@
+﻿@using System.Globalization;
+@model List<OCM.TFI.OCM.Iscritto.RetribuzioneMensile>
+@{
+    ViewBag.Title = "Retribuzione Mensile";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    
+    var it = new CultureInfo("it-IT");
+}
+
+<title>Enpaia | Retribuzione Mensile</title>
+
+<div class="d-flex pl-2 align-items-center mb-3">
+    <a class="btn btn-outline-success" style="font-size: 20px" href="@Url.Action("Retribuzioni", "Iscritto")">
+        <i class="fas fa-arrow-left"></i> Torna alle retribuzioni annuali
+    </a>
+</div>
+
+
+@if (Model.Count == 0)
+{
+    <p>Non sono presenti documenti da visualizzare</p>
+}
+else
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" style="overflow:scroll;">
+                            <table id="tblRetribuzioneMensile" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background: #0c773c; color: white; width: 9%; text-align: center; vertical-align: middle; font-size: 17px">Posizione</th>
+                                        <th style="background: #0c773c; color: white; width: 9%; text-align: center; vertical-align: middle; font-size: 17px">Anno</th>
+                                        <th style="background: #0c773c; color: white; width: 9%; text-align: center; vertical-align: middle; font-size: 17px">Mese</th>
+                                        @*<th hidden style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle">Matricola</th>*@
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Tipo Movimento</th>
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Dal</th>
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Al</th>
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Retribuzione Imponibile</th>
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Retribuzione Occasionale</th>
+                                        <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle; font-size: 17px">Retribuzione Figurativa</th>
+                                        @*<th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle">Contributo</th>*@
+                                        @*<th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle">Assistenza Contrattuale</th>
+                                            <th style="background:#0c773c;color:white;width:9%;text-align:center;vertical-align:middle">Abbonamento Pa</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var retMen in Model)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retMen.Posizione</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retMen.Anno</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retMen.Mese</td>
+                                            @*<td hidden style="text-align:center;vertical-align:middle;font-size:20px"> @retMen.Matricola</td>*@
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.TipoMovimento</td>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.Dal.ToString("dd/MM/yyyy")</td>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.Al.ToString("dd/MM/yyyy")</td>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.Retribuzione.ToString("C", it)</td>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.Occasionale.ToString("C", it)</td>
+                                            <td style="text-align:center;vertical-align:middle;font-size:16px"> @retMen.Figurativa.ToString("C", it)</td>
+                                            @*<td style="text-align:center;vertical-align:middle;font-size:20px"> @retMen.Contributo</td>*@
+                                            @*<td style="text-align:center;vertical-align:middle;font-size:20px">@retMen.AssistenzaContrattuale</td>*@
+                                            @*<td style="text-align:center;vertical-align:middle;font-size:20px">@retMen.AbbonamentoPa</td>*@
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+

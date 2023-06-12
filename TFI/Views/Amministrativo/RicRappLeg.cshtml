@@ -1,0 +1,242 @@
+﻿@model TFI.OCM.Amministrativo.Rappresentante_legaleOCM
+@{
+    ViewBag.Title = "Ricerca Rappresentanti Legali";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<style>
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .cancelBtn::after {
+        visibility: visible;
+        background-color: #0c773c;
+        color: white;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .applyBtn::after {
+        background-color: #0c773c;
+        color: white;
+        visibility: visible;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    #cerca {
+        text-align: center;
+    }
+
+        #cerca:hover {
+            text-align: center;
+            background-color: #0c773c;
+        }
+
+    #cancella:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+
+    #inserisci:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+
+@using (Html.BeginForm("RicRappLeg", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white" id="ricerca">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Rappresentanti Legali</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <div class=col-lg-2>
+                    <label>Codice Posizione:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="posizione" name="posizione" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-10>
+                    <label>Ragione Sociale:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="ragioneSociale" name="ragioneSociale" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class=col-lg-3>
+                    <label>Partita IVA:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="partitaiva" name="partitaiva" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-3>
+                    <label>Codice Fiscale Azienda:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="codiceFiscale" name="codiceFiscale" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class=col-lg-4>
+                    <label>Cognome:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="cognome" name="cognome" asp-for="cognome" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Nome:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="nome" name="nome" asp-for="nome" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Codice Fiscale:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="codfis" name="codfis" asp-for="codfis" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <div class="input-group">
+                <div class="col-lg-1 offset-lg-5">
+                    <label>&nbsp;</label>
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model != null)
+{
+    List<TFI.OCM.Amministrativo.Rappresentante_legaleOCM.RappLegale> listaRappLeg = Model.rapplegale as List<TFI.OCM.Amministrativo.Rappresentante_legaleOCM.RappLegale>;
+
+    if(listaRappLeg.Count > 0) 
+    { 
+    <div class="input-group justify-content-end">
+
+        <div class="icheck-success d-inline">
+            <input type="radio" name="Filtro" id="Tutti" checked>
+            <label class="form-check-label" for="Tutti">
+                Tutti
+            </label>
+        </div>
+        &emsp;
+        <div class="icheck-success d-inline">
+            <input type="radio" name="Filtro" id="Attivo">
+            <label class="form-check-label" for="Attivo">
+                Confermati
+            </label>
+        </div>
+        &emsp;
+        <div class="icheck-success d-inline">
+            <input type="radio" name="Filtro" id="Cessato">
+            <label class="form-check-label" for="Cessato">
+                Non Confermati
+            </label>
+        </div>
+    </div>
+    <br />
+    <table class="table table-bordered table-hover table-striped table-responsive " style="height:300px;width:100%" id="table">
+        <thead>
+            <tr>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle">Posizione</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle">Data Inizio</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle">Rappresentante principale</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle; width: 100%">Funzione rapprensentante</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle">Data comunicazione</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle; width: 100%">Email</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle; width: 100%">Cognome</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle; width: 100%">Nome</th>
+                <th style="background: #0c773c; color: white; text-align: center; vertical-align: middle; width: 100%">Dettaglio</th>
+                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:100%">Elimina</th>
+            </tr>
+        </thead>
+        <tbody id="tb_Rapp">
+            @foreach (var den in Model.rapplegale)
+            {
+                <tr>
+                    <td>
+                        @den.codpos
+                    </td>
+                    <td>
+                        @den.datini.Substring(0, 10)
+                    </td>
+                    <td>
+                        @den.rappri
+                    </td>
+                    <td>
+                        @den.denfunrap
+                    </td>
+                    <td>
+                        @den.datcom.Substring(0, 10)
+                    </td>
+                    <td>
+                        @den.emailcert
+                    </td>
+                    <td>
+                        @den.cog
+                    </td>
+                    <td>
+                        @den.nom
+                    </td>
+                    <td hidden>
+                        @den.prorec
+                    </td>
+                    <td hidden id="datconf">
+                        @den.datconf
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DettRapp", "Amministrativo", new {codpos=@den.codpos, datini=@den.datini.Substring(0, 10), rappri=@den.rappri, denfunrap=@den.denfunrap, datcom=@den.datcom.Substring(0, 10), cog=@den.cog, nom=den.nom})" style="color:black;background-color:lightgray;text-align:center">
+                            <i class="far fa-calendar-times fa-lg"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Delete", "Amministrativo", new {codpos=@den.codpos,prorec= @den.prorec, datconf=@den.datconf })" style="color:black;background-color:lightgray;text-align:center">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
+}  
+
+
+<script>
+    $(document).change(function () {
+        if (document.getElementById('Tutti').checked == true) {
+            $('tr').show();
+        }
+        else if (document.getElementById('Attivo').checked == true) {
+            $('tr').show();
+            $('tr:contains("datconf")').hide();
+        }
+        else if (document.getElementById('Cessato').checked == true) {
+            $('tr').show();
+            $('tr:not(:contains("datconf"))').hide();
+        }
+    });
+</script>
+
+
+

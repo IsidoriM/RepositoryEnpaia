@@ -1,0 +1,522 @@
+@model OCM.TFI.OCM.Registrazione.RegistrazioneAziendaModel
+
+@{
+    ViewBag.Title = "Enpaia | Registrazione Azienda";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<link href="@Url.Content("~/dist/css/pages/RegistrazioneAzienda.css")" rel="stylesheet" type="text/css" />
+
+<div class="container pt-3">
+    <div class="card" style="background-color: #097132">
+        <div class="mb-4 d-flex justify-content-center w-100" style="background-color: #097132">
+            <div class="text-center mr-3">
+                <img class="mt-3 mb-3" style="border-radius: 2%; width:123px; background-color:white" src="~/Images/Logo-Fondazione-Enpaia.png">
+            </div>
+            <div class="text-sm-center text-md-left">
+                <h2 style="margin-top:50px;">
+                    <label class="text-white" style="font-family: 'Poppins',sans-serif;">Registrazione Azienda</label>
+                </h2>
+            </div>
+        </div>
+    </div>
+    @Html.ActionLink("Torna indietro", "IntroduzioneRegistrazioneAzienda", "Registrazione", string.Empty, new { @class = "btn btn-primary mb-3" })
+
+    <div>
+        <ul class="nav nav-tabs nav-fill" id="tabsRegistrazione" role="tablist">
+            <li><a class="nav-link text-dark active not-interactive" id="datiAzienda-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-datiAzienda" aria-selected="true" href="#datiAzienda">Dati Azienda</a></li>
+            <li><a class="nav-link text-dark border-bottom not-interactive" id="sedeLegale-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-sedeLegale" aria-selected="false" href="#sedeLegale">Sede Legale</a></li>
+            <li><a class="nav-link text-dark border-bottom not-interactive" id="sedeOperativa-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-sedeOperativa" aria-selected="false" href="#sedeOperativa">Sede Operativa</a></li>
+            <li><a class="nav-link text-dark border-bottom not-interactive" id="rappresentanteLegale-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-rappresentanteLegale" aria-selected="false" href="#rappresentanteLegale">Rappresentante Legale</a></li>
+            <li><a class="nav-link text-dark border-bottom not-interactive" id="tipoAttivita-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-tipoAttivita" aria-selected="false" href="#tipoAttivita">Informazioni Attivita</a></li>
+            <li><a class="nav-link text-dark border-bottom not-interactive" id="invioDocumenti-Tab" data-toggle="tab" role="tab" aria-controls="custom-tabs-one-invioDocumenti" aria-selected="false" href="#invioDocumenti">Documenti</a></li>
+        </ul>
+    </div>
+    @using (Html.BeginForm("RegistrazioneAzienda", "Registrazione", FormMethod.Post, new { id = "datiAnagraficiForm", enctype = "multipart/form-data" }))
+    {
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="datiAzienda" role="tabpanel" aria-labelledby="datiAzienda-Tab">
+                <h5 class="font-weight-bold text-center">DATI AZIENDA</h5>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.RagioneSociale)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.RagioneSociale)
+                    @Html.TextBoxFor(model => model.DatiAzienda.RagioneSociale, new { @class = "form-control", maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.CodiceFiscale)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.CodiceFiscale)
+                    @Html.TextBoxFor(model => model.DatiAzienda.CodiceFiscale, new { @class = "form-control", maxlength = "16" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.PartitaIva)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.PartitaIva)
+                    @Html.TextBoxFor(model => model.DatiAzienda.PartitaIva, new { @class = "form-control", maxlength = "11" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.SelectedNaturaGiuridica)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.SelectedNaturaGiuridica)
+                    @Html.DropDownListFor(model => model.DatiAzienda.SelectedNaturaGiuridica, (IEnumerable<SelectListItem>)ViewBag.NatureGiuridiche, "Seleziona natura giuridica", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.Note)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.Note)
+                    @Html.TextBoxFor(model => model.DatiAzienda.Note, new { @class = "form-control", maxlength = "2000" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.Email)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.Email)
+                    @Html.TextBoxFor(model => model.DatiAzienda.Email, new { @class = "form-control", maxlength = "100" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatiAzienda.Pec)
+                    @Html.ValidationMessageFor(model => model.DatiAzienda.Pec)
+                    @Html.TextBoxFor(model => model.DatiAzienda.Pec, new { @class = "form-control", maxlength = "100" })
+                </div>
+                <div class="form-row justify-content-end mt-3 px-1">
+                    <button type="button" class="btn btn-block btn-outline-success col-3" id="nextDatiAnagrafici">Avanti</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="sedeLegale" role="tabpanel" aria-labelledby="sedeLegale-Tab">
+                <h5 class="font-weight-bold text-center">SEDE LEGALE</h5>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.SelectedTipoIndirizzo)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.SelectedTipoIndirizzo)
+                        @Html.DropDownListFor(model => model.SedeLegale.SelectedTipoIndirizzo, (IEnumerable<SelectListItem>)ViewBag.TipiIndirizzo, "Seleziona DUG", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.SedeLegale.Indirizzo)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.Indirizzo)
+                        @Html.TextBoxFor(model => model.SedeLegale.Indirizzo, new { @class = "form-control", maxlength = "80" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.Civico)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.Civico)
+                        @Html.TextBoxFor(model => model.SedeLegale.Civico, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.SelectedProvincia)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.SelectedProvincia)
+                        @Html.DropDownListFor(model => model.SedeLegale.SelectedProvincia, (IEnumerable<SelectListItem>)ViewBag.Province, "Seleziona provincia", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.SelectedComune)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.SelectedComune)
+                        @if (string.IsNullOrEmpty(Model.SedeLegale.SelectedProvincia))
+                        {
+                            @Html.DropDownListFor(model => model.SedeLegale.SelectedComune, Model.SedeLegale.Comuni, new { @class = "form-control", disabled = true })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.SedeLegale.SelectedComune, Model.SedeLegale.Comuni, "seleziona comune", new { @class = "form-control" })
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.SelectedLocalita)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.SelectedLocalita)
+                        @{
+                            if (string.IsNullOrEmpty(Model.SedeLegale.SelectedComune))
+                            {
+                                @Html.DropDownListFor(model => model.SedeLegale.SelectedLocalita, Model.SedeLegale.LocalitaSelezionabili, new { @class = "form-control", disabled = true })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.SedeLegale.SelectedLocalita, Model.SedeLegale.LocalitaSelezionabili, "seleziona località", new { @class = "form-control" })
+                            }
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.SedeLegale.CAP)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.CAP)
+                        @Html.TextBoxFor(model => model.SedeLegale.CAP, new { @class = "form-control", @readonly = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.SedeLegale.SelectedStatoEstero)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.SelectedStatoEstero)
+                        @Html.DropDownListFor(model => model.SedeLegale.SelectedStatoEstero, (IEnumerable<SelectListItem>)ViewBag.StatiEsteri, "Seleziona stato estero", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.SedeLegale.Telefono1)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.Telefono1)
+                        @Html.TextBoxFor(model => model.SedeLegale.Telefono1, new { @class = "form-control", maxlength = "9" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.SedeLegale.Cellulare)
+                        @Html.ValidationMessageFor(model => model.SedeLegale.Cellulare)
+                        @Html.TextBoxFor(model => model.SedeLegale.Cellulare, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row justify-content-between mt-3 px-1" style="column-gap : 10px">
+                    <button type="button" class="btn btn-outline-success col-3" id="backSedeLegale">Indietro</button>
+                    <button type="button" class="btn btn-block btn-outline-success col-3" id="nextSedeLegale">Avanti</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="sedeOperativa" role="tabpanel" aria-labelledby="sedeOperativa-Tab">
+                <h5 class="font-weight-bold text-center">SEDE OPERATIVA</h5>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.SelectedTipoIndirizzo)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.SelectedTipoIndirizzo)
+                        @Html.DropDownListFor(model => model.Corrispondenza.SelectedTipoIndirizzo, (IEnumerable<SelectListItem>)ViewBag.TipiIndirizzo, "Seleziona DUG", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.Corrispondenza.Indirizzo)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.Indirizzo)
+                        @Html.TextBoxFor(model => model.Corrispondenza.Indirizzo, new { @class = "form-control", maxlength = "80" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.Civico)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.Civico)
+                        @Html.TextBoxFor(model => model.Corrispondenza.Civico, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.SelectedProvincia)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.SelectedProvincia)
+                        @Html.DropDownListFor(model => model.Corrispondenza.SelectedProvincia, (IEnumerable<SelectListItem>)ViewBag.Province, "Seleziona provincia", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.SelectedComune)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.SelectedComune)
+                        @{
+                            if (string.IsNullOrEmpty(Model.Corrispondenza.SelectedProvincia))
+                            {
+                                @Html.DropDownListFor(model => model.Corrispondenza.SelectedComune, Model.Corrispondenza.Comuni, new { @class = "form-control", disabled = true })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.Corrispondenza.SelectedComune, Model.Corrispondenza.Comuni, "seleziona comune", new { @class = "form-control" })
+                            }
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.SelectedLocalita)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.SelectedLocalita)
+                        @{
+                            if (string.IsNullOrEmpty(Model.Corrispondenza.SelectedComune))
+                            {
+                                @Html.DropDownListFor(model => model.Corrispondenza.SelectedLocalita, Model.Corrispondenza.LocalitaSelezionabili, new { @class = "form-control", disabled = true })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.Corrispondenza.SelectedLocalita, Model.Corrispondenza.LocalitaSelezionabili, "seleziona località", new { @class = "form-control" })
+                            }
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.Corrispondenza.CAP)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.CAP)
+                        @Html.TextBoxFor(model => model.Corrispondenza.CAP, new { @class = "form-control", @readonly = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.Corrispondenza.SelectedStatoEstero)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.SelectedStatoEstero)
+                        @Html.DropDownListFor(model => model.Corrispondenza.SelectedStatoEstero, (IEnumerable<SelectListItem>)ViewBag.StatiEsteri, "Seleziona stato estero", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.Corrispondenza.Telefono1)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.Telefono1)
+                        @Html.TextBoxFor(model => model.Corrispondenza.Telefono1, new { @class = "form-control", maxlength = "9" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.Corrispondenza.Cellulare)
+                        @Html.ValidationMessageFor(model => model.Corrispondenza.Cellulare)
+                        @Html.TextBoxFor(model => model.Corrispondenza.Cellulare, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block buttonDiCopia" id="copiaDaSedeLegaleButton">Copia da Sede Legale</button>
+                </div>
+                <div class="form-row justify-content-between mt-3 px-1" style="column-gap : 10px">
+                    <button type="button" class="btn btn-outline-success col-3" id="backCorrispondenza">Indietro</button>
+                    <button type="button" class="btn btn-block btn-outline-success col-3" id="nextCorrispondenza">Avanti</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="rappresentanteLegale" role="tabpanel" aria-labelledby="rappresentanteLegale-Tab">
+                <h5 class="font-weight-bold text-center">RAPPRESENTANTE LEGALE</h5>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Cognome)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Cognome)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Cognome , new { @class = "form-control", maxlength = "75" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Nome)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Nome)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Nome , new { @class = "form-control", maxlength = "50" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.RappresentanteLegale.CodiceFiscale)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.CodiceFiscale, "", new { id="RappresentanteLegale_CodiceFiscale_Validation" })
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.CodiceFiscale, new { @class = "form-control", valida_nome_cognome="true", nome_id="RappresentanteLegale_Nome", cognome_id="RappresentanteLegale_Cognome", maxlength = "16" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.DataNascitaDateTime)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.DataNascitaDateTime)
+                        @Html.TextBox("ShowDataNascita", Model.RappresentanteLegale.DataNascitaDateTime,new { @class = "form-control", type = "date", disabled = true })
+                        @Html.HiddenFor(model => model.RappresentanteLegale.DataNascitaDateTime)
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedGenere)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedGenere)
+                        @if (ViewBag.GenerePlaceHolder != null)
+                        {
+                            @Html.DropDownList("ShowGeneri", (IEnumerable<SelectListItem>)ViewBag.Generi, (string)ViewBag.SelectedGenerePlaceHolder, new { @class = "form-control", disabled = true })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("ShowGeneri", (IEnumerable<SelectListItem>)ViewBag.Generi, "Seleziona genere", new { @class = "form-control", disabled = true })
+                        }
+                        @Html.HiddenFor(model => model.RappresentanteLegale.SelectedGenere)
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedProvinciaDiNascita)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedProvinciaDiNascita)
+                        @if (ViewBag.ProvinciaDiNascitaPlaceHolder != null)
+                        {
+                            @Html.DropDownList("ShowProvincieNascita", (IEnumerable<SelectListItem>)ViewBag.ProvincieDiNascita, (string)ViewBag.ProvinciaDiNascitaPlaceHolder, new { @class = "form-control", disabled = true })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("ShowProvincieNascita", (IEnumerable<SelectListItem>)ViewBag.ProvincieDiNascita, "Seleziona provincia", new { @class = "form-control", disabled = true })
+                        }
+                        @Html.HiddenFor(model => model.RappresentanteLegale.SelectedProvinciaDiNascita)
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedComuneDiNascita)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedComuneDiNascita)
+                        @Html.DropDownList("ShowComuniNascita", Model.RappresentanteLegale.ComuniDiNascita, new { @class = "form-control", disabled = true })
+                        @Html.HiddenFor(model => model.RappresentanteLegale.SelectedComuneDiNascita)
+                    </div>
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedStatoEsteroDiNascita)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedStatoEsteroDiNascita)
+                        @if (ViewBag.StatoEsteroDiNascitaPlaceHolder != null)
+                        {
+                            @Html.DropDownList("ShowStatiEsteriNascita", (IEnumerable<SelectListItem>)ViewBag.StatiEsteri, (string)ViewBag.StatoEsteroDiNascitaPlaceHolder, new { @class = "form-control", disabled = true })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("ShowStatiEsteriNascita", (IEnumerable<SelectListItem>)ViewBag.StatiEsteri, "Seleziona stato estero", new { @class = "form-control", disabled = true })
+                        }
+                        @Html.HiddenFor(model => model.RappresentanteLegale.SelectedStatoEsteroDiNascita)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-lg btn-block buttonDiCopia" id="codiceFiscaleButton">Estrai i dati dal Codice Fiscale</button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedIncarico)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedIncarico)
+                        @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedIncarico, (IEnumerable<SelectListItem>)ViewBag.Incarichi, "Seleziona incarico", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.RappresentanteLegale.DataDecIncDateTime)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.DataDecIncDateTime)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.DataDecIncDateTime, new { @class = "form-control", type = "date" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedTipoIndirizzo)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedTipoIndirizzo)
+                        @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedTipoIndirizzo, (IEnumerable<SelectListItem>)ViewBag.TipiIndirizzo, "Seleziona DUG", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-4">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Indirizzo)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Indirizzo)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Indirizzo, new { @class = "form-control", maxlength = "80" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Civico)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Civico)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Civico, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedProvincia)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedProvincia)
+                        @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedProvincia, (IEnumerable<SelectListItem>)ViewBag.Province, "Seleziona provincia", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedComune)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedComune)
+                        @{
+                            if (string.IsNullOrEmpty(Model.RappresentanteLegale.SelectedProvincia))
+                            {
+                                @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedComune, Model.RappresentanteLegale.Comuni, new { @class = "form-control", disabled = true })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedComune, Model.RappresentanteLegale.Comuni, "seleziona comune", new { @class = "form-control" })
+                            }
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedLocalita)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedLocalita)
+                        @{
+                            if (string.IsNullOrEmpty(Model.RappresentanteLegale.SelectedComune))
+                            {
+                                @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedLocalita, Model.RappresentanteLegale.LocalitaSelezionabili, new { @class = "form-control", disabled = true })
+                            }
+                            else
+                            {
+                                @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedLocalita, Model.RappresentanteLegale.LocalitaSelezionabili, "seleziona localita", new { @class = "form-control" })
+                            }
+                        }
+                    </div>
+                    <div class="form-group col-3">
+                        @Html.LabelFor(model => model.RappresentanteLegale.CAP)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.CAP)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.CAP, new { @class = "form-control", @readonly = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.SelectedStatoEstero)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.SelectedStatoEstero)
+                        @Html.DropDownListFor(model => model.RappresentanteLegale.SelectedStatoEstero, (IEnumerable<SelectListItem>)ViewBag.StatiEsteri, "Seleziona stato estero", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Telefono1)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Telefono1)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Telefono1, new { @class = "form-control", maxlength = "9" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Cell)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Cell)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Cell, new { @class = "form-control", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.Email)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.Email)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.Email, new { @class = "form-control", maxlength = "100" })
+                    </div>
+                    <div class="form-group col-6">
+                        @Html.LabelFor(model => model.RappresentanteLegale.EmailCert)
+                        @Html.ValidationMessageFor(model => model.RappresentanteLegale.EmailCert)
+                        @Html.TextBoxFor(model => model.RappresentanteLegale.EmailCert, new { @class = "form-control", maxlength = "100" })
+                    </div>
+                </div>
+                <div class="form-row justify-content-between mt-3 px-1" style="column-gap : 10px">
+                    <button type="button" class="btn btn-outline-success col-3" id="backRappresentanteLegale">Indietro</button>
+                    <button type="button" class="btn btn-block btn-outline-success col-3" id="nextRappresentanteLegale">Avanti</button>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tipoAttivita" role="tabpanel" aria-labelledby="tipoAttivita-Tab">
+                <h5 class="font-weight-bold text-center">INFORMAZIONI ATTIVITA</h5>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AltriDati.SelectedCategorieAttivita)
+                    @Html.ValidationMessageFor(model => model.AltriDati.SelectedCategorieAttivita)
+                    @Html.DropDownListFor(model => model.AltriDati.SelectedCategorieAttivita, (IEnumerable<SelectListItem>)ViewBag.CategorieAttivita, "Seleziona categoria attivita", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AltriDati.SelectedTipoAttivita)
+                    @Html.ValidationMessageFor(model => model.AltriDati.SelectedTipoAttivita)
+                    @{
+                        if (string.IsNullOrEmpty(Model.AltriDati.SelectedCategorieAttivita))
+                        {
+                            @Html.DropDownListFor(model => model.AltriDati.SelectedTipoAttivita, Model.AltriDati.TipiAttivia, "Seleziona tipo attivita", new { @class = "form-control", disabled = true })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.AltriDati.SelectedTipoAttivita, Model.AltriDati.TipiAttivia, "Seleziona tipo attivita", new { @class = "form-control" })
+                        }
+                    }
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AltriDati.SelectedCodiceStatistico)
+                    @Html.ValidationMessageFor(model => model.AltriDati.SelectedCodiceStatistico)
+                    @Html.DropDownListFor(model => model.AltriDati.SelectedCodiceStatistico, (IEnumerable<SelectListItem>)ViewBag.CodiciStatistici, "Selezionare codice statistico", new { @class = "form-control" })
+                </div>
+                <div class="form-row justify-content-between mt-3 px-1" style="column-gap : 10px">
+                    <button type="button" class="btn btn-outline-success col-3" id="backAltriDati">Indietro</button>
+                    <button type="button" class="btn btn-block btn-outline-success col-3" id="nextAltriDati">Avanti</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="invioDocumenti" role="tabpanel" aria-labelledby="invioDocumenti-Tab">
+                <h5 class="font-weight-bold text-center">DOCUMENTI</h5>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.CertificatoIscrizioneCCIAA)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.CertificatoIscrizioneCCIAA.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.CertificatoIscrizioneCCIAA.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.StatutoAttoCostitutivo)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.StatutoAttoCostitutivo.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.StatutoAttoCostitutivo.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.DocumentoLegaleRappresentante)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.DocumentoLegaleRappresentante.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.DocumentoLegaleRappresentante.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.PartitaIva)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.PartitaIva.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.PartitaIva.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.DM80)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.DM80.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.DM80.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.DelegaConsulente)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.DelegaConsulente.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.DelegaConsulente.File)
+                        </div>
+                        <div class="p-3">
+                            @Html.LabelFor(m => m.DocumentiRegistrazioneAzienda.InformativaPrivacy)
+                            @Html.TextBoxFor(m => m.DocumentiRegistrazioneAzienda.InformativaPrivacy.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx" })
+                            @Html.ValidationMessageFor(m => m.DocumentiRegistrazioneAzienda.InformativaPrivacy.File)
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row justify-content-between mt-3 px-1" style="column-gap : 10px">
+                    <button type="button" class="btn btn-outline-success col-3" id="backDocumenti">Indietro</button>
+                    <button type="submit" class="btn btn-block btn-outline-success col-3" id="nextDocumenti">Conferma</button>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/expressiveval")
+<script type="module" src="../../dist/js/pages/RegistrazioneAzienda/RegistrazioneAzienda.js"></script>
+<script type="module" src="../../dist/js/pages/RegistrazioneAzienda/Selectors.js"></script>
+<script src="~/dist/js/Validators/CodiceFiscale.js"></script>
+<script src="~/dist/js/Validators/FileSize.js"></script>
+<script src="~/dist/js/Validators/FileType.js"></script>

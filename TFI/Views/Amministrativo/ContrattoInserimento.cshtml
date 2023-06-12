@@ -1,0 +1,105 @@
+﻿@model TFI.OCM.Amministrativo.GestioneContrattiOCM
+@{
+    ViewBag.Title = "ContrattoInserimento";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+@using (Html.BeginForm("ContrattoInserimento", "Amministrativo"))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Inserimento Contratto</h3>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-4">
+                <label>Qualifica</label>
+                <select class="form-control" id="Qualifica" name="Qualifica" asp-for="Qualifica">
+                    <option selected disabled></option>
+                    <option value="1">DIRIGENTE</option>
+                    <option value="2">IMPIEGATO</option>
+                    <option value="0">IMPIEGATO QUADRO</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <label>Nome Contratto</label>
+                <input type="text" class="form-control" id="Denominazione" name="Denominazione" />
+            </div>
+            <div class="col-sm-4">
+                <label> Assistenza Contrattuale</label>
+                <select class="form-control" id="ASSCON" name="ASSCON" asp-for="ASSCON">
+                    <option selected disabled></option>
+                    <option value="S">S</option>
+                    <option value="N">N</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Data Inizio Validità</label>
+                <input type="date" id="DATINI" class="form-control" name="DATINI" />
+            </div>
+            <div class="col-sm-4">
+                <label>Data Fine Validità</label>
+                <input type="date" id="DATFIN" class="form-control" name="DATFIN" />
+            </div>
+            <div class="col-sm-4">
+                <label>Mensilità</label>
+                <select class="form-control" id="NUMMEN" name="NUMMEN" asp-for="NUMMEN">
+                    <option selected disabled></option>
+                    <option value="12">12°</option>
+                    <option value="13">13°</option>
+                    <option value="14">14°</option>
+                    <option value="15">15°</option>
+                    <option value="16">16°</option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Scatti</label>
+                <input type="number" class="form-control" id="MAXSCA" name="MAXSCA" />
+            </div>
+            <div class="col-sm-4">
+                <label>Durata Scatto</label>
+                <input type="text" class="form-control" id="PERSCA" name="PERSCA" />
+            </div>
+            <div class="col-sm-4">
+                <label>Rivalutazione</label>
+                <select class="form-control" id="RIVAUT" name="RIVAUT" asp-for="RIVAUT">
+                    <option selected disabled></option>
+                    <option value="S">S</option>
+                    <option value="N">N</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-group offset-lg-3">
+                <div class="col-lg-3">
+                    <label>&nbsp;</label>
+                    <button name="" id="" asp-for="" type="button" class="btn btn-block btn-outline-success float-end" onclick="window.location.href='@Url.Action("ContrattiRicerca", "Amministrativo")'">Indietro</button>
+                </div>
+                <div class="col-lg-3 offset-lg-4">
+                    <div>
+                        <label>&nbsp;</label>
+                        <input name="salva" id="salva" asp-for="salva" type="submit" value="Salva" class="btn btn-block btn-outline-success float-end">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+
+
+
+}
+

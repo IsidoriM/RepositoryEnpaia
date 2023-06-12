@@ -1,0 +1,1664 @@
+﻿@model TFI.OCM.Amministrativo.GestioneRapportiLavoroIscrittiOCM
+@{
+    ViewBag.Title = "Modifica Anagrafica";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@{
+    var mod = Model.iscritti;
+    var rdl = Model;
+}
+@{Html.RenderPartial("PartialViewShowMessages");}
+
+<style>
+    .modal-header {
+        background-color: #0c773c;
+    }
+
+    .modal-title {
+        text-align: center;
+        width: 100%;
+        color: white
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                @using (Html.BeginForm("ModificaAnagraficaRapportiLavoroIscritti", "Amministrativo", FormMethod.Post))
+                {
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Modifica Dati: @Model.iscritti.nominativo Matricola:@Model.iscritti.mat
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card card-primary card-tabs">
+                                        <div class="card-header p-0 pt-1" style="background-color: #0c773c;color:white">
+                                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Anagrafica Iscritti</a>
+                                                </li>
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-2" role="tab" aria-controls="custom-tabs-one-2" aria-selected="false">Dati Bancari</a>
+                                                </li>
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-3" role="tab" aria-controls="custom-tabs-one-3" aria-selected="false">Dati Eredi</a>
+                                                </li>
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-4" role="tab" aria-controls="custom-tabs-one-4" aria-selected="false">Debiti</a>
+                                                </li>
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-5" role="tab" aria-controls="custom-tabs-one-5" aria-selected="false">Blocchi</a>
+                                                </li>
+                                                <li class="nav-item col-sm-2">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-6" role="tab" aria-controls="custom-tabs-one-6" aria-selected="false">Note</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+
+                                                    <div class="row">
+                                                        <div>
+                                                            <input type="text" asp-for="ultagg" name="ultagg" id="ultagg" class="form-control" value="@Model.iscritti.ultagg" hidden>
+                                                            <input type="text" asp-for="strdatnasold" name="strdatnasold" id="strdatnasold" class="form-control" value="@Model.iscritti.strdatnasold" hidden>
+                                                            <input type="text" id="mat" asp-for="mat" name="mat" class="form-control" value="@Model.iscritti.mat" hidden>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Cognome</label>
+                                                                <input type="text" asp-for="cognome" name="cognome" id="cognome" class="form-control" value="@Model.iscritti.cognome" readonly>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Nome</label>
+                                                                <input type="text" asp-for="nome" name="nome" id="nome" class="form-control" value="@Model.iscritti.nome" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Codice Fiscale</label>
+                                                                <input type="text" id="codfis" asp-for="codfis" name="codfis" class="form-control" value="@Model.iscritti.codfis" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data Nascita</label>
+                                                                <input type="date" value="@Model.iscritti.datnas" id="datnas" asp-for="datnas" name="datnas" class="form-control" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Sesso</label>
+                                                                <select class="form-control" id="sesso" asp-for="sesso" name="sesso" readonly>
+
+                                                                    <option value="@Model.iscritti.sesso">@Model.iscritti.sesso</option>
+                                                                    @*<option value="M">M</option>
+                        <option value="F">F</option>*@
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Comune di Nascita</label>
+                                                                <input type="text" id="comuneN" asp-for="comuneN" name="comuneN" class="form-control" value="@Model.iscritti.comuneN" readonly>
+                                                                <input type="text" id="comuneCodN" asp-for="comuneCodN" name="comuneCodN" class="form-control" value="@Model.iscritti.comuneCodN" hidden>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Provincia di Nascita</label>
+                                                                <input type="text" id="provN" asp-for="provN" name="provN" class="form-control" value="@Model.iscritti.provN" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Stato Estero</label>
+                                                                <input type="text" id="statoEsN" asp-for="statoEsN" name="statoEsN" class="form-control" value="@Model.iscritti.statoEsN" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group autocomplete">
+                                                                <label>Titolo di Studio</label>
+                                                                <select id="titoloStudio" asp-for="titoloStudio" name="titoloStudio" class="form-control" readonly>
+                                                                    <option value="@Model.iscritti.titoloStudioCod" selected disabled>@Model.iscritti.titoloStudio</option>
+                                                                    @*@foreach (var item in Model.listTitoli)
+                        {
+                            <option value="@item.codtitstu">@item.dentistu</option>
+                        }*@
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo di Residenza</label>
+                                                                <select class="form-control" id="dug" name="dug" asp-for="dug" readonly>
+                                                                    <option value="@Model.iscritti.coddug" selected readonly>@Model.iscritti.dug</option>
+                                                                    @foreach (var item in Model.listaIndirizzi)
+                                                                    {
+                                                                        <option value="@item.coddug">@item.dendug</option>
+                                                                    }
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>&nbsp;</label>
+                                                                <input type="text" class="form-control" id="indirizzo" asp-for="indirizzo" name="indirizzo" value="@Model.iscritti.indirizzo" required readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input type="text" class="form-control" id="numciv" asp-for="numciv" name="numciv" value="@Model.iscritti.numciv" required readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <input type="text" class="form-control" id="comune" asp-for="comune" name="comune" value="@Model.iscritti.comune" required readonly>
+                                                                <input type="text" class="form-control" id="comuneCod" asp-for="comuneCod" name="comuneCod" value="@Model.iscritti.comuneCod" hidden>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Cap</label>
+                                                                <input type="number" class="form-control" pattern=".{5}" id="cap" asp-for="cap" name="cap" value="@Model.iscritti.cap" required readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input type="text" class="form-control" pattern=".{2}" id="prov" asp-for="prov" name="prov" value="@Model.iscritti.prov" required readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <input type="text" class="form-control" id="localita" asp-for="localita" name="localita" value="@Model.iscritti.localita" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Stato Estero</label>
+                                                                <input type="text" class="form-control" id="statoEs" asp-for="statoEs" name="statoEs" value="@Model.iscritti.statoEs" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>C/O</label>
+                                                                <input type="text" class="form-control" id="co" name="co" asp-for="co" value="@Model.iscritti.co" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono</label>
+                                                                <input type="tel" class="form-control" id="tel" asp-for="tel" name="tel" value="@Model.iscritti.tel" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono 2</label>
+                                                                <input type="tel" class="form-control" id="tel2" asp-for="tel2" name="tel2" value="@Model.iscritti.tel2" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Cellulare</label>
+                                                                <input type="tel" class="form-control" pattern=".{10}" id="cellulare" asp-for="cellulare" name="cellulare" value="@Model.iscritti.cellulare" readonly required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="email" class="form-control" id="email" asp-for="email" name="email" value="@Model.iscritti.email" readonly required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Posta Elettronica Certificata</label>
+                                                                <input type="email" class="form-control" id="pec" asp-for="pec" name="pec" value="@Model.iscritti.pec" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Fax</label>
+                                                                <input type="tel" class="form-control" id="fax" asp-for="fax" name="fax" value="@Model.iscritti.fax" readonly>
+                                                            </div>
+                                                        </div>-->
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Sito Web</label>
+                                                                <input type="tel" class="form-control" id="url" asp-for="url" name="url" value="@Model.iscritti.url" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <fieldset style="margin-top: 1%; border: 2px solid #0c773c; border-collapse: inherit; padding: 15px;">
+                                                        <legend style="width: unset; font-size: 13px; font-weight: bold; font-family: Verdana;">Privacy</legend>
+                                                        <div class="row">
+                                                            <div class="col-sm-12" style="text-align: center; font-size: 15px;">
+                                                                <label>1.Esecuzione di obblighi di legge connessi all'espletamento delle funzioni istituzionali della Fondazione Enpaia</label>
+                                                            </div>
+                                                            <div style="margin-left: 43%;">
+                                                                <label>Accetto</label>
+                                                                <input type="checkbox" id="1" class="radio" name="privacy1SI" checked disabled="disabled"/>
+                                                                <label>Non accetto</label>
+                                                                <input type="checkbox" id="1" class="radio" name="privacy1NO"disabled="disabled" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-12" style="text-align: center; font-size: 15px; margin-top: 2%; ">
+                                                                <label>2.Informazione sull'attività svolta e sui servizi esistenti e futuri erogati dalla Fondazione ENPAIA e/o da soggetti terzi che erogano servizi complementari,mediante l'invio tramite mailing postale e cartaceo di materiali e pubblicazioni della Fondazione e/o dei predetti soggetti terzi</label>
+                                                            </div>
+                                                            <div style="margin-left: 43%;">
+                                                                <label>Accetto</label>
+                                                                <input type="checkbox" id="1" class="radio" name="privacy1SI" checked disabled="disabled"/>
+                                                                <label>Non accetto</label>
+                                                                <input type="checkbox" id="1" class="radio" name="privacy1NO"disabled="disabled" />
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                    <div style="width: 25%; margin-left: 38.5%; " id="modifica" name="modifica">
+                                                        <input style="margin-top:5%" type="button" value="Modifica" onclick="Modifica()" class="btn btn-block btn-outline-success btn-lg">
+                                                    </div>
+                                                    <div class="row justify-content-between" style="margin-top:2%; display:none"  id="salann" name="salann">
+                                                        <div class="col-sm-2" style="float: right" id="annulla" name="annulla">
+                                                            <input type="button" value="Annulla" class="btn btn-block btn-outline-success btn-lg">
+                                                        </div>
+                                                        <div class="col-sm-2" id="salva" name="salva" >
+                                                            <input type="submit" value="Salva" class="btn btn-block btn-outline-success btn-lg">
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <br />
+
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-2" role="tabpanel" aria-labelledby="custom-tabs-one-2-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Occorrenze trovate: @Model.datiBancariIscritto.occorrenze</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @if (Model.listDatiBancariIscritto.Count > 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <table id="tableIsc" style="text-align:center" class="table table-bordered table-hover table-striped">
+                                                                            <thead>
+                                                                                <tr class="header" style="background:#0c773c;color:white">
+                                                                                    <th>Matricola</th>
+                                                                                    <th>Data Inizio</th>
+                                                                                    <th>Data Fine </th>
+                                                                                    <th>Modalità Pagamento</th>
+                                                                                    <th>Iban</th>
+                                                                                    <th>PROISCBAN</th>
+                                                                                    <th>Modifica</th>
+                                                                                    <th>Elimina</th>
+
+                                                                                </tr>
+
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var a in Model.listDatiBancariIscritto)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td>@a.mat</td>
+                                                                                        <td>@a.datini</td>
+                                                                                        <td>@a.datfin</td>
+                                                                                        <td>@a.modpag</td>
+                                                                                        <td>@a.iban</td>
+                                                                                        <td>@a.proiscban</td>
+                                                                                        <td><a data-toggle="modal" data-target="#modal-banca" id="btnBancaMod" name="btnBancaMod"><i class="far fa-edit fa-lg"></i></a></td>
+                                                                                        <td><a href="@Url.Action("EliminaRighe","Amministrativo", new {proiscban =a.proiscban, mat = a.mat,bancari = "bancari"})"><i class="fas fa-trash-alt"></i></a></td>
+
+                                                                                    </tr>
+
+
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3" style="float: right">
+                                                        <button type="button" name="bancario" id="bancario" asp-for="bancario" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-banca1">Nuovi Dati Bancari</button>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-3" role="tabpanel" aria-labelledby="custom-tabs-one-3-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Occorrenze trovate: @Model.eredi.occorrenzeE</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @if (Model.listEredi.Count > 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <table id="tableIsc" style="text-align:center" class="table table-bordered table-hover table-striped">
+                                                                            <thead>
+                                                                                <tr class="header" style="background:#0c773c;color:white">
+                                                                                    <th>Cognome</th>
+                                                                                    <th>Nome</th>
+                                                                                    <th>Sesso </th>
+                                                                                    <th>Codice Fiscale</th>
+                                                                                    <th>Data Nascita</th>
+                                                                                    <th>Parentela</th>
+                                                                                    <th>ProEre</th>
+                                                                                    <th hidden></th>
+                                                                                    <th>Modifica</th>
+                                                                                    <th>Elimina</th>
+                                                                                </tr>
+
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var a in Model.listEredi)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td>@a.cognomeE</td>
+                                                                                        <td>@a.nomeE</td>
+                                                                                        <td>@a.sessoE</td>
+                                                                                        <td>@a.codfisE</td>
+                                                                                        <td>@a.datnasE</td>
+                                                                                        <td>@a.denparE</td>
+                                                                                        <td>@a.proereE</td>
+                                                                                        <td hidden>@a.probancE</td>
+                                                                                        <td><a data-toggle="modal" data-target="#modal-eredi" id="btnErediMod" name="btnErediMod"><i class="far fa-edit fa-lg"></i></a></td>
+                                                                                        <td><a href="@Url.Action("EliminaRighe","Amministrativo", new {mat = Model.iscritti.mat, eredi ="eredi", proereE=a.proereE})"><i class="fas fa-trash-alt"></i></a></td>
+                                                                                    </tr>
+
+
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2" style="float: right">
+                                                        <button type="button" name="bancario" id="bancario" asp-for="bancario" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-eredi1">Nuovo Erede</button>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-4" role="tabpanel" aria-labelledby="custom-tabs-one-4-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Occorrenze trovate: @Model.debitiIscritto.occorrenze</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @if (Model.listDebitiIscritto.Count > 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <table id="tableIsc" style="text-align:center" class="table table-bordered table-hover table-striped">
+                                                                            <thead>
+                                                                                <tr class="header" style="background:#0c773c;color:white">
+                                                                                    <th>Descrizione</th>
+                                                                                    <th>Importo Debito</th>
+                                                                                    <th>Importo Estinto </th>
+                                                                                    <th>Importo Residuo</th>
+                                                                                    <th hidden></th>
+                                                                                    <th hidden></th>
+                                                                                    <th hidden></th>
+                                                                                    <th>Ultimo Aggiornamento</th>
+                                                                                    <th>Modifica</th>
+                                                                                    <th>Elimina</th>
+                                                                                </tr>
+
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var a in Model.listDebitiIscritto)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td>@a.desctratt</td>
+                                                                                        <td>@a.impdebito</td>
+                                                                                        <td>@a.impestinto</td>
+                                                                                        <td>@a.impresiduo</td>
+                                                                                        <td hidden>@a.protratt</td>
+                                                                                        <td hidden>@a.prorap</td>
+                                                                                        <td hidden>@a.codpos</td>
+                                                                                        <td>@a.ultagg</td>
+                                                                                        <td><a data-toggle="modal" data-target="#modal-debito" id="btnModDebito" name="btnModDebito"><i class="far fa-edit fa-lg"></i></a></td>
+                                                                                        <td><a href="@Url.Action("EliminaRighe","Amministrativo", new {mat = Model.iscritti.mat,debiti="debiti",codpos=a.codpos,prorap=a.prorap,protratt=a.protratt})"><i class="fas fa-trash-alt"></i></a></td>
+                                                                                    </tr>
+
+
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3" style="float: right">
+                                                        <button type="button" name="bancario" id="bancario" asp-for="bancario" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-debito1">Nuovo Debito iscritto</button>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-5" role="tabpanel" aria-labelledby="custom-tabs-one-5-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Occorrenze trovate: @Model.blocchiIscritto.occorrenze</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @if (Model.listBlocchiIscritto.Count > 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <table id="tableIsc" style="text-align:center" class="table table-bordered table-hover table-striped">
+                                                                            <thead>
+                                                                                <tr class="header" style="background:#0c773c;color:white">
+                                                                                    <th>ID</th>
+                                                                                    <th>Tipo Blocco</th>
+                                                                                    <th>Tipo Errore </th>
+                                                                                    <th hidden></th>
+                                                                                    <th hidden></th>
+                                                                                    <th>Modifica</th>
+                                                                                    <th>Eimina</th>
+                                                                                </tr>
+
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var a in Model.listBlocchiIscritto)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td>@a.id</td>
+                                                                                        <td>@a.denblocco</td>
+                                                                                        <td>@a.denerrore</td>
+                                                                                        <td hidden>@a.tipoBlocco</td>
+                                                                                        <td hidden>@a.tipoErrore</td>
+                                                                                        <td><a data-toggle="modal" data-target="#modal-blocco" id="btnModBlocco" name="btnModBlocco"><i class="far fa-edit fa-lg"></i></a></td>
+                                                                                        <td><a href="@Url.Action("EliminaRighe","Amministrativo", new {mat = Model.iscritti.mat,bloccoID=a.id,blocco="blocco"})"><i class="fas fa-trash-alt"></i></a></td>
+                                                                                    </tr>
+
+
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2" style="float: right">
+                                                        <button type="button" name="bancario" id="bancario" asp-for="bancario" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-blocco1">Nuovo blocco</button>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-6" role="tabpanel" aria-labelledby="custom-tabs-one-6-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group">
+                                                                <label>Occorrenze trovate: @Model.noteIscritto.occorrenze</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            @if (Model.listNoteIscritto.Count > 0)
+                                                            {
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <table id="tableNote" style="text-align:center" class="table table-bordered table-hover table-striped">
+                                                                            <thead>
+                                                                                <tr class="header" style="background:#0c773c;color:white">
+                                                                                    <th>ID</th>
+                                                                                    <th>Note</th>
+                                                                                    <th>Modifica</th>
+                                                                                    <th>Elimina</th>
+                                                                                </tr>
+
+                                                                            </thead>
+                                                                            <tbody>
+                                                                               
+                                                                                @foreach (var a in Model.listNoteIscritto)
+                                                                                {
+
+                                                                                    <tr>
+                                                                                        <td>@a.idnote</td>
+                                                                                        <td>@a.note</td>
+                                                                                        <td><a data-toggle="modal" data-target="#modal-Note" id="modnote" name="modnote"><i class="far fa-edit fa-lg"></i></a></td>
+                                                                                        <td><a href="@Url.Action("EliminaRighe","Amministrativo", new {mat = Model.iscritti.mat,note="note",NoteID=a.idnote})"><i class="fas fa-trash-alt"></i></a></td>
+                                                                                    </tr>
+
+
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div><input type="text" name="datiNONModificati" id="datiNONModificati " value="@Model.iscritti.datiNONModificati" hidden /></div>
+                                                    </div>
+                                                    <div class="col-sm-2" style="float: right">
+                                                        <button type="button" name="Note" id="Note" asp-for="Note" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-Note1">Nuove Note</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row justify-content-start col-sm-3">
+                                    @Html.ActionLink("Indietro", "GestioneRapportiLavoroIscritti", "Amministrativo", routeValues: null, htmlAttributes: new { id = "IndietroLink", @class = "Indietro btn btn-block btn-outline-success btn-lg" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-banca" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Dati Bancari</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>IBAN:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="iban" maxlength="27" name="iban" asp-for="iban" class="form-control" placeholder="" required>&emsp;
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text" hidden id="proiscban" name="proiscban" />
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>SWIFT:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="swift" name="swift" asp-for="swift" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>ISTITUTO CREDITO:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="istCre" name="istCre" asp-for="istCre" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>AGENZIA:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="age" name="age" asp-for="age" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>INDIRIZZO:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="indAge" name="indAge" asp-for="indAge" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto dati bancari" id="bancari" name="bancari" asp-for="bancari" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-blocco" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Blocco</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+                                        <div class="col-sm-6">
+                                            <label>Tipo Blocco</label>
+                                            <select class="form-control" id="tipoBlocco" asp-for="tipoBlocco" name="tipoBlocco">
+                                                <option id="blocsel" name="blocsel" selected disabled></option>
+                                                @foreach (var i in Model.listblocco)
+                                                {
+                                                    <option value="@i.tipblocco">@i.denblocco</option>
+                                                }
+                                            </select>
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text" hidden id="id" name="id" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Tipo Errore</label>
+                                            <select class="form-control" id="tipoErrore" asp-for="tipoErrore" name="tipoErrore">
+                                                <option id="errsel" name="errsel" selected disabled></option>
+                                                @foreach (var i in Model.listErr)
+                                                {
+                                                    <option value="@i.tiperrore">@i.denerrore</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto blocco" id="blocco" name="blocco" asp-for="blocco" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-debito" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Debito</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+
+                                        <input id="codpos" name="codpos" hidden />
+                                        <input id="protratt" name="protratt" hidden />
+                                        <input id="prorap" name="prorap" hidden />
+                                        <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                    </div>
+
+                                    <div class="row ">
+                                        <div class="col-sm-5">
+                                            <label>Tipo Debito</label>
+                                            <input type="text" value="" id="tiptratt" name="tiptratt" asp-for="tiptratt" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>Importo Debito</label>
+                                            <input type="number" value="" id="impdebito" name="impdebito" asp-for="impdebito"  class="form-control" min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Importo Pagato</label>
+                                            <input type="number" value="" id="impestinto" name="impestinto"  asp-for="impestinto" class="form-control"min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Importo Residuo</label>
+                                            <input type="number" value="" id="impresiduo" name="impresiduo" asp-for="impresiduo" class="form-control"min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto debito" id="debito" name="debito" asp-for="debito" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-Note" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Nota</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <label>Note</label>
+                                            <textarea style="width:100%;height:250px" id="note" name="note" asp-for="note"></textarea>
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text"  id="idnote" name="idnote" asp-for="idnote" hidden/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto note" id="note" name="note" asp-for="note" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-eredi" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Erede</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Dati Anagrafici</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Nome</label>
+                                            <input type="text" value="" id="nomeE" name="nomeE" asp-for="nomeE" class="form-control" placeholder="" required>&emsp;
+                                            <input type="text" value="0" id="proereE" name="proereE" asp-for="proereE" class="form-control" placeholder="" hidden>&emsp;
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text" value="0" id="probancE" name="probancE" asp-for="probancE" class="form-control" placeholder="" hidden>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Cognome</label>
+                                            <input type="text" value="" id="cognomeE" name="cognomeE" asp-for="cognomeE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <label>Comune Nascita</label>
+                                            <input type="text" value="" id="comuneNE" name="comuneNE" asp-for="comuneNE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Pr.</label>
+                                            <input type="text" value="" id="provNE" name="provNE" asp-for="provNE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <label>Stato Estero</label>
+                                            <input type="text" value="" id="statoEsNE" name="statoEsNE" asp-for="statoEsNE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Data di nascita</label>
+                                            <input type="date" value="" id="datnasE" name="datnasE" asp-for="datnasE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Sesso</label>
+                                            <select class="form-control" id="sessoE" asp-for="sessoE" name="sessoE">
+                                                <option>F</option>
+                                                <option>M</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Codice Fiscale</label>
+                                            <input type="text" value="" id="codfisE" name="codfisE" asp-for="codfisE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Recapito</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <label>Indirizzo</label>
+                                            <select class="form-control" value="" id="coddugE" asp-for="coddugE" name="coddugE">
+                                                <option></option>
+                                                @foreach (var item in Model.listaIndirizzi)
+                                                {
+                                                    <option value="@item.coddug">@item.dendug</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label style="margin-bottom: 25px"></label>
+                                            <input type="text" value="" id="indirizzoE" name="indirizzoE" asp-for="indirizzoE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Num. Civico</label>
+                                            <input type="number" value="" id="numcivE" name="numcivE" asp-for="numcivE" class="form-control" min="0" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Comune </label>
+                                            <input type="text" value="" id="comuneE" name="comuneE" asp-for="comuneE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Pr.</label>
+                                            <input type="text" value="" id="provE" name="provE" asp-for="provE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Cap</label>
+                                            <input type="text" value="" id="capE" name="capE" asp-for="capE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Località</label>
+                                            <input type="text" value="" id="localitaE" name="localitaE" asp-for="localitaE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <label>Stato Estero</label>
+                                            <input type="text" value="" id="statoEs_E" name="statoEs_E" asp-for="statoEs_E" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Telefono</label>
+                                            <input type="text" value="" id="telE" name="telE" asp-for="telE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Email</label>
+                                            <input type="text" value="" id="emailE" name="emailE" asp-for="emailE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>C/O</label>
+                                            <input type="text" value="" id="coE" name="coE" asp-for="coE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Parentela e percentuali</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Data Inizio </label>
+                                            <input type="date" value="" id="datiniE" name="datiniE" asp-for="datiniE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Parentela</label>
+                                            <select class="form-control" value="" id="parentelaE" asp-for="parentelaE" name="parentelaE">
+                                                <option></option>
+                                                @foreach (var item in Model.listeredi)
+                                                {
+                                                    <option value="@item.codpar">@item.denpar</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label>%TFR</label>
+                                            <input type="text" value="" id="perTFRE" name="perTFRE" asp-for="perTFRE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>%FAP</label>
+                                            <input type="text" value="" id="perFPE" name="perFPE" asp-for="perFPE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Maggiorazione</label>
+                                            <select class="form-control" value="" id="maggE" asp-for="maggE" name="maggE">
+                                                <option value="S">SI</option>
+                                                <option value="N">NO</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>% Maggiorazione</label>
+                                            <input type="text" value="" id="maggPerE" name="maggPerE" asp-for="maggPerE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Dati Bancari Eredi</h5>
+                                    <hr />
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>Iban:</label>
+                                            <input type="text" value="" maxlength="27" id="IBANE" name="IBANE" asp-for="IBANE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Swift:</label>
+                                            <input type="text" value="" id="SWIFTE" name="SWIFTE" asp-for="SWIFTE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Istituto credito:</label>
+                                            <input type="text" value="" id="istCreE" name="istCreE" asp-for="istCreE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-5">
+                                            <label>Agenzia:</label>
+                                            <input type="text" value="" id="AgenziaE" name="AgenziaE" asp-for="AgenziaE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <label>Indirizzo:</label>
+                                            <input type="text" value="" id="indBE" name="indBE" asp-for="indBE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Provincia:</label>
+                                            <input type="text" value="" id="provBE" name="provBE" asp-for="provBE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto eredi" id="eredi" name="eredi" asp-for="eredi" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-banca1" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Dati Bancari</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>IBAN:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="iban" maxlength="27" name="iban" asp-for="iban" class="form-control" placeholder="" required>&emsp;
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>SWIFT:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="swift" name="swift" asp-for="swift" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>ISTITUTO CREDITO:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="istCre" name="istCre" asp-for="istCre" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>AGENZIA:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="age" name="age" asp-for="age" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>INDIRIZZO:</label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="" id="indAge" name="indAge" asp-for="indAge" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto dati bancari" id="bancari" name="bancari" asp-for="bancari" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-blocco1" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Blocco</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+                                        <div class="col-sm-6">
+                                            <label>Tipo Blocco</label>
+                                            <select class="form-control" id="tipoBlocco" asp-for="tipoBlocco" name="tipoBlocco">
+                                                <option></option>
+                                                @foreach (var i in Model.listblocco)
+                                                {
+                                                    <option value="@i.tipblocco">@i.denblocco</option>
+                                                }
+                                            </select>
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Tipo Errore</label>
+                                            <select class="form-control" id="tipoErrore" asp-for="tipoErrore" name="tipoErrore">
+                                                <option></option>
+                                                @foreach (var i in Model.listErr)
+                                                {
+                                                    <option value="@i.tiperrore">@i.denerrore</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto blocco" id="blocco" name="blocco" asp-for="blocco" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-debito1" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Debito</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row ">
+                                        <div class="col-sm-6">
+                                            <label>Azienda</label>
+                                            <select class="form-control" value="" id="azi" asp-for="azi" name="azi">
+                                                <option></option>
+                                                @foreach (var i in Model.listAzienda)
+                                                {
+                                                    <option value="@i.codposAz"> @i.ragsocAz</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Data Inizio</label>
+                                            <input type="date" value="" id="datiniDeb" name="datiniDeb" asp-for="datiniDeb" class="form-control" placeholder="" required>
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Data Fine</label>
+                                            <input type="date" value="" id="datfinDeb" name="datfinDeb" asp-for="datfinDeb" class="form-control" placeholder="" required>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-8">
+                                            <label>Tipo Debito</label>
+                                            <select class="form-control" id="tiptratt" asp-for="tiptratt" name="tiptratt">
+                                                <option></option>
+                                                @foreach (var i in Model.listdebiti)
+                                                {
+                                                    <option value="@i.tiptratt">@i.TipDeb</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>Importo Debito</label>
+                                            <input type="number" value="" id="impdebito" name="impdebito" asp-for="impdebito"  class="form-control" min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Importo Pagato</label>
+                                            <input type="number" value="" id="impestinto" name="impestinto" asp-for="impestinto"  class="form-control"min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Importo Residuo</label>
+                                            <input type="number" value="" id="impresiduo" name="impresiduo" asp-for="impresiduo"  class="form-control"min="0" step="0.01" pattern="\d*" placeholder="" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto debito" id="debito" name="debito" asp-for="debito" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-Note1" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Nota</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <label>Note</label>
+                                            <textarea style="width:100%;height:250px" id="note" name="note" asp-for="note"></textarea>
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text" id="idnote" name="idnote" asp-for="idnote" hidden />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto note" id="note" name="note" asp-for="note" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @using (Html.BeginForm("ModificaRighe", "Amministrativo"))
+                {
+                    <div class="modal fade show" id="modal-eredi1" style="display:none" aria-modal="true" role="dialog">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header ">
+                                    <h4 class="modal-title">Erede</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Dati Anagrafici</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Nome</label>
+                                            <input type="text" value="" id="nomeE" name="nomeE" asp-for="nomeE" class="form-control" placeholder="" required>&emsp;
+                                            <input type="text" value="0" id="proereE" name="proereE" asp-for="proereE" class="form-control" placeholder="" hidden>&emsp;
+                                            <input type="text" hidden value="@Model.iscritti.mat" id="mat" name="mat" asp-for="mat" />
+                                            <input type="text" value="0" id="probancE" name="probancE" asp-for="probancE" class="form-control" placeholder="" hidden>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Cognome</label>
+                                            <input type="text" value="" id="cognomeE" name="cognomeE" asp-for="cognomeE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <label>Comune Nascita</label>
+                                            <input type="text" value="" id="comuneNE" name="comuneNE" asp-for="comuneNE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Pr.</label>
+                                            <input type="text" value="" id="provNE" name="provNE" asp-for="provNE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <label>Stato Estero</label>
+                                            <input type="text" value="" id="statoEsNE" name="statoEsNE" asp-for="statoEsNE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Data di nascita</label>
+                                            <input type="date" value="" id="datnasE" name="datnasE" asp-for="datnasE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Sesso</label>
+                                            <select class="form-control" id="sessoE" asp-for="sessoE" name="sessoE">
+                                                <option>F</option>
+                                                <option>M</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Codice Fiscale</label>
+                                            <input type="text" value="" id="codfisE" name="codfisE" asp-for="codfisE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Recapito</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <label>Indirizzo</label>
+                                            <select class="form-control" value="" id="coddugE" asp-for="coddugE" name="coddugE">
+                                                <option></option>
+                                                @foreach (var item in Model.listaIndirizzi)
+                                                {
+                                                    <option value="@item.coddug">@item.dendug</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label style="margin-bottom: 25px"></label>
+                                            <input type="text" value="" id="indirizzoE" name="indirizzoE" asp-for="indirizzoE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Num. Civico</label>
+                                            <input type="number" value="" id="numcivE" name="numcivE" asp-for="numcivE" class="form-control" min="0" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Comune </label>
+                                            <input type="text" value="" id="comuneE" name="comuneE" asp-for="comuneE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Pr.</label>
+                                            <input type="text" value="" id="provE" name="provE" asp-for="provE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Cap</label>
+                                            <input type="number" value="" id="capE" name="capE" asp-for="capE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Località</label>
+                                            <input type="text" value="" id="localitaE" name="localitaE" asp-for="localitaE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                            <label>Stato Estero</label>
+                                            <input type="text" value="" id="statoEs_E" name="statoEs_E" asp-for="statoEs_E" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Telefono</label>
+                                            <input type="number" value="" id="telE" name="telE" asp-for="telE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Email</label>
+                                            <input type="text" value="" id="emailE" name="emailE" asp-for="emailE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>C/O</label>
+                                            <input type="text" value="" id="coE" name="coE" asp-for="coE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Parentela e percentuali</h5>
+                                    <hr />
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <label>Data Inizio </label>
+                                            <input type="date" value="" id="datiniE" name="datiniE" asp-for="datiniE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <label>Parentela</label>
+                                            <select class="form-control" value="" id="parentelaE" asp-for="parentelaE" name="parentelaE">
+                                                <option></option>
+                                                @foreach (var item in Model.listeredi)
+                                                {
+                                                    <option value="@item.codpar">@item.denpar</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label>%TFR</label>
+                                            <input type="text" value="" id="perTFRE" name="perTFRE" asp-for="perTFRE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>%FAP</label>
+                                            <input type="text" value="" id="perFPE" name="perFPE" asp-for="perFPE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Maggiorazione</label>
+                                            <select class="form-control" value="" id="maggE" asp-for="maggE" name="maggE">
+                                                <option value="S">SI</option>
+                                                <option value="N">NO</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>% Maggiorazione</label>
+                                            <input type="text" value="" id="maggPerE" name="maggPerE" asp-for="maggPerE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <h5 style="font-size: large; color: #0c773c; text-align: center; font-size: 20px ">Dati Bancari Eredi</h5>
+                                    <hr />
+                                    <div class="row ">
+                                        <div class="col-sm-4">
+                                            <label>Iban:</label>
+                                            <input type="text" value="" maxlength="27" id="IBANE" name="IBANE" asp-for="IBANE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Swift:</label>
+                                            <input type="text" value="" id="SWIFTE" name="SWIFTE" asp-for="SWIFTE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Istituto credito:</label>
+                                            <input type="text" value="" id="istCreE" name="istCreE" asp-for="istCreE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                    </div>
+                                    <div class="row ">
+                                        <div class="col-sm-5">
+                                            <label>Agenzia:</label>
+                                            <input type="text" value="" id="AgenziaE" name="AgenziaE" asp-for="AgenziaE" class="form-control" placeholder="">&emsp;
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <label>Indirizzo:</label>
+                                            <input type="text" value="" id="indBE" name="indBE" asp-for="indBE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <label>Provincia:</label>
+                                            <input type="text" value="" id="provBE" name="provBE" asp-for="provBE" class="form-control" placeholder="" required>&emsp;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                    <input type="submit" value="Inserimeto eredi" id="eredi" name="eredi" asp-for="eredi" class="btn  btn-outline-success hover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $("tr td #btnErediMod").on('click', function () {
+
+        var mat = $("#mat").val();
+        var proere = $(this).closest('tr').children()[6].textContent;
+        $("#proereE").val(proere);
+        $.ajax({
+            url: '@Url.Action("CaricaModificaEredi","Amministrativo")',
+            data: { 'mat': mat, 'proere': proere },
+            success: function (data) {
+                $("#nomeE").val(data.nomeE);
+                $("#cognomeE").val(data.cognomeE);
+                $("#sessoE").val(data.sessoE);
+                $("#codfisE").val(data.codfisE);
+                $("#datnasE").val(data.datnasE);
+                $("#parentelaE").val(data.parentelaE);
+                $("#datiniE").val(data.datiniE);
+                $("#coddugE").val(data.coddugE);
+                $("#comuneCodNE").val(data.comuneCodNE);
+                $("#provNE").val(data.provNE);
+                $("#indirizzoE").val(data.indirizzoE);
+                $("#statoEs_E").val(data.statoEs_E);
+                $("#comuneCodE").val(data.comuneCodE);
+                $("#capE").val(data.capE);
+                $("#localitaE").val(data.localitaE);
+                $("#provE").val(data.provE);
+                $("#perTFRE").val(data.perTFRE);
+                $("#perFPE").val(data.perFPE);
+                $("#maggE").val(data.maggE);
+                $("#maggPerE").val(data.maggPerE);
+                $("#emailE").val(data.emailE);
+                $("#telE").val(data.telE);
+                $("#coE").val(data.coE);
+                $("#IBANE").val(data.IBANE);
+                $("#probancE").val(data.probancE);
+                $("#SWIFTE").val(data.SWIFTE);
+                $("#istCreE").val(data.istCre);
+                $("#AgenziaE").val(data.age);
+                $("#indBE").val(data.indAge);
+                $("#provBE").val(data.proiscban);
+                $("#comuneE").val(data.comuneE);
+                $("#comuneNE").val(data.comuneNE);
+
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            },
+
+        });
+
+    });
+
+
+    $("tr td #btnBancaMod").on('click', function () {
+
+        $("#iban").val($(this).closest('tr').children()[4].textContent);
+        $("#proiscban").val($(this).closest('tr').children()[5].textContent);
+
+    });
+
+    $("tr td #btnModBlocco").on('click', function () {
+
+        var id = $(this).closest('tr').children()[0].textContent;
+        var denb = $(this).closest('tr').children()[1].textContent;
+        var dene = $(this).closest('tr').children()[2].textContent;
+        var tipb = $(this).closest('tr').children()[3].textContent;
+        var tipe = $(this).closest('tr').children()[4].textContent;
+        $("#id").val(id);
+        var tipobloccov = '<option  value="' + tipb + '">' + denb + '</option>';
+        var tipoerrorev = '<option  value="' + tipe + '">' + dene + '</option>';
+
+        $("#blocsel").html(tipobloccov);
+        $("#errsel").html(tipoerrorev);
+    });
+    $("tr td #btnModDebito").on('click', function () {
+        var a = $(this).closest('tr').children()[0].textContent;
+        var b = $(this).closest('tr').children()[1].textContent;
+        var c = $(this).closest('tr').children()[2].textContent;
+        var d = $(this).closest('tr').children()[3].textContent;
+
+        $("#tiptratt").val(a);
+        $("#impdebito").val(b);
+        $("#impestinto").val(c);
+        $("#impresiduo").val(d);
+        $("#protratt").val($(this).closest('tr').children()[4].textContent);
+        $("#prorap").val($(this).closest('tr').children()[5].textContent);
+        $("#codpos").val($(this).closest('tr').children()[6].textContent);
+
+    });
+    $("tr td #modnote").on('click', function () {
+
+        $("#note").val($(this).closest('tr').children()[1].textContent);
+        var a = $(this).closest('tr').children()[0].textContent;
+
+        $("#idnote").val(a);
+        
+
+    });
+    $('input[type="checkbox"]').on('change', function () {
+        $('input[id="' + this.id + '"]').not(this).prop('checked', false);
+    });
+
+
+    $("#iban").on('change', function () {
+        var iban = $("#iban").val();
+          $.ajax({
+
+         url: '@Url.Action("CercaBanca", "Amministrativo")',
+         data: { 'iban': iban},
+
+         success: function (data)
+         {
+             $("#istCre").val(data.istCre);
+             $("#age").val(data.age);
+             $("#indAge").val(data.indAge);
+
+
+},
+         error: function ()
+         {
+             alert('Istituto di credito non presente nella base dati');
+         },
+         complete: function ()
+         {
+         },
+     })
+    })
+    $("#IBANE").on('change', function () {
+        var iban = $("#IBANE").val();
+          $.ajax({
+
+         url: '@Url.Action("CercaBanca", "Amministrativo")',
+         data: { 'iban': iban},
+
+         success: function (data)
+         {
+             $("#istCreE").val(data.istCre);
+             $("#AgenziaE").val(data.age);
+             $("#indBE").val(data.indAge);
+             $("#provBE").val(data.proiscban);
+
+},
+         error: function ()
+         {
+             alert('Istituto di credito non presente nella base dati');
+         },
+         complete: function ()
+         {
+         },
+     })
+    })
+    function Modifica() {
+        $("#modifica").hide();
+        $("#salann").show();
+        $("#salva").show();
+        $("#annulla").show();
+        $("#dug").prop("readonly", false);
+        $("#dug").css("background-color","white")
+        $("#co").prop("readonly", false);
+        $("#indirizzo").prop("readonly", false);
+        $("#numciv").prop("readonly", false);
+        $("#statoEs").prop("readonly", false);
+        $("#cap").prop("readonly", false);
+        $("#localita").prop("readonly", false);
+        $("#comune").prop("readonly", false);
+        $("#comune").prop("readonly", false);
+        $("#prov").prop("readonly", false);
+        $("#statocivile").prop("readonly", false);
+        $("#pec").prop("readonly", false);
+        $("#email").prop("readonly", false);
+        $("#cellulare").prop("readonly", false);
+        $("#tel").prop("readonly", false);
+        $("#tel2").prop("readonly", false);
+        $("#fax").prop("readonly", false);
+        $("#url").prop("readonly", false);
+    }
+     $("#annulla").on('click', function () {
+
+         location.reload();
+     })
+
+
+</script>
+<script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var stringArray = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaComuni"]));
+    var stringArray2 = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaStati"]));
+
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("comune"), stringArray);
+    autocomplete(document.getElementById("statoEs"), stringArray2);
+    autocomplete(document.getElementById("comuneE"), stringArray);
+    autocomplete(document.getElementById("statoEs_E"), stringArray2);
+
+</script>

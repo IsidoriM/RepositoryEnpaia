@@ -1,0 +1,88 @@
+﻿@using System.Text.RegularExpressions
+@model OCM.TFI.OCM.Registrazione.ResultRegistrazioneAzienda
+
+@{
+    ViewBag.Title = "Enpaia | Esito Registrazione Azienda";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+    Regex regexSplitPascalCase = new Regex("([a-z,0-9](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", RegexOptions.Compiled);
+}
+
+@section showMessage{
+    @{ Html.RenderPartial("PartialViewShowMessages"); }
+}
+
+<link href="@Url.Content("~/dist/css/pages/RegistrazioneAzienda.css")" rel="stylesheet" type="text/css"/>
+
+<div class="container pt-3">
+    <div class="card" style="background-color: #097132">
+        <div class="mb-4 d-flex justify-content-center w-100" style="background-color: #097132">
+            <div class="text-center mr-3">
+                <img class="mt-3 mb-3" style="border-radius: 2%; width:123px; background-color:white" src="~/Images/Logo-Fondazione-Enpaia.png">
+            </div>
+            <div class="text-sm-center text-md-left">
+                <h2 style="margin-top:50px;">
+                    <label class="text-white" style="font-family: 'Poppins',sans-serif;">Esito Registrazione Azienda</label>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="datiAzienda" role="tabpanel" aria-labelledby="datiAzienda-Tab">
+            <div class="form-group mt-4">
+                <h2 class="font-weight-bold text-center">Registrazione in attesa di conferma dall'utente Enpaia</h2>
+                <p class="mt-5">
+                    Ti comunichiamo che la tua registrazione è andata a buon fine! Riceverai una mail con un link che ti darà la possibilità di accedere allo stato della pratica
+                    e ti permetterà di caricare eventuali file non ancora caricati.
+                </p>
+                <p>
+                    Per vedere consultare la tua pratica, oltre che tramite il link ricevuto via mail, puoi cliccare sul seguente <a href="@Url.Action("AccessoPraticaRegistrazioneAzienda", "Registrazione")">link</a>.
+                </p>
+                <p>
+                    Inserendo la tua partita IVA e il numero di prtocollo che troverai qui sotto e nella mail, avrai la possibilità di consultare la pratica e caricare eventuali file mancanti.
+                </p>
+
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label>Numero Protocollo:</label>
+                            <p>@Model.Protocollo.NumeroProtocollo</p>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Data inzio procedura registrazione:</label>
+                            <p>@Model.Protocollo.DataProtocollo.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label>Lista dei documenti caricati correttamente:</label>
+                            <ul>
+                                @foreach (var documento in Model.DocumentiCaricati)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("DownloadFileRegistrazione", "FileDownload", new {uuid = documento.Uuid, idAllegato = documento.IdAllegato})"><i class="fas fa-file"></i></a>
+                                        @regexSplitPascalCase.Replace(@documento.TipoDocumento.ToString(), "$1 ")
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="form-group col-6">
+                            <label><b>Lista dei documenti ancora da caricare</b>:</label>
+                            <ul>
+                                @foreach (var documento in Model.DocumentiDaCaricare)
+                                {
+                                    <li>@regexSplitPascalCase.Replace(@documento.TipoDocumento.ToString(), "$1 ")</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row justify-content-end mt-3">
+                    <a href="@Url.Action("AccessoPraticaRegistrazioneAzienda", "Registrazione")" class="btn btn-block btn-outline-success col-3">
+                        Vai alla pratica
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,734 @@
+﻿@{
+    ViewBag.Title = "Inserimento Denuncia Arretrati";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model  TFI.OCM.AziendaConsulente.DenunciaArretrati
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+<script src="~/dist/js/Utilities/DataTableHelper.js"></script>
+<script> 
+
+        /*$("#tabella_Aziende").DataTable({ "paging": true, "ordering": false, "lengthChange": false, "responsive": true, "autoWidth": false, "info": false, "searching": false });*/
+
+       /* var table = $("#tabella_Aziende").DataTable();*/
+        $('#btnSalva').on('click', function (showMsg) {
+            var datden, today, datero;
+            var kk;
+            var table, txtErog, txtImp;
+            var pref, pageIndex;
+            var isChanged = false;
+
+            // if (document.getElementById("radio_escludiSanz")) {
+            //     if (document.getElementById("radio_evasione").checked == false && document.getElementById("radio_omissione").checked == false && document.getElementById("radio_escludiSanz").checked == false) {
+            //         alert("Selezionare la modalita\' di sanzione!");
+            //         event.preventDefault(); //.returnValue = null;
+            //         return false;
+            //     }
+            // }
+            // else {
+            //     if (document.getElementById("radio_evasione").checked == false && document.getElementById("radio_omissione").checked == false) {
+            //         alert("Selezionare la modalita\' di sanzione!");
+            //         event.preventDefault(); //.returnValue = null;
+            //         return false;
+            //     }
+            // }
+
+            if ($("#txtDataDenuncia").val().replace(' ', '') == '') {
+                alert("Inserire la data denuncia!");
+                $("#txtDataDenuncia").select();
+                //document.getElementById("txtDataDenuncia").select();
+                event.preventDefault(); //.returnValue = null;
+                return false;
+            }
+
+            datden = $("#txtDataDenuncia").val();
+            today = "<%=Today.ToString()%>";
+            datden = datden.slice(6, 10) + datden.slice(3, 5) + datden.slice(0, 2)
+            today = today.slice(6, 10) + today.slice(3, 5) + today.slice(0, 2)
+
+            if (parseFloat(datden) > parseFloat(today)) {
+                alert("La data denuncia non deve essere maggiore della data odierna!");
+                $("#txtDataDenuncia").select();
+                //document.getElementById("txtDataDenuncia").select();
+                event.preventDefault(); //.returnValue = null;
+                return false;
+            }
+
+            if (document.getElementById("ddlPagina") != null) {
+                pageIndex = "#" + document.getElementById("ddlPagina").options[document.getElementById("ddlPagina").selectedIndex].value.toString() + "#";
+            }
+            else {
+                pageIndex = "#1#";
+            }
+            //----------------------------------------------------
+            document.getElementById("hdnModifica").value = document.getElementById("hdnModifica").value.replace(pageIndex, "");
+            //----------------------------------------------------
+            if (parseFloat(document.getElementById("lblTotRetribuzioni").innerText.replace(",", ".")) == 0) {
+                alert("Impossibile salvare! Non e\' stato inserito alcun importo!");
+                event.preventDefault(); //.returnValue = null;
+                return false;
+            }
+
+            document.getElementById("hdnModifica").value += pageIndex;
+            if (showMsg == true) {
+                if (confirm("Confermi operazione?")) {
+                    document.getElementById("hdnSalva").value = "S";
+                    return true;
+                }
+                else {
+                    event.preventDefault(); //.returnValue = null;
+                   /* return false*/;
+                }
+            }
+            else {
+                $("#tabella_Aziende").DataTable().destroy();
+                var salva = $('#hdnSalva').val();
+                if (salva == "N") {
+                    salva = "S";
+                    $('#hdnSalva').val(salva);
+                }
+                var itemlist = [];
+                var x = 0;
+                //get cell values, instead of the header text.
+                $("#tabella_Aziende tbody tr").each(function () {
+                    /*var tdlist = $(this).find("tr");*/
+
+                    var Item = $(this).children(".Matricola").html() + "-" + $(this).closest("tr").find("input[id*=txtImponibile]").val().replace(/\./g, '').replace(',', '.') + "-" + $(this).closest("tr").find("input[id*=txtOccasionale]").val().replace(/\./g, '').replace(',', '.') + "-" + $(this).closest("tr").find("input[id*=txtContributi]").val().replace(/\./g, '').replace(',', '.');
+                    /* OrderId: 1*/
+                    itemlist.push(Item);
+                    /* console.log(itemlist[x]);*/
+                    x++;
+                });
+                $("#tabella_Aziende").DataTable(GetInitializerOptionsWithUniformedPaging('tabella_Aziende'));
+                $('#arrayNascosto').val(itemlist);
+                document.getElementById("formArretrati").submit();
+            }
+        });
+
+
+
+    $(document).ready(function ()
+    {
+        calcoloImporti();
+        $('#btnCerca').on('click', function () {
+            if (document.getElementById("txtAnno") != null) {
+                document.getElementById("txtAnno").value = document.getElementById("txtAnno").value.replace('.', '').replace(',', '');
+                
+                if (document.getElementById("txtAnno").value.replace(' ', '') === '') {
+                    alert("Seleziona l\'anno di competenza!");
+                    document.getElementById("txtAnno").select();
+                    event.preventDefault(); //.returnValue = null;
+                    return;
+                }
+                if (document.getElementById("txtAnno").value.length < 4) {
+                    alert("Inserire un anno di 4 cifre!");
+                    document.getElementById("txtAnno").select();
+                    event.preventDefault(); //.returnValue = null;
+                    return;
+                }
+                if (/*parseInt(*/document.getElementById("txtAnno").value > @DateTime.Now.Year)
+                {
+                    alert("L\'anno di competenza non puo\' essere  maggiore dell\'anno corrente!");
+                    document.getElementById("txtAnno").select();
+                    event.preventDefault(); //.returnValue = null;
+                    return;
+                }
+                 if (/*parseInt(*/document.getElementById("txtAnno").value < @DateTime.Now.Year - 5)
+                {
+                    alert("Non è possibile effettuare arretrati relativi al periodo prescritto");
+                    document.getElementById("txtAnno").select();
+                    event.preventDefault(); //.returnValue = null;
+                    return;
+                }
+                anno_comp = document.getElementById("txtAnno").value;
+
+            }
+            else {
+                anno_comp = event.srcElement.value;
+                blnSubmit = true;
+            }
+            if (document.getElementById("txtDataDenuncia").value.replace(' ', '') == '') {
+                alert("Inserire la data della denuncia!");
+                document.getElementById("txtDataDenuncia").select();
+                event.preventDefault(); //.returnValue = null;
+                return;
+            }
+        });
+            var focusFlag = 0;
+            settaPagina();
+            $("#divPopUpAperto").click(function () {
+                win.close(); //win = null;
+                var bcgDiv = document.getElementById("divPopUpAperto");
+                bcgDiv.style.display = "none";
+            });
+
+        $("#tabella_Aziende").DataTable(GetInitializerOptionsWithUniformedPaging('tabella_Aziende'));
+        $(".pagination").children().click(function () {
+            settaPagina();
+        });
+
+        function TotaliJQ() {
+
+            $("#tabella_Aziende").find("input[id*=txtImponibile]").each(function () {
+
+                var RetImp = $(this).closest("tr").find("input[id*=txtImponibile]").val().replace(/\./g, '').replace(',', '.');
+                var Occ = $(this).closest("tr").find("input[id*=txtOccasionale]").val().replace(/\./g, '').replace(',', '.');
+                var ImpCon = $(this).closest("tr").find("input[id*=txtContributi]").val().replace(/\./g, '').replace(',', '.');
+                var PreRetImp = $(this).attr('previous_value')
+                if (PreRetImp == undefined) {
+                    PreRetImp = 0.00
+                }
+                var PreOcc = $(this).closest("tr").find("input[id*=txtOccasionale]").attr('previous_value');
+                if (PreOcc == undefined) {
+                    PreOcc = 0.00
+                }
+                var PreImpCon = $(this).closest("tr").find("input[id*=txtContributi]").attr('previous_value');
+                if (PreImpCon == undefined) {
+                    PreImpCon = 0.00
+                }
+
+                Imponibile = $("#lblTotRetribuzioni").text().replace(/\./g, '').replace(',', '.') - parseFloat(PreRetImp);
+                Imponibile = parseFloat(Imponibile) + parseFloat(RetImp);
+                $("#lblTotRetribuzioni").val(Imponibile.toFixed(2));
+                $("#lblTotRetribuzioni").val(formatMoney($("#lblTotRetribuzioni").val().replace('.', ',')));
+                $("#lblTotRetribuzioni").text($("#lblTotRetribuzioni").val());
+                /*$("#lblTotRetribuzioni").text(formatMoney($("#lblTotRetribuzioni").val()));*/
+
+                Occasionali = $("#lblTotOccasionali").text().replace(/\./g, '').replace(',', '.') - parseFloat(PreOcc);
+                Occasionali = Occasionali + parseFloat(Occ);
+                $("#lblTotOccasionali").val(Occasionali.toFixed(2));
+                $("#lblTotOccasionali").val(formatMoney($("#lblTotOccasionali").val().replace('.', ',')));
+                $("#lblTotOccasionali").text($("#lblTotOccasionali").val());
+
+                Contributi = $("#lblTotContributi").text().replace(/\./g, '').replace(',', '.') - parseFloat(PreImpCon);
+                Contributi = Contributi + parseFloat(ImpCon);
+                $("#lblTotContributi").val(Contributi.toFixed(2));
+                $("#lblTotContributi").val(formatMoney($("#lblTotContributi").val().replace('.', ',')));
+                $("#lblTotContributi").text($("#lblTotContributi").val());
+
+                $(this).attr('previous_value', RetImp);
+                $(this).closest("tr").find("input[id*=txtOccasionale]").attr('previous_value', Occ);
+                $(this).closest("tr").find("input[id*=txtContributi]").attr('previous_value', ImpCon);
+
+                //Valorizziamo i campi nascosti per mantenerli allineati
+                //------------------------------------------------------
+                document.getElementById('hdnTotRetribuzioni').value = document.getElementById('lblTotRetribuzioni').innerText;
+                document.getElementById('hdnTotOccasionali').value = document.getElementById('lblTotOccasionali').innerText;
+                document.getElementById('hdnTotContributi').value = document.getElementById('lblTotContributi').innerText;
+
+            })
+        };
+
+        $('#btnCerca').on('click', function () {
+            var salva = $('#hdnSalva').val();
+            if (salva == "S") {
+                salva = "N";
+                $('#hdnSalva').val(salva);
+            }
+            var evasione;
+            var omissione;
+            var escludi;
+            if ($('#radio_evasione').checked) {
+                $('#radio_evasione').val("check")
+            }
+            else {
+                $('#radio_evasione').val("uncheck");
+            }
+            if ($('#radio_omissione').checked) {
+                $('#radio_omissione').val("check");
+            }
+            else {
+                $('#radio_omissione').val("uncheck");
+            }
+
+            if (document.document.getElementById("radio_escludiSanz")) {
+                if ($('#radio_escludiSanz').checked) {
+                    $('#radio_escludiSanz').val("check");
+                }
+                else {
+                    $('#radio_escludiSanz').val("uncheck");
+                }
+            }
+        });
+
+        function CloseModal() {
+            //if (typeof (focusFlag) == "undefined") { var focusFlag = 0; }
+            //if (focusFlag == 1) {
+            //    if (typeof (win) != "undefined") {
+            //        if (!win.closed) {
+            //            win.close(); win = null;
+            //            var bcgDiv = document.getElementById("divPopUpAperto");
+            //            bcgDiv.style.display = "none";
+            //        }
+            //    }
+            //}
+            //else {
+            //    focusFlag = 0
+            //}
+        }
+
+        function pageClose(index) {
+            var msg;
+            var url = '../MsgConfirm.aspx?msg=';
+            var ret;
+            switch (index) {
+                case 1:
+                    msg = "Variando l'anno di competenza i dati non salvati andranno persi. Salvare i dati inseriti?";
+                    break;
+                case 2:
+                    msg = "Chiudendo la pagina i dati non salvati andranno persi. Salvare i dati inseriti?";
+                    break;
+            }
+
+            if (parseFloat(document.getElementById("lblTotRetribuzioni").innerText.replace(".", "").replace(",", ".")) > 0) {
+                var bcgDiv = document.getElementById("divPopUpAperto");
+                bcgDiv.style.display = "block";
+
+                //ret = showModalDialog(url + msg, "window", "dialogWidth=400px;dialogHeight=100px;status=no;help=no;unadorned=yes;scroll=no;toolbar=no;");
+
+                win = window.open(url + msg, "ModalPopUp", "width=800px,height=100px,top=250px,left=30%,status=no,help=no,unadorned=yes,scroll=no,toolbar=no,resizable=no,statusbar=no,titlebar=no,Fullscreen=no");
+                //focusFlag = 1
+                var timer = setInterval(function () {
+                    if (win.closed) {
+                        clearInterval(timer);
+                        ret = win.returnValue;
+
+                        var bcgDiv = document.getElementById("divPopUpAperto");
+                        bcgDiv.style.display = "none";
+
+                        if (ret == "Y") {
+                            if (checkFields(false) == true) {
+                                document.getElementById("hdnSalva").value = "S";
+                                return true;
+                            }
+                        }
+                        else {
+                            if (ret == "N") { return true; }
+                            else {
+                                event.preventDefault(); //.returnValue = null;
+                                return false;
+                            }
+                        }
+                        return true;
+
+                        //callback(returnValue);
+                    }
+                }, 500);
+                return false;
+            }
+        }
+
+        function formatMoney(money) {
+            var value = money.toString();
+            var l = value.length;
+            var new_value = "";
+            if (l > 3) {
+                var u = 0;
+                for (i = l - 1; i >= 0; i--) {
+                    if (u == 3) {
+                        u = 0;
+                        new_value = new_value;
+                    }
+                    new_value = value[i] + new_value;
+                    u++;
+                }
+            }
+            return new_value;
+        };
+
+        function settaPagina() {
+            $("input[id*=txtImponibile]").blur(function () {
+
+                var RetImp = $(this).val().replace(/\./g, '').replace(',', '.');
+                var Occ = $(this).closest("tr").find("input[id*=txtOccasionale]").val().replace(/\./g, '').replace(',', '.');
+                var Aliq = $(this).closest("tr").find("[id*=txtAliq]").text().replace(/\./g, '').replace(',', '.');
+
+                var ImpCon = 0;
+
+                //--------------------------------------------------------------
+
+                RetImp = Math.round(RetImp);
+                $(this).val(formatMoney)
+                $(this).val(formatMoney(Math.round(RetImp).toFixed(2).replace('.', ',')));
+
+                //Calcoliamo l'importo dei contributi
+                //-----------------------------------
+                if (!isNaN(parseFloat(RetImp)) && !isNaN(parseFloat(Aliq))) {
+                    ImpCon = parseFloat(RetImp) * parseFloat(Aliq) / 100;
+                }
+                //document.getElementById('dgIscritti__ctl' + indice + '_txtContrib').value = ImpCon.toFixed(2).replace('.', ',');
+                $(this).closest("tr").find("input[id*=txtContributi]").val(ImpCon.toFixed(2).replace('.', ','));
+                //-----------------------------------
+                TotaliJQ();
+            });
+
+            $("input[id*=txtOcc]").blur(function () {
+                var RetImp = $(this).closest("tr").find("input[id*=txtImponibile]").val().replace(/\./g, '').replace(',', '.');
+                var Occ = $(this).val().replace(/\./g, '').replace(',', '.');
+                //----------------------------------------------------------------
+                Occ = Math.round(Occ);
+                $(this).val(formatMoney(Math.round(Occ).toFixed(2).replace('.', ',')));
+
+                if (parseFloat(Occ) > parseFloat(RetImp) && parseFloat(Occ) > 0) {
+                    alert("L\'importo occasionale non puo\' essere maggiore dell'imponibile!");
+                    $(this).focus();
+                    $(this).val('0,00');
+                    $(this).select();
+                    //event.preventDefault();
+                    //return;
+                }
+
+                TotaliJQ();
+            });
+        }
+        function calcoloImporti() {
+
+            $("#tabella_Aziende").find("input[id*=txtImponibile]").each(function () {
+                if ($(this).val().indexOf(',') < 0 || $(this).val().indexOf('.') < 0) {
+                    var RetImp = $(this).val().replace(/\./g, '').replace(',', '.');
+
+                }
+                $(this).val(formatMoney)
+                $(this).val(formatMoney(Math.round(RetImp).toFixed(2).replace('.', ',')));
+            });
+            $("#tabella_Aziende").find("input[id*=txtOccasionale]").each(function () {
+                if ($(this).val().indexOf(',') < 0 || $(this).val().indexOf('.') < 0) {
+                    var Occ = $(this).val().replace(/\./g, '').replace(',', '.');
+
+                }
+                $(this).val(formatMoney)
+                $(this).val(formatMoney(Math.round(Occ).toFixed(2).replace('.', ',')));
+            });
+            $("#tabella_Aziende").find("input[id*=txtContributi]").each(function () {
+                if ($(this).val().indexOf(',') < 0 || $(this).val().indexOf('.') < 0) {
+                    var Con = $(this).val().replace(/\./g, '').replace(',', '.');
+
+                }
+                $(this).val(formatMoney)
+                $(this).val(formatMoney(Math.round(Con).toFixed(2).replace('.', ',')));
+            });
+
+
+
+            TotaliJQ();
+
+        }
+        calcoloImporti();
+
+        $('.numberonly').keypress(function (e) {
+
+            var charCode = (e.which) ? e.which : event.keyCode;
+            var value = $(this).val();
+
+            if (IsDecimal(value)) {
+                if (String.fromCharCode(charCode).match(/[^0-9]/g) || String.fromCharCode(charCode).match(/[<>'"/;`%]/g)) {
+                    return false;
+                }
+            }
+            else {
+                if (String.fromCharCode(charCode).match(/[^0-9,.]/g) || String.fromCharCode(charCode).match(/[<>'"/;`%]/g)) {
+                    return false;
+                }
+            }
+
+
+        });
+        function IsDecimal(value) {
+            if (value.includes(',') || value.includes('.')) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+
+    });
+
+
+    </script>
+
+}
+
+
+<div class="card card-default" id="insDenArr">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            @Model.lblPeriodo
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm("InsDenunciaArretrati", "AziendaConsulente", FormMethod.Post, new { id = "formArretrati" }))
+{
+    <div class="card" style="background-color:white">
+        <div class="card-body col-lg-12">
+            <div class="row">
+                @Html.Hidden("lblPeriodo",Model.lblPeriodo)
+                <div class="input-group col-lg-4 align-items-center">
+                    <label id="lblAnno" class="mb-0 mr-2">Anno Competenza:</label>
+                    @if (ViewBag.IsDataDenunciaFromModifica)
+                    {
+                        @Html.DropDownList("txtAnno", (IEnumerable<SelectListItem>)ViewBag.ListaAnniCompetenzaNonPrescritti, "Seleziona anno competenza...", new { disabled = true, @class="form-control numberonly" })
+                        @Html.Hidden("txtAnno")
+                    }
+                    else
+                    {
+                        @Html.DropDownList("txtAnno", (IEnumerable<SelectListItem>)ViewBag.ListaAnniCompetenzaNonPrescritti, "Seleziona anno competenza...", new { id = "txtAnno", required="required", @class="form-control numberonly" })
+                    }
+                </div>
+                <div class="input-group col-lg-3 align-items-center">
+                    <label id="lblDataDenuncia" class="mb-0 mr-2">Data Denuncia:</label>
+                    <input type="text" class="form-control" id="txtDataDenuncia" name="txtDataDenuncia" value="@(ViewBag.IsDataDenunciaFromModifica ? Model.txtDataDenuncia : DateTime.Now.ToString("dd/MM/yyyy"))" readonly/>
+                </div>
+                <div class="form-group mb-0 align-items-center col-lg-3  @( ViewBag.annoSelez ? "" : "d-none")">
+                    @if (ViewBag.IsUtenteAmministrativo)
+                    {
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="radio" id="radio_evasione" value="rbEvasione_ON" @(Model.rbtnEvasione ? "checked='checked'" : "")>
+                            <label class="form-check-label" for="radio_evasione" id="rbtnEvasione">
+                                Evasione
+                            </label>
+                        </div>
+                        
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="radio" id="radio_omissione" value="rbOmissione_ON" @(Model.rbtnOmissione ? "checked='checked'" : "")>
+                            <label class="form-check-label" for="radio_omissione" id="rbtnOmissione">
+                                Omissione
+                            </label>
+                        </div>
+                    
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="radio" id="radio_escludiSanz" value="rbEscludi_ON">
+                            <label class="form-check-label" for="radio_escludiSanz" id="rbtnEscludi">
+                                Escludi Sanzione
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="col-lg-2  align-items-center @( ViewBag.annoSelez ? "d-none" : "d-flex") ml-auto">
+                    <button name="submit_button" id="btnCerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Seleziona" style="width: 100%">Seleziona</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    if (ViewBag.ListaDenunciaArretrati != null)
+    {
+        //if (ViewBag.ListaDenunciaArretrati.Count()!= 0)
+        //{
+        <div class="card">
+        <div class="card-body">
+        <table class="table table-bordered table-hover table-striped" id="tabella_Aziende">
+            <thead>
+                <tr>
+                    <th>Mat.</th>
+                    <th>Cognome e Nome</th>
+                    <th>Dal</th>
+                    <th>Al</th>
+                    <th>Qual.</th>
+                    <th>Liv.</th>
+                    <th>65enne</th>
+                    <th>Ret.Imp.</th>
+                    <th>di cui Occ.</th>
+                    <th>Aliq.</th>
+                    <th>Contrib.</th>
+                    <th hidden>prorap</th>
+                    <th hidden>codcon</th>
+                    <th hidden>procon</th>
+                    <th hidden>codloc</th>
+                    <th hidden>proloc</th>
+                    <th hidden>codliv</th>
+                    <th hidden>datnas</th>
+                    <th hidden>qualifica</th>
+                    <th hidden>mod</th>
+                    <th hidden>datero</th>
+                    <th hidden>impmin</th>
+                    <th hidden>prev</th>
+                    <th hidden> promod</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (TFI.OCM.AziendaConsulente.DenunciaArretrati azi in ViewBag.ListaDenunciaArretrati)
+                {
+                    <text>
+                        <tr>
+                            <td class="Matricola">@azi.mat</td>
+                            @*<td>@azi.nome</td>*@
+
+                            @if (azi.promod != 0)
+                            {
+                                <td>
+                                    @Html.ActionLink(azi.nome, "Modprev01", new
+                                   {
+                                      mat = azi.mat,
+                                      nom = azi.nome.Split(' ')[0],
+                                      cog = azi.nome.Split(' ')[1],
+                                      prorap = azi.prorap,
+                                      promod = azi.promod
+                                  },
+                                  new
+                                    { @style = "color:#0c773c; font-weight: bold" })
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @azi.nome
+                                </td>
+                            }
+                            <td>@azi.datadal.Substring(0, 10)</td>
+                            <td>@azi.dataal.Substring(0, 10)</td>
+                            <td>@azi.qualifica</td>
+                            <td>@azi.livello</td>
+                            <td>@azi.eta65</td>
+                            @*<td>@azi.impret</td>
+                                <td>@azi.impocc</td>*@
+                            <td>
+                                @Html.TextBox("impRet", azi.impret, new
+                           {
+                               @id = "txtImponibile",
+                               style = "max-width: 100px",
+                               @class = "txt_impRet",
+                               //@readonly = "readonly",
+                               oldValue = "0",
+                               previous_value = "0"
+                           })
+                            </td>
+                            <td>
+                                @Html.TextBox("impOcc", azi.impocc, new
+                           {
+                               @id = "txtOccasionale",
+                               style = "max-width: 80px",
+                               @class = "txt_impOcc",
+                               //@readonly = "readonly",
+                               oldValue = "0",
+                               previous_value = "0"
+                           })
+                            </td>
+                            <td id="txtAliq">@azi.aliquota</td>
+                            <td style="background-color:transparent">
+                                @Html.TextBox("impCon", azi.impcon, new
+                           {
+                               @id = "txtContributi",
+                               style = "max-width: 80px",
+                               @class = "txt_impCon",
+                               @readonly = "readonly",
+                               oldValue = "0"
+
+                           })
+                            </td>
+                            @*<td>@azi.impcon</td>
+                                <asp:TextBox id=txtContributi runat="server" Width="48px" CssClass="valuta" Text='<%# DataBinder.Eval(Container, "DataItem.IMPCON") %>' ReadOnly="True" BorderStyle="None" BackColor="Transparent">
+                                </asp:TextBox>*@
+                            <td hidden style="display:none">@azi.prorap</td>
+                            <td hidden style="display:none">@azi.codcon</td>
+                            <td hidden style="display:none">@azi.procon</td>
+                            <td hidden style="display:none">@azi.codloc</td>
+                            <td hidden style="display:none">@azi.proloc</td>
+                            <td hidden style="display:none">@azi.codliv</td>
+                            <td hidden style="display:none">@azi.datnas</td>
+                            <td hidden style="display:none">@azi.qualifica</td>
+                            <td hidden style="display:none">@azi.mod</td>
+                            <td hidden style="display:none">
+                                @Html.TextBox("datero", azi.datero, new
+                                {
+                                    @id = "datero_" + azi.mat,
+                                    style = "max-width: 80px",
+                                    @class = "txtErogazione",
+                                    @readonly = "readonly",
+                                    oldValue = "0"
+                                })
+                            </td>
+                            <td hidden style="display:none">@azi.impmin</td>
+                            <td hidden style="display:none">@azi.prev</td>
+                            <td hidden style="display:none">@azi.promod</td>
+                        </tr>
+                    </text>
+                }
+            </tbody>
+        </table>
+
+        <INPUT class="smallsize" id="hdnModifica" style="Z-INDEX: 108; POSITION: absolute; BACKGROUND-COLOR: #ffffcc; WIDTH: 43px; HEIGHT: 18px; TOP: 21px; LEFT: 462px"
+               type="hidden" size="1" name="Hidden1" runat="server">
+        <INPUT class="smallsize" id="hdnTotOccasionali" style="Z-INDEX: 106; POSITION: absolute; BACKGROUND-COLOR: #66ccff; WIDTH: 43px; HEIGHT: 18px; TOP: 21px; LEFT: 361px"
+               type="hidden" size="1" name="Hidden1" runat="server">
+        <INPUT class="smallsize" id="hdnTotContributi" style="Z-INDEX: 107; POSITION: absolute; BACKGROUND-COLOR: #66ccff; WIDTH: 43px; HEIGHT: 18px; TOP: 21px; LEFT: 411px"
+               type="hidden" size="1" name="Hidden1" runat="server">
+        <INPUT class="smallsize" id="hdnTotRetribuzioni" style="Z-INDEX: 105; POSITION: absolute; BACKGROUND-COLOR: #66ccff; WIDTH: 43px; HEIGHT: 18px; TOP: 22px; LEFT: 311px"
+               type="hidden" size="1" name="Hidden1" runat="server">
+        <INPUT id="arrayNascosto" name="arrayNascosto" value="" type="hidden">
+
+        <section id="arretrati-box-totali" class="content row w-100 mx-0">
+            <div class="container-fluid px-0">
+                <div class="card col-12 boxTotali">
+                    <div class="card-body row text-white">
+                        <div class="col-3">
+                            <b id="Label3">Totale Arretrati</b>
+                        </div>
+                        <div class="row col-9">
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label4" class="mr-1">Imponibile</b>
+                                @if (Model.lblTotRetribuzioni != 0)
+                                {
+                                    <b>€ <span id="lblTotRetribuzioni">@Model.lblTotRetribuzioni.ToString()</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotRetribuzioni">0,00</span></b>
+                                }
+                            </div>
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label5" class="mr-1">Occasionale</b>
+                                @if (Model.lblTotOccasionali != 0)
+                                {
+                                    <b>€ <span id="lblTotOccasionali">@Model.lblTotOccasionali.ToString().Replace(",", ".")</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotOccasionali">0,00</span></b>
+                                }
+                            </div>
+                            <div class="col-4 d-flex justify-content-end">
+                                <b id="Label6" class="mr-1">Contributi</b>
+                                @if (Model.lblTotContributi != 0)
+                                {
+                                    <b>€ <span id="lblTotContributi">@Model.lblTotContributi.ToString().Replace(",", ".")</span></b>
+                                }
+                                else
+                                {
+                                    <b>€ <span id="lblTotContributi">0,00</span></b>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input class="smallsize" id="hdnSalva" value="N" type="hidden" size="2" name="hdnSalva">
+        </section>
+        <section>
+            <div class="card-body row">
+                <div class="col-lg-4 ">
+                </div>
+                <div class="col-lg-2 ">
+                    <button type="submit" id="btnSalva" class="btn btn-block btn-outline-success float-end">Salva</button>
+                </div>
+                @*<div class="col-4">
+            <button type="button" class="btn_official">[Totali]</button>
+        </div>*@
+                <div class="col-lg-2">
+                    <button type="submit" class="btn btn-block btn-outline-success float-end" id="btnIndietro" name="btnIndietro" value="indietro">Torna Indietro</button>
+                </div>
+                <div class="col-lg-4 ">
+                </div>
+            </div>
+            @*<input type="hidden" onload="formattazioneImporti()"/>*@
+        </section>
+        </div>
+        </div>
+        //}
+    }
+}

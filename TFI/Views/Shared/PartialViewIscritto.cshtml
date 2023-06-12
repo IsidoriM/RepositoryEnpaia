@@ -1,0 +1,172 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #0c773c;">
+    <!-- Brand Logo -->
+
+    <div style="background-color:white; background-image: url(@Url.Content("~/Images/Logo-Fondazione-Enpaia.png")); background-size:cover; background-position: 0; height: 140px"></div>
+    <!-- Sidebar -->
+    <div class="sidebar" style="overflow-y: auto; height: calc(100% - 140px)">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/Images/user.png" class="img-circle elevation-2" alt="User Image" />
+            </div>
+            <div class="info">
+                @{ TFI.OCM.Utente.Utente utente = Session["utente"] as TFI.OCM.Utente.Utente;}
+                <a href="#" name="Utente" class="d-block" style="white-space: normal; word-break: break-word;"> @utente.DescrizioneAzienda</a>
+            </div>
+        </div>
+        <p name="CodiceFiscale" style="visibility:hidden;height:0"> @*inserire cod fisc*@</p>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="@Url.Action("Anagrafica", "Iscritto")" class="nav-link">
+                        <i class="nav-icon fas fa-id-badge"></i>
+                        <p>Dati Anagrafici</p>
+                    </a>
+                </li>
+                <li class="nav-item parentElement">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-comment-dollar"></i>
+                        <p>
+                            Visualizzazione CU/EC
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="@Url.Action("EstrattoConto", "Iscritto")" class="nav-link">
+                                <i class="nav-icon fas fa-money-bill-alt"></i>
+                                <p>Estratto conto</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href='@Url.Action("CertificazioniUniche", "Iscritto")' class="nav-link ">
+                                <i class="nav-icon fas fa-file-signature"></i>
+                                <p>Certificazione unica</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item parentElement">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-comment-dollar"></i>
+                        <p>
+                            Richieste pagamento
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if (Session["IsTfr"] != null && (bool)Session["IsTfr"])
+                        {
+                            <li class="nav-item">
+                                <a href='@Url.Action("RichiestaTFR", "Iscritto")' class="nav-link primary">
+                                    <i class="fas fa-file-contract nav-icon"></i>
+                                    <p>TFR</p>
+                                </a>
+                            </li>
+                        }
+                        @if (Session["HasFondoConto"] != null && (bool)Session["HasFondoConto"])
+                        {
+                            <li class="nav-item">
+                                <a href='@Url.Action("RichiestaContoIndividuale", "Iscritto")' class="nav-link primary">
+                                    <i class="fas fa-coins nav-icon"></i>
+                                    <p>Fondo Conto Individuale</p>
+                                </a>
+                            </li>
+                        }
+
+
+                        @*@if (Session["IsAssegno"] != null && (bool)Session["IsAssegno"])
+                            {
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Assegni", "Iscritto")' class="nav-link">
+                                        <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                                        <p>Assegni</p>
+                                    </a>
+                                </li>
+                            }*@
+                        @if (Session["IsAnticipo"] != null && (bool)Session["IsAnticipo"])
+                        {
+                            <li class="nav-item">
+                                <a href='@Url.Action("AnticipazioneTFR", "Iscritto")' class="nav-link">
+                                    <i class="fas fa-money-check-alt nav-icon"></i>
+                                    <p>Anticipazione TFR</p>
+                                </a>
+                            </li>
+                        }
+                        @if (Session["HasPratiche"] != null && (bool)Session["HasPratiche"])
+                        {
+                            <li class="nav-item">
+                                <a href='@Url.Action("GestionePratiche", "Iscritto")' class="nav-link">
+                                    <i class="fa fa-file nav-icon"></i>
+                                    <p>Visualizza Pratiche</p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("ProspettiPagamento", "Iscritto")' class="nav-link ">
+                        <i class="nav-icon fas fa-search-dollar"></i>
+                        <p>Prospetti di pagamento</p>
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a href='@Url.Action("CartaEnpaia", "Iscritto")' class="nav-link">
+                        <i class="nav-icon fas fa-id-card"></i>
+                        <p>Carta enpaia</p>
+                    </a>
+                </li>-->
+                <li class="nav-item">
+                    <a href='@Url.Action("Retribuzioni", "Iscritto")' class="nav-link ">
+                        <i class="nav-icon fas fa-donate"></i>
+                        <p>Retribuzioni</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("Convenzioni", "Convenzioni")' class="nav-link ">
+                        <i class="nav-icon fas fa-donate"></i>
+                        <p>Convenzioni</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("ConvenzioniBPM", "Convenzioni")' class="nav-link ">
+                        <i class="nav-icon fas fa-donate"></i>
+                        <p>Convenzioni BPM</p>
+                    </a>
+                </li>
+
+                @*@Url.Action("Infortuni", "Iscritto")*@
+                <!--<li class="nav-item">
+                    <a href='@Url.Action("Infortuni", "Iscritto")' class="nav-link ">
+                        <i class="nav-icon fas fa-ambulance"></i>
+                        <p>Infortuni</p>
+                    </a>
+                </li>-->
+                <li class="nav-item">
+                    <a href='@Url.Action("Privacy", "Iscritto")' class="nav-link">
+                        <i class="nav-icon fas fa-lock"></i>
+                        <p>Privacy</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("ModificaPWD", "Iscritto")' class="nav-link">
+                        <i class="nav-icon fas fa-unlock-alt"></i>
+                        <p>Modifica password</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("LogOut", "Login", new { tipoUtenza = "ext"})' class="nav-link ">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

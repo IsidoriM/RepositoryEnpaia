@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewBag.Title = "AnagraficaGruppoUtente";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@{
+    Html.RenderPartial("PartialViewShowMessages");
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table thead th {
+        background: #0c773c;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+@using (Html.BeginForm("AnagraficaGruppoUtente", "Admin", FormMethod.Get))
+{
+
+    <div class="card" style="background-color:white" id="tabRicerca">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Anagrafica Gruppo Utente</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" col-lg="6">
+                    <label>Ricerca Nome Gruppo:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="selezionaNomeGruppo" name="selezionaNomeGruppo" placeholder="NOME GRUPPO" autocomplete="off" autofocus style="width: 600px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-block btn-outline-success" style="width:100px">Cerca</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card" style="background-color:white" id="btnNuovo">
+        <div style="margin:auto">
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="button" onclick="nuovoGruppo()" class="btn btn-block btn-outline-success" style="width:500px">Nuovo Gruppo</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function nuovoGruppo() {
+
+            document.getElementById("tabRicerca").style.display = "none";
+            document.getElementById("btnNuovo").style.display = "none";
+            document.getElementById("tabNuovoGruppo").style.display = "inline";
+            document.getElementById("tabUtenti").style.display = "none";
+
+
+        }
+    </script>
+}
+@if (Model != null)
+{
+
+    <section class="content" id="btnNuovo">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" id="tabUtenti">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background:#0c773c;color:white;width:20%;text-align:center;vertical-align:middle">Numero utenti appartenenti al gruppo</th>
+                                        <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Nome Gruppo</th>
+                                        <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle"></th>
+                                        <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Funzionalità</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btnNuovo">
+
+
+
+                                    @foreach (var GetTabella in Model)
+                                    {
+                                        using (Html.BeginForm("AnagraficaGruppoUtente", "Admin", FormMethod.Get))
+                                        {
+                                    <tr>
+                                        <td style="text-align:center">
+                                            <label>@GetTabella.codGru</label>
+                                            @*@Html.Label(GetTabella.codGruppo)*@
+                                        </td>
+                                        <td style="text-align:center">
+                                            <label id="oldGrup">@GetTabella.denGru</label>
+                                            @*@Html.Label(@GetTabella.denGrup, new { style = "class=label", @id = "oldGrup" })*@
+                                            <input id="oldGrup" name="oldGrup" value="@GetTabella.denGru" hidden />
+                                            @*@Html.Hidden("oldGrup", @GetTabella.denGrup)*@
+                                            <input type="text" style="display:none" placeholder="@GetTabella.denGru" id="newGrup" />
+                                            @*@Html.TextBox("newGrup", String.Empty, new { style = "display:none; text-align: center; class=text; type=text; width: 100%;", @placeholder = @GetTabella.denGrup, @id = "newGrup" })*@
+
+                                        </td>
+                                        <td style="text-align:center">
+
+                                            <button  id="Edit" class="Edit btn btn-outline-success" type="button" style="width: 30%; ">Modifica</button>
+
+                                            <button type="submit" id="btnConf" class="Conferma btn  btn-outline-success" style="display: none;  float: left; margin-left: 15%;">Conferma</button>
+
+                                            <button class="Cancel btn btn-outline-success" type="button" style="display: none; width: 30%;">Annulla</button>
+                                        </td>
+                                        
+                                        <td style="text-align:center">
+
+                                            <button class="btn btn-outline-success" type="button" onclick="window.location.href='@Url.Action("GruppoFunzionalita","Admin",new {oldGrup=@GetTabella.denGru })'">Funzionalità</button>
+                                        </td>
+                                    </tr>
+                                        }
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+<script type="text/javascript">
+
+        //Bottone Modifica
+
+        $(".Edit").click(function () {
+            var btnConferma = $(this).next();
+            var btnAnulla = $(this).next().next();
+            btnConferma.css("display", "inline");
+            btnAnulla.css("display", "inline");
+            $(this).css("display", "none");
+
+            var currentTD = $(this).parent();
+            var precTD = currentTD.prev();
+            var label = precTD.children("#oldGrup");
+            var textbox = precTD.children("#newGrup");
+            label.css("display", "none");
+            textbox.css("display", "inline");
+
+        });
+
+        //Bottone Annulla
+
+        $(".Cancel").click(function () {
+
+            var btnConferma = $(this).prev();
+            var btnModifica = $(this).prev().prev();
+            btnConferma.css("display", "none");
+            btnModifica.css("display", "inline");
+            $(this).css("display", "none");
+
+            var currentTD = $(this).parent();
+            var precTD = currentTD.prev();
+            var label = precTD.children("#oldGrup");
+            var textbox = precTD.children("#newGrup");
+            label.css("display", "inline");
+            textbox.css("display", "none");
+        });
+
+        $(".Conferma").click(function () {
+
+            if (confirm('Confermare?')) {
+                this.submit();
+            }
+            return false;
+        });
+
+
+        $(document).ready(function () {
+            $('#tabUtenti').after('<div id="nav"></div>');
+            var rowsShown = 20;
+            var rowsTotal = $('#tabUtenti tbody tr').length;
+            var numPages = rowsTotal / rowsShown;
+            for (i = 0; i < numPages; i++) {
+                var pageNum = i + 1;
+                $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            }
+            $('#tabUtenti tbody tr').hide();
+            $('#tabUtenti tbody tr').slice(0, rowsShown).show();
+            $('#nav a:first').addClass('active');
+            $('#nav a').bind('click', function () {
+
+
+
+                $('#nav a').removeClass('active');
+                $(this).addClass('active');
+                var currPage = $(this).attr('rel');
+                var startItem = currPage * rowsShown;
+                var endItem = startItem + rowsShown;
+                $('#tabUtenti tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                    css('display', 'table-row').animate({ opacity: 1 }, 300);
+            });
+        });
+</script>
+
+
+
+@using (Html.BeginForm("AnagraficaGruppoUtente", "Admin", FormMethod.Get))
+{
+<div class="card" style="background-color: white; display: none;" id="tabNuovoGruppo">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Anagrafica Nuovo Gruppo Utente</h3>
+    </div>
+
+    <div class="card-body" style="background-color:white">
+        <div class="input-group">
+            <div class="form-group" col-lg="6">
+                <label>Inserisci Nome Gruppo:</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="nuovoNomeGruppo" name="nuovoNomeGruppo" placeholder="NOME GRUPPO" autocomplete="off" autofocus style="width: 600px; margin-right: 20px;">
+                </div>
+            </div>
+            <div class="form-group" col-lg="6">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="Inserisci btn btn-block btn-outline-success" style="width:100px">Inserisci</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col-sm-2">
+            <button type="button" style="float:right" onclick="history.go(-1)" class="btn btn-block btn-outline-success btn-lg">Indietro</button>
+        </div>
+    </div>
+</div>
+    <script>
+        $(".Inserisci").click(function () {
+
+            if (confirm('Confermare?')) {
+                this.submit();
+            }
+            return false;
+        });
+    </script>
+}
+
+

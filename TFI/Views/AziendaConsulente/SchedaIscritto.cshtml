@@ -1,0 +1,738 @@
+﻿@using System.Linq
+@using OCM.TFI.OCM.AziendaConsulente
+@model TFI.OCM.AziendaConsulente.RapportiLavoro
+@{
+    var modIsc = Model.modIsc;
+}
+@{
+    ViewBag.Title = "SchedaIscritto";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    var gen = (ViewBag.ListaGeneri as IEnumerable<Genere>).FirstOrDefault(g => g.Id.ToString() == modIsc.sesso)
+              ?? new Genere() { Id = 0, Descrizione = "" };
+}
+
+<link href="@Url.Content("~/dist/css/pages/SchedaIscritto.css")" rel="stylesheet" type="text/css" />
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                @using (Html.BeginForm("ModRapportiLavoro", "AziendaConsulente", FormMethod.Post, new { id = "formSchedaIscritto"}))
+                {
+
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Modifica dati RDL Matricola: @modIsc.matricola
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card card-primary card-tabs">
+                                        <div class="card-header p-0 pt-1" style="background-color: #0c773c;color:white">
+                                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link active not-interactive" id="custom-tabs-one-home-tab" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Anagrafici</a>
+                                                </li>
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link not-interactive" id="custom-tabs-one-profile-tab" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Dati Contrattuali</a>
+                                                </li>
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link not-interactive" id="custom-tabs-one-messages-tab" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Dati Retributivi</a>
+                                                </li>
+                                                @if ((bool)TempData["isAziSomm"])
+                                                {
+                                                    <li class="nav-item col-sm-3">
+                                                        <a class="nav-link not-interactive" id="custom-tabs-one-settings-tab" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Azienda utilizzatrice</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Matricola</label>
+                                                                    <input type="text" class="form-control" id="matricola" name="matricola" value="@modIsc.matricola" readonly>
+                                                                    <input type="text" class="form-control" id="prorap" name="prorap" value="@modIsc.prorap" hidden>
+                                                                    <input type="text" class="form-control" value="@modIsc.checkIscritto" hidden>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group">
+                                                                    <label>Cognome</label>
+                                                                    <input type="text" asp-for="cognome" name="cognome" class="form-control" value="@modIsc.cognome" placeholder="Inserire Cognome" id="cognome" required readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group">
+                                                                    <label>Nome</label>
+                                                                    <input type="text" class="form-control" asp-for="nome" name="nome" value="@modIsc.nome" placeholder="Inserire Nome" id="nome" required readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Codice Fiscale</label>
+                                                                    <input type="text" value="@modIsc.codFis" id="codFis" asp-for="codFis" name="codFis" class="form-control" placeholder="Inserire Codice Fiscale" maxlength="16" required pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Data Nascita</label>
+                                                                    <input type="date" id="dataNas" asp-for="dataNas" name="dataNas" class="form-control" placeholder="Data Nascita" value="@modIsc.dataNas" required readonly />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Genere</label>
+                                                                    <select class="form-control" id="sesso" asp-for="sesso" name="sesso" style="pointer-events: none" required readonly>
+                                                                        <option value="@gen.Id">@gen.Descrizione</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Comune di Nascita</label>
+                                                                    <select id="comuneN" asp-for="comuneN" name="comuneNCod" class="form-control" style="pointer-events: none" required readonly>
+                                                                        <option value="@modIsc.comuneNCod" selected>@modIsc.comuneN</option>
+                                                                    </select>
+                                                                    <input value="@modIsc.comuneN" name="comuneN" hidden />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Provincia di Nascita</label>
+                                                                    <select id="provinciaN" asp-for="provinciaN" name="provinciaN" class="form-control" style="pointer-events: none" required readonly>
+                                                                        <option value="@modIsc.provinciaN" selected>@modIsc.provinciaN</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Stato Estero</label>
+                                                                    <select id="statoEsN" asp-for="statoEsN" name="statoEsN" class="form-control" style="pointer-events: none" readonly>
+                                                                        <option value="@modIsc.statoEsN" selected>@modIsc.statoEsN</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr />
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group autocomplete">
+                                                                    <label>Titolo di Studio</label>
+                                                                    <select class="form-control" id="titoloStudio" name="titoloStudio" asp-for="titoloStudio" required>
+                                                                        <option value=""></option>
+                                                                        @foreach (var item in ViewBag.ListaTitStu)
+                                                                        {
+                                                                            <option value="@item.Key" @(modIsc.titoloStudioCod == item.Key ? "selected" : "")>@item.Value</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>DUG</label>
+                                                                    <select class="form-control" id="indirizzo" name="indirizzo" asp-for="indirizzo" required>
+                                                                        <option value=""></option>
+                                                                        @foreach (var item in ViewBag.ListaDug)
+                                                                        {
+                                                                            <option value="@item.CODDUG" @(modIsc.indirizzoCod == item.CODDUG ? "selected" : "")>@item.DENDUG</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group">
+                                                                    <label>Indirizzo di Residenza</label>
+                                                                    <input type="text" value="@modIsc.residenza" class="form-control" id="residenza" asp-for="residenza" name="residenza" placeholder="Inserire indirizzo" maxlength="80" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Civico</label>
+                                                                    <input type="text" value="@modIsc.civico" class="form-control" id="civico" asp-for="civico" name="civico" placeholder="Inserire civico" maxlength="10" required pattern="^(^\d+(\/[a-zA-Z])?[a-zA-Z]?$)|(SNC)$">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Provincia</label>
+                                                                    <select class="form-control" id="provincia" asp-for="provincia" name="provincia" placeholder="Inserire la Provincia" required>
+                                                                        <option value="">Selezionare Provincia</option>
+                                                                        @foreach (var std in ViewBag.ListaProvince)
+                                                                        {
+                                                                            if (std.SIGPRO != "EE")
+                                                                            {
+                                                                                <option value="@std.SIGPRO" @(modIsc.provincia == std.SIGPRO ? "selected" : "")>@std.SIGPRO</option>
+                                                                            }
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Comune</label>
+                                                                    <select class="form-control" id="comune" asp-for="comune" name="comuneCod" placeholder="Inserire Comune" required>
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.ListaComuni)
+                                                                        {
+                                                                            <option value="@std.Key" @(modIsc.comuneCod == std.Key ? "selected" : "")>@std.Value</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Località</label>
+                                                                    <select class="form-control" id="localita" asp-for="localita" name="localita" placeholder="" required>
+                                                                        <option value=""></option>
+                                                                        @foreach (var loc in ViewBag.ListaLocalita)
+                                                                        {
+                                                                            <option value="@loc.Value" @(modIsc.localita == loc.Value ? "selected" : "")>@loc.Value</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group">
+                                                                    <label>Cap</label>
+                                                                    <input type="text" value="@modIsc.cap" class="form-control" pattern=".{5}" id="cap" asp-for="cap" name="cap" required readonly maxlength="9">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Stato Estero</label>
+                                                                    <select class="form-control" id="statoEs" asp-for="statoEs" name="statoEs" placeholder="Inserire lo Stato Estero">
+                                                                        <option value="">Selezionare Stato Estero</option>
+                                                                        @foreach (var se in ViewBag.ListaStatiEsteri)
+                                                                        {
+                                                                            <option value="@se.CODCOMSE" @(modIsc.statoEs == se.DENCOMSE.Trim() ? "selected" : "")>@se.DENCOMSE</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>C/O</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.co" id="co" name="co" asp-for="co" placeholder="" maxlength="40">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input type="email" value="@modIsc.email" class="form-control" id="email" asp-for="email" name="email" placeholder="Inserire Email" required maxlength="100">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Posta Elettronica Certificata</label>
+                                                                    <input type="email" value="@modIsc.pec" class="form-control" id="pec" asp-for="pec" name="pec" placeholder="Inserire la PEC" title="Inserisci un dominio valido (&#64;pec o &#64;legalmail)" pattern="(.+)@("@")(legalmail|pec)(\.{1}([a-zA-Z0-9-])+)*" maxlength="100">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Telefono</label>
+                                                                    <input type="tel" value="@modIsc.tel" class="form-control" id="tel" asp-for="tel" name="tel" placeholder="Inserire Telefono" pattern="[0-9]{2}[0-9]{7}" maxlength="9">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Cellulare</label>
+                                                                    <input type="tel" value="@modIsc.cell" class="form-control" pattern="[0-9]{3}[0-9]{7}" id="cell" asp-for="cell" name="cell" placeholder="Inserire Cellulare" required maxlength="10">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="form-row justify-content-end mt-3">
+                                                            <a class="btn btn-block btn-outline-success col-3" id="next1">
+                                                                Avanti
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Data iscrizione</label>
+                                                                    <input type="date" value="@modIsc.datIsc" id="datIsc" name="datIsc" asp-for="datIsc" class="form-control" required readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Decorrenza modifica</label>
+                                                                    <input type="date" id="datDecMod" name="datDecMod" asp-for="datDecMod" class="form-control" required 
+                                                                           min="@(modIsc.datIsc)" max="@(DateTime.Now.ToString("yyyy-MM-dd"))">
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row" id="alertDataIscrizione" style="display: none">
+                                                            <div class="alert alert-danger" role="alert">
+                                                                Occorre compilare la data di iscrizione!
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Tipo rapporto</label>
+                                                                    <select class="form-control" name="tipRap" asp-for="tipRap" id="tipRap" required>
+                                                                        <option value="">Seleziona tipo rapporto</option>
+                                                                        @foreach (var item in ViewBag.ListaTipRap)
+                                                                        {
+                                                                            <option value="@item.Key" @(modIsc.tipRap == item.Key ? "selected" : "")>@item.Value</option>
+
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2">
+                                                                <div class="form-group" style="display:none" name="periododll" id="periododll">
+                                                                    <label>Durata mesi</label>
+                                                                    <select class="form-control" name="periodo" asp-for="periodo" id="periodo">
+                                                                        <option selected></option>
+                                                                        <option>24</option>
+                                                                        <option>36</option>
+                                                                        <option>48</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group" style="display: none; padding-left: 7.5px;" name="" id="data_termine">
+                                                                <label> Data Termine</label>
+                                                                <input type="date" value="@modIsc.datTerm" id="datTerm" name="datTerm" asp-for="datTerm" class="form-control">
+                                                            </div>
+                                                            <div class="form-group" style="display: none; padding-left: 7.5px;" name="part_time" id="part_time">
+                                                                <label>% Part-Time</label>
+                                                                <input type="number" value="@modIsc.PercPT" id="PercPT" name="PercPT" class="form-control" min="0" max="100" step=".01"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="padding-left: 7.5px;">
+
+                                                            <div class="form-group align-items-center" style="display: none; column-gap: 10px;" name="da_al" id="da_al">
+                                                                <label>Da</label>
+                                                                <input type="date" value="@modIsc.daal" class="form-control" name="daal" id="daal" asp-for="daal" readonly />
+                                                                <label>Al</label>
+                                                                <input type="date" value="@modIsc.alal" class="form-control" name="alal" id="alal" asp-for="alal" readonly />
+                                                                <label>%</label>
+                                                                <input type="number" value="@modIsc.perce1" class="form-control" name="perce1" id="perce1" asp-for="perce1" min="0" max="100" />
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="padding-left: 7.5px;">
+                                                            <div class="form-group align-items-center" style="display: none; column-gap: 10px;" name="da_al1" id="da_al1">
+                                                                <label>Da</label>
+                                                                <input type="date" value="@modIsc.daal2" class="form-control" name="daal2" id="daal2" asp-for="daal2" readonly />
+                                                                <label>Al</label>
+                                                                <input type="date" value="@modIsc.alal2" class="form-control" name="alal2" id="alal2" asp-for="alal2" readonly />
+                                                                <label>%</label><input type="number" value="@modIsc.perce2" class="form-control" name="perce2" id="perce2" asp-for="perce2" min="0" max="100" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="row" style="padding-left: 7.5px;">
+                                                            <div class="form-group align-items-center" style="display: none; column-gap: 10px;" name="da_al2" id="da_al2">
+                                                                <label>Da</label>
+                                                                <input type="date" value="@modIsc.daal3" class="form-control" name="daal3" id="daal3" asp-for="daal3" readonly />
+                                                                <label>Al</label>
+                                                                <input type="date" value="@modIsc.alal3" class="form-control" name="alal3" id="alal3" asp-for="alal3" readonly />
+                                                                <label>%</label>
+                                                                <input type="number" value="@modIsc.perce3" class="form-control" name="perce3" id="perce3" asp-for="perce3" min="0" max="100" />
+
+                                                            </div>
+                                                            <div class="form-group spazioCheckMesi" style="display:none" name="mesi" id="mesi">
+                                                                <input type="checkbox" name="MeseSel[]" value="1" @(modIsc.meseSel.Contains("1") ? "checked" : "") />
+                                                                <label>Gen</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="2" @(modIsc.meseSel.Contains("2") ? "checked" : "") />
+                                                                <label>Feb</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="3" @(modIsc.meseSel.Contains("3") ? "checked" : "") />
+                                                                <label>Mar</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="4" @(modIsc.meseSel.Contains("4") ? "checked" : "") />
+                                                                <label>Apr</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="5" @(modIsc.meseSel.Contains("5") ? "checked" : "") />
+                                                                <label>Mag</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="6" @(modIsc.meseSel.Contains("6") ? "checked" : "") />
+                                                                <label>Giu</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="7" @(modIsc.meseSel.Contains("7") ? "checked" : "") />
+                                                                <label>Lug</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="8" @(modIsc.meseSel.Contains("8") ? "checked" : "") />
+                                                                <label>Ago</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="9" @(modIsc.meseSel.Contains("9") ? "checked" : "") />
+                                                                <label>Set</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="10" @(modIsc.meseSel.Contains("10") ? "checked" : "") />
+                                                                <label>Ott</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="11" @(modIsc.meseSel.Contains("11") ? "checked" : "") />
+                                                                <label>Nov</label>
+                                                                <input type="checkbox" name="MeseSel[]" value="12" @(modIsc.meseSel.Contains("12") ? "checked" : "") />
+                                                                <label>Dic</label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Contratto</label>
+                                                                    <select class="form-control" id="contratto" name="contratto" required>
+                                                                        <option value="@modIsc.contrattocod" selected>@modIsc.contratto</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Livello</label>
+                                                                    <select class="form-control" id="livello" name="codlivello" required>
+                                                                        <option value="@modIsc.codlivello" selected>@modIsc.livello</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Qualifica</label>
+                                                                    <select class="form-control" id="qualifica" name="qualifica" value="qualifica" required>
+                                                                        <option value="@modIsc.codqualifica" selected>@modIsc.qualifica</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Numero mensilità</label>
+                                                                    <input type="number" value="@modIsc.numMes" id="numMes" name="numMes" class="form-control" required maxlength="2">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Mese corrispondente 14°</label>
+                                                                    <input type="number" value="@modIsc.m14" id="m14" name="m14" asp-for="m14" class="form-control" placeholder="Inserire mese 14°" readonly maxlength="4">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>15°</label>
+                                                                    <input type="number" value="@modIsc.m15" id="m15" name="m15" asp-for="m15" class="form-control" placeholder="Inserire mese 15°" readonly maxlength="4">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>16°</label>
+                                                                    <input type="number" value="@modIsc.m16" id="m16" name="m16" asp-for="m16" class="form-control" placeholder="Inserire mese 16°" readonly maxlength="4">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3" style="display:none">
+                                                                <div class="form-group">
+                                                                    <input type="text" value="@modIsc.tipspe" id="tipspe" name="tipspe" asp-for="tipspe" class="form-control">
+
+                                                                    <input type="text" value="@modIsc.codloc" id="codloc" name="codloc" asp-for="codloc" class="form-control">
+
+                                                                    <input type="text" id="denconnew" name="denconnew" asp-for="denconnew">
+
+                                                                    <input type="text" id="tiprapval" name="tiprapval" asp-for="tiprapval">
+                                                                    <input type="text" id="codlival" name="codlival" asp-for="codlival">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Aliquota contributiva</label>
+                                                                    <select class="form-control" id="aliqCont" name="gruass" asp-for="aliqCont" style="pointer-events: none;background: #E9ECEF;" required>
+                                                                        <option value="@modIsc.gruass">@modIsc.aliqCont</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="form-group">
+                                                                    <label>Valore aliquota</label>
+                                                                    <input type="text" value="@modIsc.aliquota" id="aliquota" name="aliquota" asp-for="aliquota" class="form-control" readonly required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-4" style="text-align:center">
+                                                                <div class="form-group">
+                                                                    <label>Fap</label>
+                                                                    <input type="checkbox" name="fap" id="fap" asp-for="fap" class="form-control" value="true" @(modIsc.fap ? "checked" : "")  style="width: 6%; margin: auto; pointer-events:none"/>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <div class="icheck-success d-inline d-flex">
+                                                                        <input type="checkbox" name="assistenzaCon" id="assistenzaCon" asp-for="assistenzaCon" value="true" @(modIsc.assistenzaCon ? "checked" : "") style="pointer-events:none"/>
+                                                                        <label class="form-check-label" style="pointer-events:none">
+                                                                            Assistenza contrattuale
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                            <a class="btn btn-outline-success col-3" id="back2">
+                                                                Indietro
+                                                            </a>
+                                                            <a class="btn btn-block btn-outline-success col-3" id="next2">
+                                                                Avanti
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Emolumenti contrattuali (€)</label>
+                                                                    <input class="form-control" value="@modIsc.emolumenti" id="emolumenti" asp-for="emolumenti" name="emolumenti" placeholder="0,00" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Retribuzione dichiarata (€)</label>
+                                                                    <input class="form-control" value="@modIsc.retDic" id="retDic" asp-for="retDic" name="retDic" placeholder="0,00" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Scatti di anzianità</label>
+                                                                    <input type="number" class="form-control" value="@modIsc.scattiAnz" id="scattiAnz" asp-for="scattiAnz" name="scattiAnz" min="0" max="99" pattern="\d*" maxlength="17">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Ultimo</label>
+                                                                    <input type="date" class="form-control" value="@modIsc.dataUltSc" id="dataUltSc" asp-for="dataUltSc" name="dataUltSc">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Prossimo</label>
+                                                                    <input type="date" class="form-control" value="@modIsc.prossimoSc" id="prossimoSc" asp-for="prossimoSc" name="prossimoSc">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Importo €</label>
+                                                                    <input class="form-control" value="@modIsc.importoSc" id="importoSc" asp-for="importoSc" name="importoSc" placeholder="0,00" readonly>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class=" row">
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group">
+                                                                    <label>Emolumenti extracontrattuali per n° mensilità:</label>
+                                                                    <br />
+                                                                    <label>12€</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.S12" id="S12" asp-for="S12" name="S12" placeholder="0,00" maxlength="4">
+                                                                    <label>13€</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.S13" id="S13" asp-for="S13" name="S13" placeholder="0,00" maxlength="4">
+                                                                    <label>14€</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.S14" id="S14" asp-for="S14" name="S14" placeholder="0,00" maxlength="4">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group">
+                                                                    <label style="height:17px"></label>
+                                                                    <br />
+                                                                    <label>15€</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.S15" id="S15" asp-for="S15" name="S15" placeholder="0,00" readonly maxlength="4">
+                                                                    <label>16€</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.S16" id="S16" asp-for="S16" name="S16" placeholder="0,00" readonly maxlength="4">
+                                                                    <label>Totale €</label>
+                                                                    <input type="text" class="form-control" value="@modIsc.totaleS" id="totaleS" asp-for="totaleS" name="totaleS" placeholder="Totale" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        @if ((bool)TempData["isAziSomm"])
+                                                        {
+                                                            <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                                <a class="btn btn-outline-success col-3" id="back3">
+                                                                    Indietro
+                                                                </a>
+                                                                <a class="btn btn-block btn-outline-success col-3" id="next3">
+                                                                    Avanti
+                                                                </a>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                                <a class="btn btn-block btn-outline-success col-3" id="back3">
+                                                                    Indietro
+                                                                </a>
+                                                                <input value="Salva" id="blocco" name="blocco" asp-for="blocco" class="btn btn-outline-success col-3">
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                                @if ((bool)TempData["isAziSomm"])
+                                                {
+
+                                            <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Posizione</label>
+                                                                <input type="text" class="form-control" id="pozioneAZ" asp-for="pozioneAZ" name="pozioneAZ" value="@modIsc.pozioneAZ" maxlength="10">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Ragione sociale</label>
+                                                                <input type="text" class="form-control" id="ragsocAZ" asp-for="ragsocAZ" name="ragsocAZ" value="@modIsc.ragsocAZ" required maxlength="100">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Codice fiscale</label>
+                                                                <input type="text" class="form-control" id="cfAz" asp-for="cfAz" name="cfAz" value="@modIsc.cfAz" required maxlength="16">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Partita IVA</label>
+                                                                <input type="text" class="form-control" id="piAZ" asp-for="piAZ" name="piAZ" value="@modIsc.piAZ" placeholder="Cerca azienda con p.Iva" required maxlength="11">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>DUG</label>
+                                                                <select class="form-control" id="DUG" name="residenzaAZCod" asp-for="residenzaAZ" required value="@modIsc.residenzaAZCod" title="Tipo di indirizzo non valido">
+                                                                    <option value=""></option>
+                                                                    @foreach (var std in ViewBag.ListaDug)
+                                                                    {
+                                                                        <option value="@std.CODDUG" @(modIsc.residenzaAZCod == std.CODDUG ? "selected" : "")>@std.DENDUG</option>
+                                                                    }
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo di Residenza</label>
+                                                                <input type="text" class="form-control" id="indirizzoAZ" asp-for="indirizzoAZ" name="indirizzoAZ" value="@modIsc.indirizzoAZ" required maxlength="80">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input type="text" class="form-control" id="numCivAZ" asp-for="numCivAZ" name="numCivAZ" value="@modIsc.numCivAZ" required maxlength="10" pattern="^(^\d+(\/[a-zA-Z])?[a-zA-Z]?$)|(SNC)$">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <select type="text" class="form-control" id="ProvinciaS" asp-for="provinciaAZ" name="provinciaAZ" value="@modIsc.provinciaAZ" required>
+                                                                    <option value="">Selezionare la Provincia</option>
+                                                                    @foreach (var prov in ViewBag.ListaProvince)
+                                                                    {
+                                                                        if (prov.SIGPRO != "EE")
+                                                                        {
+                                                                            <option value="@prov.SIGPRO" @(modIsc.provinciaAZ == prov.SIGPRO ? "selected" : "")>@prov.SIGPRO</option>
+                                                                        }
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <select type="text" class="form-control" id="ComuneS" asp-for="comuneAZ" name="comuneAZCod" value="@modIsc.comuneAZ" required style="pointer-events: none;background: #E9ECEF;">
+                                                                    <option value="">Selezionare Comune</option>
+                                                                    @foreach (var std in ViewBag.ListaComuniAziSomm)
+                                                                    {
+                                                                        <option value="@std.Key" @(Model.modIsc.comuneAZCod == std.Key ? "selected" : "")>@std.Value</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <select type="text" class="form-control" id="LocalitaS" asp-for="localitaAZ" name="localitaAZ" value="@modIsc.localitaAZ" required style="pointer-events: none;background: #E9ECEF;">
+                                                                    <option value="">Selezionare la Località</option>
+                                                                    @foreach (var loc in ViewBag.ListaLocalitaAziSomm)
+                                                                    {
+                                                                        <option value="@loc.Value" @(modIsc.localitaAZ == loc.Value ? "selected" : "")>@loc.Value</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>CAP</label>
+                                                                <input type="text" class="form-control" id="CAPS" asp-for="capAZ" name="capAZ" value="@modIsc.capAZ" readonly required maxlength="9">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="back4">
+                                                            Indietro
+                                                        </a>
+                                                        <input value="Salva" id="blocco" name="blocco" asp-for="blocco" class="btn btn-outline-success col-3">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-3 alert alert-success" role="alert">
+                                            Per salvare i dati premere il tasto salva alla fine della procedura.
+                                        </div>
+                                    </div>
+                                        <!-- /.card -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.Hidden("RapportoDiLavoroCorrente", modIsc.tipRap)
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+@Html.Hidden("codPosAzienda", Model.posizione)
+
+<script src="~/dist/js/pages/Azienda/SchedaIscritto.js" type="module"></script>

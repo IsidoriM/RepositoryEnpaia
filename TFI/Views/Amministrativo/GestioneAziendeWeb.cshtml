@@ -1,0 +1,200 @@
+﻿@model TFI.OCM.Amministrativo.GestioneAziendeWebOCM
+
+@{
+    ViewBag.Title = "GestioneAziende";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 10px;
+    }
+
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Aziende</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("GestioneAziendeWeb", "Amministrativo", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-3>
+                        <label>Codice Posizione:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Codpos" name="Codpos" asp-for="Codpos" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Ragione Sociale:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Ragsoc" name="Ragsoc" asp-for="Ragsoc" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Partita IVA:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Partitaiva" name="Partitaiva" asp-for="Partitaiva" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Codice Fiscale:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="codfis" name="codfis" asp-for="codfis" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 text-lg">
+                    <div class="input-group">
+                        <div class="icheck-success d-inline">
+                            <input type="radio" value="Attivo" style="" name="Cessato" id="Attivo">
+                            <label class="form-check-label" for="Attivo">
+                                Confermate
+                            </label>
+                        </div>
+                        &emsp;
+                        <div class="icheck-success d-inline">
+                            <input type="radio" value="Cessato" name="Cessato" id="Cessato">
+                            <label class="form-check-label" for="Cessato">
+                                Da Confermare
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-sm-2" style="float: right">
+                    @Html.ActionLink("Nuova Azienda", "NuovaAzienda", "Amministrativo", new { @class = "btn btn-block btn-outline-success float-end" })
+
+                    <!--<button name="nuovaAz" id="nuovaAz" asp-for="nuovaAz" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Nuova Azienda</button>-->
+                </div>
+                <div class="col-sm-2">
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@if (Model != null)
+{
+    if (Model.Ricerca.Count > 0)
+    {
+        <div class="card">
+            <div class="card-body" style="overflow-x:auto">
+                <br />
+                <div style="overflow:scroll;height:300px">
+                    <table id="table" style="text-align:center" class="table table-hover table-striped">
+                        <thead>
+                            <tr class="header" style="background:#0c773c;color:white">
+                                <th>Codice Posizione Azienda</th>
+                                <th>Ragione Sociale</th>
+                                <th>P. IVA</th>
+                                <th>Codice Fiscale</th>
+                                <th>Data Registrazione</th>
+                                <th>Data Apertura</th>
+                                <th>Apri</th>
+                            </tr>
+
+                        </thead>
+                        @foreach (var sede in Model.Ricerca)
+                        {
+                            <tbody>
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td>@sede.CodiceAziendaWeb</td>
+                                    <td>@sede.RagioneSociale</td>
+                                    <td>@sede.PartitaIva</td>
+                                    <td>@sede.CodiceFiscale</td>
+                                    <td>@sede.DataComunicazione</td>
+                                    <td>@sede.DataApertura</td>
+                                    <td><a href='@Url.Action("DettaglioAziendaWeb", "Amministrativo", new { id = sede.CodiceAziendaWeb , codpos = sede.CodicePosizioneAzienda})'><i class="far fa-edit fa-lg"></i></a></td>
+                                </tr>
+
+                            </tbody>
+                        }
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    }
+
+
+}
+
+
+<script>
+
+</script>
+<script>
+    $(function () {
+        //Date range picker
+        $('#reservation').daterangepicker();
+    })
+</script>
+<script>
+    $(function () {
+        //Date range picker
+        $('#reservation1').daterangepicker();
+    })
+</script>

@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "DenunciaMensile_Upload";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model List<SelectListItem>
+
+<section class="content" id="denunciaMensile_Upload">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="">
+                        Caricamento Tracciato Record Denuncia Mensile
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("UploadDIPA", "AziendaConsulente", FormMethod.Post, new { id = "form_uploadDIPA", enctype = "multipart/form-data" }))
+                        {
+                            <div class="row">
+                                <div class="col-3">
+                                    @Html.TextBox("anno", null, new { @class = "numberonly", required = "required", id = "anno", autocomplete = "off", placeholder = "Anno" })
+                                </div>
+                                <div class="col-3">
+                                    <select name="mese" id="mese" required>
+                                        @foreach (SelectListItem mese in Model)
+                                        {
+                                            if (mese.Value == "0")
+                                            {
+                                                <option value="">@mese.Text.ToUpper()</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@mese.Value">@mese.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <div id="cont_file">
+                                        @Html.Label("File")
+                                        <input type="file" id="fileUpload" name="fileUpload" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:none" id="proDen">
+                                @ViewBag.proDen
+                            </div>
+                            <div class="col-12 cont_btn">
+                                @if (ViewBag.btnConfermaIsVisible)
+                                {
+                                    <button type="submit" class="btn btn_official">Conferma</button>
+                                }
+                            </div>
+                        }
+                        <div class="row">
+                            @Html.TextArea("logErrori", (string)ViewBag.logErrori, new { id = "txtArea", @readonly = "readonly" })
+                        </div>
+                        <div class="row">
+                            @if (ViewBag.btnStampaIsVisible)
+                            {
+                                <button type="button" class="btn btn_official">Stampa Pagina</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+    @Scripts.Render("~/Common")
+}

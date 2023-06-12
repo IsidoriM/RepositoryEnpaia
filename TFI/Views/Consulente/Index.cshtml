@@ -1,0 +1,96 @@
+﻿@model IEnumerable<OCM.TFI.OCM.AziendaConsulente.AziendaConsulenteLight>
+
+@{
+    ViewBag.Title = "Seleziona Azienda";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    //var webGrid = new WebGrid(Model);
+}
+
+@{
+    Html.RenderPartial("PartialViewShowMessages");
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="@Url.Content("~/dist/css/pages/ConsulenteIndex.css")" rel="stylesheet" type="text/css" />
+
+<div class="card" style="background-color:white" id="ricerca">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Seleziona Azienda</h3>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover table-striped" id="tabella_Aziende">
+    <thead>
+        <tr>
+            <th>Posizione</th>
+            <th>Ragione Sociale</th>
+            <th>Seleziona</th>
+            <th>Stato Richiesta Delega</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (OCM.TFI.OCM.AziendaConsulente.AziendaConsulenteLight azi in Model)
+        {
+            <text>
+                    <tr>
+                        <td>@azi.CodiceIdentificativo</td>
+                        <td>@azi.RagioneSociale</td>
+                        <td>
+                            @if(azi.IsDelegaConfermata){
+                                <a href="@Url.Action("SelezionaAzienda", new { id = azi.CodiceIdentificativo, nome = azi.RagioneSociale })">
+                                    <i class="fas fa-check-circle"></i>
+                                </a>
+                            }
+                        </td>
+                        <td>@(azi.IsDelegaConfermata ? "Confermata" : "Non Confermata")</td>
+                    </tr>
+            </text>
+        }
+    </tbody>
+</table>
+
+<div class="card" style="background-color:white">
+    <div class="card-body col-lg-12">
+        <div class="form-group">
+            <div class="d-flex justify-content-between">
+                @Html.Label("CercaAzienda", "Cerca Azienda per Posizione o PIVA: ", new { @class = "w-50" })
+                @Html.TextBox("CercaAzienda", "", new { @class = "form-control" })
+                <a class="btn btn-outline-success ml-3 w-25" id="ricercaAziendaButton">
+                    Cerca
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover table-striped" id="tabella_Esito_Ricerca" hidden>
+    <thead>
+        <tr>
+            <th>Posizione</th>
+            <th>Partita Iva</th>
+            <th>Ragione Sociale</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="rigaAziendaDaMostrare">
+            <td id="codPosAzienda"></td>
+            <td id="pivaAzienda"></td>
+            <td id="utenzaAzienda"></td>
+            <td>
+                <a href="" id="linkRichiediDelega">
+                    Richiedi Delega
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@using (Html.BeginForm("RichiediDelega", "Consulente", FormMethod.Get, new { id = "richiestaDelegaForm" }))
+{
+    @Html.Hidden("codPos")
+}
+
+<script type="module" src="../../dist/js/pages/Consulente/Index.js"></script>

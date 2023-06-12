@@ -1,0 +1,85 @@
+﻿
+
+@model TFI.OCM.AziendaConsulente.NuovoInfortunio
+@{
+    var result = Model;
+}
+
+@{
+    ViewBag.Title = "DettaglioInfortuni";
+    var dtnas = ViewBag.Datanas;
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+<div class="card card-default">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Scheda dettaglio infortunio</h3>
+    </div>
+    <!---->
+    <!-- /.card-header -->
+
+    <div class="card-body">
+
+
+        <div class="row">
+            <div class="col-sm-4">
+
+                <div class="form-group">
+                    <label>Matricola</label>
+                    <input type="text" value="@result.Matricola" class="form-control" id="mat" name="mat" required readonly>
+
+                </div>
+
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Nominativo Iscritto</label>
+                    <input type="text" class="form-control" value="@result.Nome @result.Cognome " disabled>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Descrizione</label>
+                    <input type="text" class="form-control" value="@result.Descrizione" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Data infortunio</label>
+                    <input type="text" class="form-control" value="@result.Datainf.Substring(0,10)" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Data denuncia infortunio</label>
+                    <input type="text" class="form-control" value="@result.Dataden.Substring(0,10)" disabled>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+<style>
+    .table th {
+        text-align: center;
+    }
+</style>
+<div class="card">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Lista Certificati Medici</h3>
+    </div>
+
+</div>

@@ -1,0 +1,397 @@
+﻿@model TFI.OCM.Amministrativo.Rappresentante_legaleOCM
+@{
+    ViewBag.Title = "DettRapp";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+@{ var detrap = Model.dettRap; }
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+@if (Model != null)
+{
+    using (Html.BeginForm("DettRapp", "Amministrativo"))
+    {
+
+        <div class="card card-default">
+            <div style="background-color: #0c773c" class="card-header">
+                <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Rapresentante legale da confermare</h3>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card card-primary card-tabs">
+                            <div class="card-header p-0 pt-1" style="background-color: #0c773c;color:white">
+                                <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                    <li class="nav-item col-sm-6">
+                                        <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Anagrafici</a>
+                                    </li>
+                                    <li class="nav-item col-sm-6">
+                                        <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-2" role="tab" aria-controls="custom-tabs-one-2" aria-selected="false">Recapiti</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-3">
+                                        <label>Data di Comunicazione:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.datcom.Substring(0,10)" class="form-control" id="datcom" name="datcom" asp-for="datcom" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Mezzo di comunicazione:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.denmez" readonly class="form-control" id="denmez" name="denmez" asp-for="denmez" placeholder="">
+                                            <input type="text" hidden value="@detrap.codmez" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Decorrenza incarico:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.datini.Substring(0,10)" class="form-control" id="datini" name="datini" asp-for="datini" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="col-sm-5">
+                                        <div class="form-group autocomplete">
+                                            <label>Tipo:</label>
+                                            <select class="form-control" >
+                                                <option selected name="codfunrap" id="codfunrap" value="@detrap.codfunrap">@detrap.denfunrap</option>
+                                                @foreach (var item in Model.listfunrap)
+                                                {
+                                                    <option name="codfunrap" id="codfunrap" value="@item.codfunrap">@item.denfunrap</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group autocomplete">
+                                            <label>Rap.Leg. principale:</label>
+                                            <select class="form-control" >
+                                                <option selected value="@detrap.rappri">@detrap.rappri</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-3">
+                                        <label>Cognome:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.cog" class="form-control" id="cog" name="cog" asp-for="cog" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Nome:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.nom" class="form-control" id="nom" name="nom" asp-for="nom" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div class="form-group autocomplete">
+                                            <label>Sesso:</label>
+                                            <div class="input-group">
+                                                <input type="text"  value="@detrap.sesso" readonly class="form-control" id="sesso" name="sesso" asp-for="sesso" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Codice Fiscale:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.codfis" class="form-control" id="codfis" name="codfis" asp-for="codfis" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-3">
+                                        <label>Data di Nascita:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.datnas.Substring(0,10)" class="form-control" id="datnas" name="datnas" asp-for="datnas" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Luogo di Nascita:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.dencomnas" class="form-control" id="dencomnas" name="dencomnas" asp-for="dencomnas" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <label>Pr:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.sigpronas" class="form-control" id="sigpronas" name="sigpronas" asp-for="sigpronas" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-4">
+                                        <label>Stato Estero Nascita:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.denstaest" class="form-control" id="denstaest" name="denstaest" asp-for="denstaest" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-one-2" role="tabpanel" aria-labelledby="custom-tabs-one-2-tab">
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label>Indirizzo di Residenza</label>
+                                            <select class="form-control" >
+                                                <option selected name="coddug" id="coddug" value="@detrap.coddug">@detrap.dendug</option>
+                                                @foreach (var item in Model.listNIVia)
+                                                {
+                                                    <option name="coddug" id="coddug" value="@item.coddug">@item.dendug</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-5">
+                                        <label>Indirizzo:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.ind" class="form-control" id="ind" name="ind" asp-for="ind" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <label>Numero Civico</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.numciv" class="form-control" id="numciv" name="numciv" asp-for="numciv" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-3">
+                                        <label>Comune:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.dencom" class="form-control" id="dencom" name="dencom" asp-for="dencom" placeholder="">
+                                            <input type="text" hidden value="@detrap.codcomres" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <label>Pr:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.sigpro" class="form-control" id="sigpro" name="sigpro" asp-for="sigpro" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Cap:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.cap" class="form-control" id="cap" name="cap" asp-for="cap" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Località:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.denloc" class="form-control" id="denloc" name="denloc" asp-for="denloc" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-6">
+                                        <label>Stato Estero:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.denstaest" class="form-control" id="denstaest" name="denstaest" asp-for="denstaest" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-3">
+                                        <label>Telefono 1:</label>
+                                        <div class="input-group">
+                                            <input type="text" value="@detrap.tel1" class="form-control" id="tel1" name="tel1" asp-for="tel1" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Telefono 2:</label>
+                                        <div class="input-group">
+                                            <input type="text" value="@detrap.tel2" class="form-control" id="tel2" name="tel2" asp-for="tel2" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <label>Cellulare:</label>
+                                        <div class="input-group">
+                                            <input type="text" value="@detrap.cell" class="form-control" id="cell" name="cell" asp-for="cell" placeholder="">
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group col-sm-3">
+                                         <label>Fax:</label>
+                                         <div class="input-group">
+                                             <input type="text"  value="@detrap.fax" class="form-control" id="fax" name="fax" asp-for="fax" placeholder="">
+                                         </div>
+                                     </div>-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="form-group col-sm-6">
+                                        <label>Email:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.email" class="form-control" id="email" name="email" asp-for="email" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <label>Email Cerificata:</label>
+                                        <div class="input-group">
+                                            <input type="text"  value="@detrap.emailcert" class="form-control" id="emailcert" name="emailcert" asp-for="emailcert" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-sm-2">
+                        <input type="submit" id="btn_Conf" name="btn_Conf" asp-for="btn_Conf" value="Conferma" class="btn btn-block btn-outline-success hover" />
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" onclick="history.go(-1)" class="btn btn-block btn-outline-success hover">Indietro</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+
+}
+
+
+<script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var stringArray = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaComuni"]));
+    var stringArray2 = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaStati"]));
+
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("denloc"), stringArray);
+    autocomplete(document.getElementById("denstaest"), stringArray2);
+    autocomplete(document.getElementById("dencom"), stringArray);
+
+</script>
+

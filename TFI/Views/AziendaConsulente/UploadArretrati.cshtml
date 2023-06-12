@@ -1,0 +1,156 @@
+﻿@{
+	ViewBag.Title = "UploadArretrati";
+	Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model List<SelectListItem>
+
+@section showMessage{
+	@{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+	<script>
+
+        $(window).on('load', function () {
+
+			if (@ViewBag.showModal) {
+				$('#UploadArretrati').modal('show');
+			}
+
+			let fileUpload = $("#fileUpload");
+	
+			$('#upload_btnConferma').on('click', function (e) {
+				checkFields(e);
+			});
+	
+			function checkFields(e) {
+				let anno = $('#anno')
+				if (anno.val() === '') {
+					alert("Inserire l'anno di competenza!");
+					anno.select();
+					e.preventDefault();
+					return false;
+				}
+				let currentYear = (new Date).getFullYear();
+				if (parseInt(anno.val()) > currentYear) {
+					alert("L'anno di competenza non può essere maggiore dell'anno in corso!");
+					anno.select();
+					e.preventDefault();
+				}
+				
+				if (fileUpload.val() === "") {
+					alert("Selezionare un file per il caricamento!");
+					fileUpload.focus();
+					e.preventDefault();
+				}
+			}
+			
+			let fileUploadErrorMessage = $("#fileUpload_errorMsg");
+			fileUpload.change(function () {
+					if (fileUpload.val() === '')
+						return;
+			
+					if (fileUpload.val().match(/.+(.txt)/)) {
+						fileUploadErrorMessage.attr('hidden', true);
+					}
+					else {
+						fileUpload.val('');
+						fileUploadErrorMessage.attr('hidden', false);
+					}
+			});
+			
+			fileUpload.blur(function (e) {
+				if (e.target.files.length === 0) {
+					fileUploadErrorMessage.attr('hidden', true);
+					fileUpload.val('');
+				}
+			});
+			
+			// $('#denunciaArretrati_Upload_Errors button.close').on('click', () => $('#UploadArretrati').modal('show'))
+		});
+	</script>
+}
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <div class="modal" tabindex="-1" id="denunciaArretrati_Upload_Errors" >
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Errori nel caricamento tramite file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="text-center text-white" style="background-color: #0c773c; font-size: 17px">
+                        <tr>
+                            <th>Errore</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var err in ViewBag.ErrorsInFile)
+                        {
+                            <tr>
+                                <td style="font-size: 16px">@Html.Raw(@err)</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal fade" tabindex="-1" id="UploadArretrati">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="titolo">Caricamento Tracciato Record Denuncia Arretrati</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			@using (Html.BeginForm("UploadArretrato", "AziendaConsulente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12 cont_data">
+							@Html.TextBox("anno", "", new { required = "required", id = "anno", placeholder = "Inserire anno competenza..." })
+						</div>
+						<div class="col-12 cont_data">
+							<div id="cont_file">
+								@Html.Label("File")
+								<input type="file" id="fileUpload" name="fileUpload" required accept=".txt"/>
+								<p id="fileUpload_errorMsg" class="text-red" hidden>* Formato file non valido</p>
+							</div>
+						</div>
+					</div>
+					<div style="display:none">
+						@{ string proDen = ViewBag.proDen;}
+						@Html.TextBox("proDen", proDen, new { id = "upload_proDen" })
+					</div>
+					<div class="col-12 cont_btn">
+						<button type="submit" class="btn_official m-auto" id="upload_btnConferma">Conferma</button>
+						<div id="btnConfermaIsVisible" style="display:none">@ViewBag.btnConfermaIsVisible</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="col-12">
+
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <script>
+    	$('#denunciaArretrati_Upload_Errors').modal('show');
+    </script>
+}

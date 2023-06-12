@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    @RenderSection("showMessage", false)
+    <!-- jQuery -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/adminlte/js")
+    <script src="/plugins/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/plugins/jquery-ui/jquery-ui.css">
+
+
+    <section class="content">
+        @RenderBody()
+    </section>
+    @RenderSection("JS", false)
+
+    <script>
+
+        $(document).ready(function () {
+            DeleteCookie("openMenuIndex");
+            $('.toast').toast('show');
+        });
+
+        function DeleteCookie(cName) {
+            //debugger;
+            document.cookie = cName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        }
+    </script>
+</body>
+</html>

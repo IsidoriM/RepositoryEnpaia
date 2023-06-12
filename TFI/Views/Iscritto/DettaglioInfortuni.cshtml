@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "Dettaglio Infortuni";
+    Layout = "~/Views/Shared/_IscrittoLayout.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<style>
+    .custom-file-label::after {
+        color: white;
+        content: "Aggiungi file";
+        background-color: #28a745;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<div class="card card-default">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Scheda dettaglio infortunio di @ViewBag.NomeUtente</h3>
+    </div>
+    <!---->
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Id Infortunio</label>
+                    <input type="text" class="form-control" value="14" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Descrizione</label>
+                    <input type="text" class="form-control" value="Frattura" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Data infortunio</label>
+                    <input type="text" class="form-control" value="02/03/2015" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Data denuncia infortunio</label>
+                    <input type="text" class="form-control" value="16/03/2015" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Data fine convalescenza</label>
+                    <input type="text" class="form-control" value="25/03/2015" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Stato</label>
+                    <input type="text" class="form-control" value="In corso" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Posizione Azienda</label>
+                    <input type="text" class="form-control" value="234" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Ragione Sociale Azienda</label>
+                    <input type="text" class="form-control" value="Società Agricola Agri Corp." disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Id Rapporto di Lavoro</label>
+                    <input type="text" class="form-control" value="27" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Descrizione Rapporto di Lavoro</label>
+                    <input type="text" class="form-control" value="Attività di vendita agroalimentare" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Numero totale Giorni di ricovero</label>
+                    <input type="text" class="form-control" value="20" disabled>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Numero totale giorni Convalescenza</label>
+                    <input type="text" class="form-control" value="30" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Data Inizio Rapporto di Lavoro</label>
+                    <input type="text" class="form-control" value="02/03/2005" disabled>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Data Fine Rapporto di Lavoro</label>
+                    <input type="text" class="form-control" value="02/03/2015" disabled>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Data Ricovero</label>
+                    <input type="text" class="form-control" value="05/03/2015" disabled>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label>Data Fine Ricovero</label>
+                    <input type="text" class="form-control" value="05/04/2015" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .table th {
+        text-align: center;
+    }
+</style>
+
+<div class="card">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Lista Certificati Medici</h3>
+    </div>
+    <div class="card-body">
+        <table id="table" class="table table-hover table-striped">
+            <thead>
+                <tr class="header" style="background:#0c773c;color:white">
+                    <th>Data Certificato</th>
+                    <th>Nominativo Medico</th>
+                    <th>Numero Giorni Convalescenza</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>06/07/2006</td>
+                    <td>Andrea Rossi</td>
+                    <td>5</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>06/07/2006</td>
+                    <td>Bruno Verdi</td>
+                    <td>18</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>06/07/2006</td>
+                    <td>Carlo Bianchi</td>
+                    <td>10</td>
+                </tr>
+                <tr style="vertical-align:middle;text-align:center">
+                    <td>06/07/2006</td>
+                    <td>Davide Manica</td>
+                    <td>20</td>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
+
+<div class="card card-default">
+    <div class="card-header" style="background-color:#0c773c;color:white;text-align:center;font-size:25px">Documentazione</div>
+    <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-sm-3 ">
+                <label style="vertical-align:middle">Tipo Documentazione:</label>
+                <div class="form-group">
+                    <select class="form-control" style="border-color: #28a753">
+                        <option selected>Referto PS</option>
+                        <option>Scheda ricovero</option>
+                        <option>Scheda Dimissione Ospedaliera</option>
+                        <option>Certificato medico</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top:32px" class="col-sm-4">
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <input type="file" class="custom-file-input" id="customFile" accept='.pdf, .jpeg, .jpg, .png'>
+                        <label style="border-color: #28a753" class="custom-file-label" id="input" for="customFile">Nessun file caricato</label>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top:32px" class="col-sm-3 ">
+
+                <button style="width:250px" type="submit" class="btn btn-success">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload file</span>
+                </button>
+            </div>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-sm-2">
+                <button type="button" style="float:right" onclick="history.go(-1)" class="btn btn-block btn-outline-success btn-lg">Indietro</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<br />
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[type="file"]').change(function (e) {
+            var fileName = e.target.files[0].name;
+            document.getElementById('input').innerHTML = fileName;
+        });
+    });
+</script>

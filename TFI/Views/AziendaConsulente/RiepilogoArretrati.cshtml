@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Riepilogo Arretrati";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model  TFI.OCM.AziendaConsulente.DenunciaArretrati
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+    <script src="~/dist/js/Utilities/DataTableHelper.js"></script>
+    <script>
+        $("#dgArretrati").DataTable(GetInitializerOptionsWithUniformedPaging('dgArretrati'));
+        function GetBtnType(value) {
+            debugger;
+            $("#btnType").prop("value", value);
+            @*window.location.href="@Url.Action("CambioPagina", "AziendaConsulente", Model)"*@
+        }
+    </script>
+}
+
+
+<div class="card card-default" id="insDenArr">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            @Model.lblPeriodo
+        </h3>
+    </div>
+</div>
+@using (Html.BeginForm("CambioPagina", "AziendaConsulente", FormMethod.Post, new { id = "formArretrati" }))
+{
+    if (ViewBag.ListaDenunciaArretrati != null)
+    {
+        <table class="table table-bordered table-hover table-striped" id="dgArretrati">
+            <thead>
+                <tr>
+                    <th>Matricola</th>
+                    <th>Cognome e Nome</th>
+                    <th>Ret.Imp.</th>
+                    <th>Occasionali</th>
+                    <th>Contributi</th>
+                    <th>Anno Competenza</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (TFI.OCM.AziendaConsulente.DenunciaArretrati azi in ViewBag.ListaDenunciaArretrati)
+                {
+                    <text>
+                        <tr>
+                            <td>@azi.mat</td>
+                            <td>@azi.nome</td>
+                            <td>@azi.impret</td>
+                            <td>@azi.impocc</td>
+                            <td>@azi.impcon</td>
+                            <td>@azi.anno</td>
+                        </tr>
+                    </text>
+                }
+            </tbody>
+        </table>
+        <div>
+            @Html.Hidden("anno", Model.hdnAnno)
+            @Html.Hidden("mese", Model.hdnMese)
+            @Html.Hidden("proden", Model.hdnProden)
+            @Html.Hidden("anncom", Model.anncom)
+        </div>
+        <div class="card-body row">
+            <div class="col-lg-4 ">
+            </div>
+            <div class="col-lg-2">
+                <button type="submit" id="btnContinua" class="btn btn-block btn-outline-success float-end">Continua</button>
+            </div>
+            <div class="col-lg-2" style="justify-content:end">
+                <button type="button" onclick="history.back()" class="btn btn-block btn-outline-success float-end" name="btnIndietro" value="indietro">Torna Indietro</button>
+            </div>
+            <div class="col-lg-4 ">
+            </div>
+        </div>
+    }
+}
+

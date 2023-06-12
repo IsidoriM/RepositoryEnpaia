@@ -1,0 +1,273 @@
+﻿@model TFI.OCM.Amministrativo.ModelloPrevOCM
+@{
+    ViewBag.Title = "Modello Prev Ricerca";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Prev</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("CaricaDatiModelloPrev", "Amministrativo", FormMethod.Post))
+        {
+            <div class="input-group">
+                <div class=col-lg-2>
+                    <label>Posizione Azienda:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="CodPos" name="CodPos" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" required>
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Ragione Sociale:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="RagSoc" name="RagSoc" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-2>
+                    <label>Matricola:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Matricola" name="Matricola" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Cognome:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Cognome" name="Cognome" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="col-3">
+                    <label>Stato Assegnazione:</label>
+                    <select class="form-control" name="UteAss" id="UteAss">
+                        <option value="0" selected disabled></option>
+                        <option value="UTENTE ASSEGNATO">UTENTE ASSEGNATO</option>
+                        <option value="UTENTE NON ASSEGNATO">UTENTE NON ASSEGNATO</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label>Stato Compilazione:</label>
+                    <select class="form-control" name="Compilazione" id="Compilazione">
+                        <option value="0" selected disabled></option>
+                        <option value="COMPLETO">COMPLETO</option>
+                        <option value="INCOMPLETO">INCOMPLETO</option>
+                    </select>
+                </div>
+                <div class="col-3
+                     ">
+                    <label>Stato:</label>
+                    <select class="form-control" name="Stato" id="Stato">
+                        <option value="0" selected disabled></option>
+                        <option value="1">DA TRASMETTERE</option>
+                        <option value="2">TRASMESSO</option>
+                        <option value="3">ACQUISITO</option>
+                        <option value="4">CONVALIDATO</option>
+                        <option value="5">INVIATO A SAP</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label>Validi\Annullati:</label>
+                    <select class="form-control" name="ValidiAnn" id="ValidiAnn">
+                        <option value="0" selected disabled></option>
+                        <option value="ANNULLATI">ANNULLATI</option>
+                        <option value="VALIDI">VALIDI</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <label>Tipo:</label>
+                    <select class="form-control" name="Tipo" id="Tipo">
+                        <option value="0" selected disabled></option>
+                        <option value="CARTACEO">CARTACEO</option>
+                        <option value="TELEMATICO">TELEMATICO</option>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class=col-lg-3>
+                    <label>Data apertura PREV01</label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="DataApePrev" name="DataApePrev">
+                    </div>
+                </div>
+                <div class=col-lg-1></div>
+                <div class="col-3">
+                    <label>Utente Apertura PREV01:</label>
+                    <select class="form-control" name="UteApePrev" id="UteApePrev">
+                        <option value="0" selected disabled></option>
+                        <option value="AZIENDA">AZIENDA</option>
+                        <option value="UTENTE ENPAIA">UTENTE ENPAIA</option>
+                        <option value="CONSULENTE">CONSULENTE</option>
+                    </select>
+                </div>
+                <div class=col-lg-1></div>
+                <div class=col-lg-3>
+                    <label>Data cessazione RDL</label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="DatCesRDL" name="DatCesRDL">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class=col-lg-3>
+                    <label>Data chiusura PREV01</label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="DataChiPrev" name="DataChiPrev">
+                    </div>
+                </div>
+                <div class=col-lg-1></div>
+                <div class="col-3">
+                    <label>Utente Conferma PREV01:</label>
+                    <select class="form-control" name="UteChiPrev" id="UteChiPrev">
+                        <option value="0" selected disabled></option>
+                        <option value="AZIENDA">AZIENDA</option>
+                        <option value="UTENTE ENPAIA">UTENTE ENPAIA</option>
+                        <option value="CONSULENTE">CONSULENTE</option>
+                    </select>
+                </div>
+                <div class=col-lg-1></div>
+                <div class=col-lg-3>
+                    <label>Anno cessazione RDL</label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="AnnCesRDL" name="AnnCesRDL">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="form-group  col-4">
+                    <label>
+                        Atti:
+                        <select class="form-control" name="Atti" id="Atti">
+                            <option value="0" selected disabled></option>
+                            <option value="S">S</option>
+                            <option value="N">N</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group  col-4">
+                    <label>
+                        RDL cessati dal:
+                        <input class="form-control" type="date" id="CesDal" name="CesDal">
+                    </label>
+                </div>
+                <div class="form-group col-4">
+                    <label>
+                        Al:
+                        <input class="form-control" type="date" id="CesAl" name="CesAl">
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-10"></div>
+                    <div class="col-lg-2">
+                        <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                    </div>
+                </div>
+            </div>
+            @*<br />*@
+            @*if (Model != null)
+                {
+                    <div>
+                        <div class="row">
+                            <div class="col-8"></div>
+                            <div class="col-2">
+                                @Html.Label("Seleziona tutte", new { style = "margin-right: 10px;", @for = "rb_selezionaTutte" })
+                                @Html.RadioButton("seleziona", 1, false, new { @class = "rb_seleziona" })
+                            </div>
+                            <div class="col-2">
+                                @Html.Label("Deseleziona tutte", new { style = "margin-right: 10px;", @for = "rb_deselezionaTutte" })
+                                @Html.RadioButton("seleziona", 0, false, new { @class = "rb_seleziona" })
+                            </div>
+                        </div>
+                    </div>
+                }*@
+        }
+    </div>
+</div>
+@if (Model != null)
+{
+    <div>
+        <br />
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12" style="height:500px; overflow:scroll;">
+                        <table id="table" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px; padding: 2px; text-align: center" ;>
+                            <thead>
+                                <tr>
+                                    <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle"> Codice Posizione </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Data Conferma PREV01</th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Ragione Sociale</th>
+                                    <th style="background: #0c773c; color: white; width: 5%; text-align: center; vertical-align: middle"> Matricola </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Nome e Cognome </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Anno Cessazione RDL </th>
+                                    <th style="background: #0c773c; color: white; width: 15%; text-align: center; vertical-align: middle"> Data Cessazione RDL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var i in Model.datiList)
+                                    {
+                                        <tr>
+                                            <td style="text-align:center;vertical-align:middle">@(i.CodPos) </td>
+                                            @if (i.DataChiPrev == "null")
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">Data non Disponibile </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">@Convert.ToDateTime(i.DataChiPrev).ToString("d") </td>
+                                            }
+                                            <td style="text-align:center;vertical-align:middle">@(i.RagSoc) </td>
+                                            <td style="text-align:center;vertical-align:middle"> @(i.Matricola) </td>
+                                            <td style="text-align:center;vertical-align:middle">@(i.Nome) @(i.Cognome) </td>
+                                            @if (i.DatCesRDL == "null")
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">Data non Disponibile </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">@Convert.ToDateTime(i.DatCesRDL).ToString("yyyy") </td>
+                                            }
+                                            @if (i.DatCesRDL == "null")
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">Data non Disponibile </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;vertical-align:middle">@Convert.ToDateTime(i.DatCesRDL).ToString("d") </td>
+                                            }
+
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Stato) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Tipo) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Atti) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.AnnCesRDL) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.CesAl) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.DataApePrev) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Utenti) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.CesDal) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.Compilazione) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.UteApePrev) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.UteAss) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.UteChiPrev) </td>
+                                            <td style="text-align:center;vertical-align:middle" hidden>@(i.ValidiAnn) </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+}
+

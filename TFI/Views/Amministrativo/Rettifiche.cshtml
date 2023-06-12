@@ -1,0 +1,755 @@
+﻿
+@model TFI.OCM.Amministrativo.Rettifiche_OCM
+@{
+    ViewBag.Title = "Rettifiche";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Rettifiche</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Rettifiche", "Amministrativo", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-2>
+                        <label>Codice Posizione:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Codpos" name="Codpos" asp-for="Codpos" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" required>
+                        </div>
+                    </div>
+                    <div class=col-lg-6>
+                        <label>Ragione Sociale:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="RagSoc2" name="RagSoc2" asp-for="RagSoc2" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" readonly>
+                            <input class="form-control" type="text" id="RagSoc" name="RagSoc" asp-for="RagSoc" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" hidden>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-2>
+                        <label>Matricola:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Mat" name="Mat" asp-for="Mat" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                        </div>
+                    </div>
+                    <div class=col-lg-6>
+                        <label>Nominativo:</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="Nominativo" name="Nominativo" asp-for="Nominativo" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" readonly>
+                            <input class="form-control" type="text" id="Nominativo2" name="Nominativo2" asp-for="Nominativo2" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" hidden>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class=col-sm-2>
+                    <label>Da Anno</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="AnnoDA" name="AnnoDA" asp-for="AnnoDA" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;" required>
+                    </div>
+                </div>
+                <div class=col-sm-2>
+                    <label>Mese</label>
+                    <div class="form-group">
+                        <select class="form-control" id="MeseDA" name="MeseDA" asp-for="MeseDA" required>
+                            <option selected></option>
+                            <option value="1">Gennaio</option>
+                            <option value="2">Febbraio</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Aprile</option>
+                            <option value="5">Maggio</option>
+                            <option value="6">Giugno</option>
+                            <option value="7">Luglio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Settembre</option>
+                            <option value="10">Ottobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Dicembre</option>
+                        </select>
+                    </div>
+                </div>
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                &emsp;
+                <div class=col-sm-2>
+                    <label>Ad Anno</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="AnnoA" name="AnnoA" asp-for="AnnoA" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-sm-2>
+                    <label>Mese</label>
+                    <div class="form-group">
+                        <select class="form-control" id="MeseA" name="MeseA" asp-for="MeseA">
+                            <option selected></option>
+                            <option value="1">Gennaio</option>
+                            <option value="2">Febbraio</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Aprile</option>
+                            <option value="5">Maggio</option>
+                            <option value="6">Giugno</option>
+                            <option value="7">Luglio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Settembre</option>
+                            <option value="10">Ottobre</option>
+                            <option value="11">Novembre</option>
+                            <option value="12">Dicembre</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-lg-2">
+                    <label>&nbsp;</label>
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+
+
+
+            if (Model != null)
+            {
+
+                if (Model.listRett.Count > 0)
+                {
+                    <div class="card" style="background-color:white">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class=col-lg-6>
+                                    <label>Occorrenze trovate: @Model.searchRett.Occorrenze</label>
+                                </div>
+                            </div>
+                            <div style="overflow: scroll; margin-top: 1%; width: 100%; height: 500px">
+                                <div id="dvData">
+                                    <table id="tb_rett" class="table table-bordered table-hover">
+                                        <tr>
+
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Modifica</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Posizione</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Matricola</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Anno Den.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Mese Den.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Anno Comp.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Retr.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Occ.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Fig.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Data Ini Sanz.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Data Fin Sanz.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Num. gg Rit.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Tasso Sanz.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Dal&emsp;&emsp;&emsp;</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Al&emsp;&emsp;&emsp;</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Tipmov</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Cod. Contr.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Cod. Liv.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Cod. Qua.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Fap</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Contr.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Aliq.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Occ. Pre.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Fig. Pre.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Ret. Pre.</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Sanz</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Contr. Pre</th>
+                                            <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Sanz. Pre</th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+                                            <th hidden></th>
+
+                                        </tr>
+                                        <tbody>
+                                            @foreach (var a in Model.listRett)
+                                            {
+
+                                                <tr>
+                                                    <td><input class="chk_Seleziona" type="checkbox" id="sel" name="sel" /></td>
+                                                    <td class="Codpos">@a.Codpos</td>
+                                                    <td class="Mat">@a.Mat</td>
+                                                    <td class="AnnoDen">@a.AnnoDen</td>
+                                                    <td class="MeseDen">@a.MeseDen</td>
+                                                    <td class="AnnoComp">@a.AnnoComp</td>
+                                                    <td><input class="Retribuzione" type="text" id="Retribuzione" name="Retribuzione" style="border: none;  " readonly value="@a.Retribuzione" /></td>
+                                                    <td><input class="Occ" type="text" id="Occ" name="Occ" readonly style="border: none; " value="@a.Occ" /></td>
+                                                    <td><input class="Fig" type="text" id="Fig" name="Fig" readonly style="border: none; " value="@a.Fig" /></td>
+                                                    <td><input class="DatIniSanz" type="text" id="DatIniSanz" style="border: none; " name="DatIniSanz" readonly value="@a.DatIniSanz" /></td>
+                                                    <td><input class="DatFinSanz" type="text" id="DatFinSanz" style="border: none;  " name="DatFinSanz" readonly value="@a.DatFinSanz" /></td>
+                                                    <td class="NumGGRit">@a.NumGGRit</td>
+                                                    <td class="TassoSanz">@a.TassoSanz</td>
+                                                    <td class="Dal">@a.Dal</td>
+                                                    <td class="Al">@a.Al</td>
+                                                    <td class="TipMov">@a.TipMov</td>
+                                                    <td class="CodContr">@a.CodContr</td>
+                                                    <td class="CodLiv">@a.CodLiv</td>
+                                                    <td class="CodQua">@a.CodQua</td>
+                                                    <td class="FAP">@a.FAP</td>
+                                                    <td class="Contributo">@a.Contributo</td>
+                                                    <td class="Aliq">@a.Aliq</td>
+                                                    <td><input class="OccPre" type="text" id="OccPre" style="border: none; " name="OccPre" readonly value="@a.OccPre" /></td>
+                                                    <td><input class="FigPre" type="text" id="FigPre" style="border: none; " name="FigPre" readonly value="@a.FigPre" /></td>
+                                                    <td><input class="RetPre" type="text" id="RetPre" style="border: none; " name="RetPre" readonly value="@a.RetPre" /></td>
+                                                    <td class="Sanz">@a.Sanz</td>
+                                                    <td class="ContributoPre">@a.ContributoPre</td>
+                                                    <td class="SanzPre">@a.SanzPre</td>
+                                                    <td class="Procon" hidden>@a.Procon</td>
+                                                    <td class="Abb" hidden>@a.Abb</td>
+                                                    <td class="AbbPre" hidden>@a.AbbPre</td>
+                                                    <td class="AssConPre" hidden>@a.AssConPre</td>
+                                                    <td class="AssCon" hidden>@a.AssCon</td>
+                                                    <td class="Proden" hidden>@a.Proden</td>
+                                                    <td class="Prodendet" hidden>@a.Prodendet</td>
+                                                    <td class="Prorap" hidden>@a.Prorap</td>
+                                                    <td class="Codgruass" hidden>@a.Codgruass</td>
+                                                    <td class="CodquaCon" hidden>@a.CodquaCon</td>
+                                                    <td class="Perfap" hidden>@a.Perfap</td>
+                                                    <td class="Impsca" hidden>@a.Impsca</td>
+                                                    <td class="Sos" hidden>@a.Sos</td>
+                                                    <td class="CodLoc" hidden>@a.CodLoc</td>
+                                                    <td class="ProLoc" hidden>@a.ProLoc</td>
+                                                    <td class="DatCes" hidden>@a.DatCes</td>
+                                                    <td class="DatDec" hidden>@a.DatDec</td>
+                                                    <td class="DatNas" hidden>@a.DatNas</td>
+                                                    <td class="Eta65" hidden>@a.Eta65</td>
+                                                    <td class="ImpAbbDel" hidden>@a.ImpAbbDel</td>
+                                                    <td class="ImpAssConDel" hidden>@a.ImpAssConDel</td>
+                                                    <td class="Prev" hidden>@a.Prev</td>
+                                                    <td class="ImpConDel" hidden>@a.ImpConDel</td>
+                                                    <td class="ImpFigDel" hidden>@a.ImpFigDel</td>
+                                                    <td class="ImpOccDel" hidden>@a.ImpOccDel</td>
+                                                    <td class="Min" hidden>@a.Min</td>
+                                                    <td class="ImpRetDel" hidden>@a.ImpRetDel</td>
+                                                    <td class="NumGgAzi" hidden>@a.NumGgAzi</td>
+                                                    <td class="ImpSanDet" hidden>@a.ImpSanDet</td>
+                                                    <td class="ImpTraEco" hidden>@a.ImpTraEco</td>
+                                                    <td class="NumGgConAzi" hidden>@a.NumGgConAzi</td>
+                                                    <td class="NumGgDom" hidden>@a.NumGgDom</td>
+                                                    <td class="NumGgFig" hidden>@a.NumGgFig</td>
+                                                    <td class="NumGgPer" hidden>@a.NumGgPer</td>
+                                                    <td class="NumGgSos" hidden>@a.NumGgSos</td>
+                                                    <td class="NumMov" hidden>@a.NumMov</td>
+                                                    <td class="PerApp" hidden>@a.PerApp</td>
+                                                    <td class="PerPar" hidden>@a.PerPar</td>
+                                                    <td class="TipDen" hidden>@a.TipDen</td>
+                                                    <td class="TipMovDenTes" hidden>@a.TipMovDenTes</td>
+                                                    <td class="TipRap" hidden>@a.TipRap</td>
+                                                    <td class="TipSpe" hidden>@a.TipSpe</td>
+                                                    <td class="RetDiff" hidden>@a.RetDiff</td>
+                                                    <td class="FigDiff" hidden>@a.FigDiff</td>
+                                                    <td class="OccDiff" hidden>@a.OccDiff</td>
+
+
+
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br />
+                            </div>
+
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class=col-2>
+                                    <label>Mod. Retr:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="Modrett" name="Modrett" asp-for="Modrett" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                    </div>
+                                </div>
+                                <div class=col-2>
+                                    <label>Mod. Occ:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="Modocc" name="Modocc" asp-for="Modocc" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                    </div>
+                                </div>
+                                <div class=col-2>
+                                    <label>Mod. Fig:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="Modfig" name="Modfig" asp-for="Modfig" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                    </div>
+                                </div>
+                                <div class=col-2>
+                                    <label>Data Ini Sanz:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="datini" name="datini" asp-for="datini" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                    </div>
+                                </div>
+                                <div class=col-2>
+                                    <label>Data Fin Sanz:</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" id="datfini" name="datfini" asp-for="datfini" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <label>&nbsp;</label>
+                                    <button name="Applica" type="button" id="Applica" class="btn btn-block btn-outline-success">Applica</button>
+                                    <button name="Salva" type="button" id="Salva" class="btn btn-block btn-outline-success">Salva</button>
+                                </div>
+                            </div>
+                            <br />
+
+
+                        </div>
+                    </div>
+                }
+            }
+        }
+
+    </div>
+</div>
+<br />
+
+
+<script>
+
+            $("#Applica").click(function(){
+
+
+                var Modrett = $("#Modrett").val();
+                var Modocc = $("#Modocc").val();
+                var Modfig = $("#Modfig").val();
+                var datini = $("#datini").val();
+                var datfini = $("#datfini").val();
+
+
+                $("#tb_rett tbody tr").each(function () {
+                    var chkBox = $(this).find(".chk_Seleziona");
+                    if (chkBox.prop("checked")) {
+
+                        if (Modrett != "") {
+                            $(this).find(".RetPre").val($(this).find(".Retribuzione").val());
+                            $(this).find(".Retribuzione").val(Modrett);
+                        };
+                        if (Modocc != "") {
+                            $(this).find(".OccPre").val($(this).find(".Occ").val());
+                            $(this).find(".Occ").val(Modocc);
+                        };
+                        if (Modfig != "") {
+                            $(this).find(".FigPre").val($(this).find(".Fig").val());
+                            $(this).find(".Fig").val(Modfig);
+                        };
+                        if (datini != "") {
+                            $(this).find(".DatIniSanz").val(datini);
+                        };
+                        if (datfini != "") {
+                            $(this).find(".DatFinSanz").val(datfini);
+                        };
+
+                    };
+                });
+
+
+            });
+
+
+    $("#Salva").click(function () {
+
+        if (CiSonoRecordCeccati()) {
+            var data = GetDataFromTableRows();
+
+            $.ajax({
+                url: '/Amministrativo/Rett',
+                dataType: "json",
+                method: "POST",
+                data: { "objList": JSON.stringify(data) },
+                success: function (result) {
+                    window.location.href = '/Amministrativo/SalvataggioRettifiche';
+                }
+            });
+        }
+
+
+    });
+
+
+     function CiSonoRecordCeccati() {
+        var n = 0;
+
+         $("#tb_rett tbody tr").each(function () {
+
+            if ($(this).find(".chk_Seleziona").prop("checked")) {
+                n++;
+            }
+        });
+
+        if (n == 0) {
+            alert("Nessuna rapporto di lavoro da trasferire.");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    $("#Codpos").blur(function () {
+
+        var value = $(this).val();
+
+        $.ajax({
+            url: "/Amministrativo/VisualizzaRagioneSociale1",
+            dataType: "text",
+            method: "POST",
+            data: { "codPos": value },
+            success: function (result) {
+                var ragioneSociale = result;
+                $("#RagSoc2").val(ragioneSociale);
+                $("#RagSoc").val(ragioneSociale);
+            }
+        });
+    });
+
+    $("#Mat").blur(function () {
+
+        var value = $(this).val();
+
+        $.ajax({
+
+            url: "/Amministrativo/VisualizzaNominativo",
+            dataType: "text",
+            method: "POST",
+            data: { "mat": value },
+            success: function (result) {
+                var nominativo = result;
+                $("#Nominativo").val(nominativo);
+                $("#Nominativo2").val(nominativo);
+
+            }
+        });
+    });
+
+    function GetDataFromTableRows() {
+
+        var obj;
+        var Codpos;
+        var Mat;
+        var AnnoDen;
+        var MeseDen;
+        var AnnoComp;
+
+        var Retribuzione;
+        var Occ;
+        var Fig;
+        var DatIniSanz;
+        var DatFinSanz;
+
+        var NumGGRit;
+        var TassoSanz;
+        var Dal;
+        var Al;
+        var TipMov;
+
+        var CodContr;
+        var CodLiv;
+        var CodQua;
+        var FAP;
+        var Contributo;
+
+        var Aliq;
+        var OccPre;
+        var FigPre;
+        var RetPre;
+        var Sanz;
+
+        var ContributoPre;
+        var SanzPre;
+        var Procon;
+        var Abb;
+        var AbbPre;
+
+        var AssConPre;
+        var AssCon;
+        var Proden;
+        var Prodendet;
+        var Prorap;
+
+        var Codgruass;
+        var CodquaCon;
+        var Perfap;
+        var Impsca;
+        var Sos;
+
+        var CodLoc;
+        var ProLoc;
+        var DatCes;
+        var DatDec;
+        var DatNas;
+
+        var Eta65;
+        var ImpAssConDel;
+        var Prev;
+        var ImpConDel;
+        var ImpFigDel;
+
+        var ImpOccDel;
+        var Min;
+        var ImpRetDel;
+        var NumGgAzi;
+        var ImpSanDet;
+
+        var ImpTraEco;
+        var NumGgConAzi;
+        var NumGgDom;
+        var NumGgFig;
+        var NumGgPer;
+
+        var NumGgSos;
+        var NumMov;
+        var PerApp;
+        var PerPar;
+        var TipDen;
+
+        var TipMovDenTes;
+        var TipRap;
+        var TipSpe;
+        var FigDiff;
+        var OccFig;
+        var RetDiff;
+        var objList = [];
+
+        $("#tb_rett tbody tr").each(function () {
+            var chkBox = $(this).find(".chk_Seleziona");
+            if (chkBox.prop("checked")) {
+
+                Codpos = $(this).find(".Codpos").text();
+                Mat = $(this).find(".Mat").text();
+                AnnoDen = $(this).find(".AnnoDen").text();
+                MeseDen = $(this).find(".MeseDen").text();
+                AnnoComp = $(this).find(".AnnoComp").text();
+
+                Retribuzione = $(this).find(".Retribuzione").val();
+                Occ = $(this).find(".Occ").val();
+                Fig = $(this).find(".Fig").val();
+                DatIniSanz = $(this).find(".DatIniSanz").val();
+                DatFinSanz = $(this).find(".DatFinSanz").val();
+
+                NumGGRit = $(this).find(".NumGGRit").text();
+                TassoSanz = $(this).find(".TassoSanz").text();
+                Dal = $(this).find(".Dal").text();
+                Al = $(this).find(".Al").text();
+                TipMov = $(this).find(".TipMov").text();
+
+                CodContr = $(this).find(".CodContr").text();
+                CodLiv = $(this).find(".CodLiv").text();
+                CodQua = $(this).find(".CodQua").text();
+                FAP = $(this).find(".FAP").text();
+                Contributo = $(this).find(".Contributo").text();
+
+                Aliq = $(this).find(".Aliq").text();
+                OccPre = $(this).find(".OccPre").val();
+                FigPre = $(this).find(".FigPre").val();
+                RetPre = $(this).find(".RetPre").val();
+                Sanz = $(this).find(".Sanz").text();
+                ContributoPre = $(this).find(".ContributoPre").text();
+                SanzPre = $(this).find(".SanzPre").text();
+                Procon = $(this).find(".Procon").text();
+                Abb = $(this).find(".Abb").text();
+                AbbPre = $(this).find(".AbbPre").text();
+
+                AssConPre = $(this).find(".AssConPre").text();
+                AssCon = $(this).find(".AssCon").text();
+                Proden = $(this).find(".Proden").text();
+                Prodendet = $(this).find(".Prodendet").text();
+                Prorap = $(this).find(".Prorap").text();
+
+                Codgruass = $(this).find(".Codgruass").text();
+                CodquaCon = $(this).find(".CodquaCon").text();
+                Perfap = $(this).find(".Perfap").text();
+                Impsca = $(this).find(".Impsca").text();
+                Sos = $(this).find(".Sos").text();
+
+                CodLoc = $(this).find(".CodLoc").text();
+                ProLoc = $(this).find(".ProLoc").text();
+                DatCes = $(this).find(".DatCes").text();
+                DatDec = $(this).find(".DatDec").text();
+                DatNas = $(this).find(".DatNas").text();
+
+                Eta65 = $(this).find(".Eta65").text();
+                ImpAssConDel = $(this).find(".ImpAssConDel").text();
+                Prev = $(this).find(".Prev").text();
+                ImpConDel = $(this).find(".ImpConDel").text();
+                ImpFigDel = $(this).find(".ImpFigDel").text();
+
+                ImpOccDel = $(this).find(".ImpOccDel").text();
+                Min = $(this).find(".Min").text();
+                ImpRetDel = $(this).find(".ImpRetDel").text();
+                NumGgAzi = $(this).find(".NumGgAzi").text();
+                ImpSanDet = $(this).find(".ImpSanDet").text();
+
+                ImpTraEco = $(this).find(".ImpTraEco").text();
+                NumGgConAzi = $(this).find(".NumGgConAzi").text();
+                NumGgDom = $(this).find(".NumGgDom").text();
+                NumGgFig = $(this).find(".NumGgFig").text();
+                NumGgPer = $(this).find(".NumGgPer").text();
+
+                NumGgSos = $(this).find(".NumGgSos").text();
+                NumMov = $(this).find(".NumMov").text();
+                PerApp = $(this).find(".PerApp").text();
+                PerPar = $(this).find(".PerPar").text();
+                TipDen = $(this).find(".TipDen").text();
+
+                TipMovDenTes = $(this).find(".TipMovDenTes").text();
+                TipRap = $(this).find(".TipRap").text();
+                TipSpe = $(this).find(".TipSpe").text();
+                RetDiff = $(this).find(".RetDiff").text();
+                OccDiff = $(this).find(".OccDiff").text();
+                FigDiff = $(this).find(".FigDiff").text();
+
+                obj = {
+                    Codpos: Codpos,
+                    Mat: Mat,
+                    AnnoDen: AnnoDen,
+                    MeseDen: MeseDen,
+                    AnnoComp: AnnoComp,
+
+                    Retribuzione: Retribuzione,
+                    Occ: Occ,
+                    Fig: Fig,
+                    DatIniSanz: DatIniSanz,
+                    DatFinSanz: DatFinSanz,
+
+                    NumGGRit: NumGGRit,
+                    TassoSanz: TassoSanz,
+                    Dal: Dal,
+                    Al: Al,
+                    TipMov: TipMov,
+
+                    CodContr: CodContr,
+                    CodLiv: CodLiv,
+                    CodQua: CodQua,
+                    FAP: FAP,
+                    Contributo: Contributo,
+
+                    Aliq: Aliq,
+                    OccPre: OccPre,
+                    FigPre: FigPre,
+                    RetPre: RetPre,
+                    Sanz: Sanz,
+
+                    ContributoPre: ContributoPre,
+                    SanzPre: SanzPre,
+                    Procon: Procon,
+                    Abb: Abb,
+                    AbbPre: AbbPre,
+
+                    AssConPre: AssConPre,
+                    AssCon: AssCon,
+                    Proden: Proden,
+                    Prodendet: Prodendet,
+                    Prorap: Prorap,
+
+                    Codgruass: Codgruass,
+                    CodquaCon: CodquaCon,
+                    Perfap: Perfap,
+                    Impsca: Impsca,
+                    Sos: Sos,
+
+                    CodLoc: CodLoc,
+                    ProLoc: ProLoc,
+                    DatCes: DatCes,
+                    DatDec: DatDec,
+                    DatNas: DatNas,
+
+                    Eta65: Eta65,
+                    ImpAssConDel: ImpAssConDel,
+                    Prev: Prev,
+                    ImpConDel: ImpConDel,
+                    ImpFigDel: ImpFigDel,
+
+                    ImpOccDel: ImpOccDel,
+                    Min: Min,
+                    ImpRetDel: ImpRetDel,
+                    NumGgAzi: NumGgAzi,
+                    ImpSanDet: ImpSanDet,
+
+                    ImpTraEco: ImpTraEco,
+                    NumGgConAzi: NumGgConAzi,
+                    NumGgDom: NumGgDom,
+                    NumGgFig: NumGgFig,
+                    NumGgPer: NumGgPer,
+
+                    NumGgSos: NumGgSos,
+                    NumMov: NumMov,
+                    PerApp: PerApp,
+                    PerPar: PerPar,
+                    TipDen: TipDen,
+
+                    TipMovDenTes: TipMovDenTes,
+                    TipRap: TipRap,
+                    TipSpe: TipSpe,
+                    FigDiff: FigDiff,
+                    RetDiff: RetDiff,
+                    OccDiff: OccDiff,
+                }
+
+                objList.push(obj);
+            }
+        });
+
+        return objList;
+    }
+</script>
+
+
+

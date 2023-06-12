@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "_AdminWebGrid";
+    var webGrid = new WebGrid(Session["ListaAdmin"] as List<TFI.OCM.Admin>);
+}
+
+<style>
+    #WebGrid a {
+        color: #000000;
+        
+    }
+
+        #WebGrid a:hover {
+            color: #0c773c;
+        }
+        #WebGrid a:checked {
+            color: #0c773c;
+        }
+    .webgrid-footer {
+        color: #0c773c;
+        background-color:white;
+    }
+    .webgrid-header a{
+        color:white;
+    }
+</style>
+
+@if (Session["ListaAdmin"] != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <div class="table table-hover table-striped ">
+
+                @webGrid.GetHtml(
+                htmlAttributes: new { @id = "WebGrid" },
+                tableStyle: "table table-bordered table-hover table-striped",
+                headerStyle: "webgrid-header",
+                footerStyle: "webgrid-footer",
+                alternatingRowStyle: "webgrid-alternating-row",
+                selectedRowStyle: "webgrid-selected-row",
+                rowStyle: "webgrid-row-style",
+                mode: WebGridPagerModes.All,
+                firstText: "<< ",
+                previousText: "Previus",
+                nextText: "Next",
+                lastText: " >>",
+
+                columns: webGrid.Columns(
+                webGrid.Column("codUtente", "Codice Utente"),
+                webGrid.Column("nome", "Denominazione Utente"),
+                webGrid.Column("codFis", "Codice Fiscale"),
+                webGrid.Column("denTipute", "Denominazione Tipo Utente"),
+                webGrid.Column("email", "Email"),
+                webGrid.Column("winUt", "Utente Windows"),
+                webGrid.Column(null, null, format: @<text>@Html.ActionLink("Modifica", null, null, new { @*@class = "select"*@ })</text>)))
+                @using (Html.BeginForm("dettagliUtenti", "Admin", FormMethod.Post, new { @id = "IndexForm" }))
+                {
+                    <input type="hidden" name="customerJSON" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $("body").on("click", ".select", function () {
+            var row = $(this).closest("tr");
+            var customer = {};
+            customer.codUtente = row.find("td").eq(0).html();
+            customer.nome = row.find("td").eq(1).html();
+            customer.codFis = row.find("td").eq(2).html();
+            customer.denTipute = row.find("td").eq(3).html();
+            customer.email = row.find("td").eq(4).html();
+            customer.winUt = row.find("td").eq(5).html();
+            $("[name=customerJSON]").val(JSON.stringify(customer));
+            $("#IndexForm")[0].submit();
+            return false;
+        });
+    </script>
+
+}

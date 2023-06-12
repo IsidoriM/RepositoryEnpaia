@@ -1,0 +1,2515 @@
+﻿@model TFI.OCM.AziendaConsulente.NuovoInfortunio
+@{
+    ViewBag.Title = "Nuovo Infortunio";
+    var dtnas = ViewBag.Datanas;
+    var Tipi = ViewBag.Infortuni;
+    var mat = ViewBag.Mat;
+
+
+
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@using Newtonsoft.Json;
+@{
+
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #0c773c
+    }
+
+    .spazioCheckMesi > input {
+        margin-left: 8px;
+    }
+
+    p {
+        font-size: 1.5ex;
+    }
+</style>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                @using (Html.BeginForm("NuovoInfortunio", "AziendaConsulente", FormMethod.Get, new { @Id = "form" }))
+                {
+
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Inserimento Nuovo Infortunio
+                        </div>
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Matricola</label>
+                                        @if (ViewBag.Mat != null)
+                                        {<select class="form-control" name="matricolaname" asp-for="matric" id="matric" required>
+                                                <option value="">Seleziona la matricola</option>
+                                                @foreach (var item in ViewBag.Mat)
+                                                {
+                                                    <option value="@item.Matricola">@item.Matricola</option>
+
+                                                }
+                                            </select>
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control" name="matric" asp-for="matric" id="matric" required>
+                                                <option value=""></option>
+
+                                            </select>
+                                        }
+
+
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cognome</label>
+                                        <input type="text" name="cognome" id="cognomesu" class="form-control" value="">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Nome</label>
+                                        <input type="text" id="nomesu" value="" name="nomesu" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" id="codifis" value="" name="codifis" class="form-control" disabled readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>&emsp;</label>
+                                        <input type="button" onclick="CercaIscritto()" value="Cerca Iscritto" class=" btn btn-block btn-outline-success">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card card-primary card-tabs">
+                                        <div class="card-header p-0 pt-1" style="background-color: #0c773c;color:white">
+                                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link active" id="custom-tabs-one-home-tab" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Iscritto</a>
+                                                </li>
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-profile-tab" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Dati Infortunio</a>
+                                                </li>
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-messages-tab" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Dati Statistici</a>
+                                                </li>
+
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-documentale-tab" href="#custom-tabs-one-documentale" role="tab" aria-controls="custom-tabs-one-documentale" aria-selected="false">Dati Documentali</a>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+
+
+                                            <div class="tab-content" id="custom-tabs-one-tabContent">
+
+                                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Matricola</label>
+                                                                <input type="text" asp-for="matricola" id="matricola" name="matricola" class="form-control" disabled readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Cognome</label>
+                                                                <input type="text" asp-for="cognome" id="cognome" name="cognome" class="form-control" value="" placeholder="Inserire Cognome" disabled readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Nome</label>
+                                                                <input type="text" class="form-control" id="nome" asp-for="nome" name="nome" value="" placeholder="Inserire Nome" disabled readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Regione</label>
+                                                                <input type="text" value="" id="Areaper" asp-for="Areaper" name="Areaper" class="form-control" disabled readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Qualifica</label>
+                                                                <input type="text" value="" id="Tipodip" asp-for="Tipodip" name="Tipodip" class="form-control" style="pointer-events: none;background: #E9ECEF" disabled readonly />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>DUG</label>
+                                                                <input type="text" value="" class="form-control" id="via" asp-for="via" name="via" maxlength="80" disabled readonly>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo di Residenza</label>
+                                                                <input type="text" value="" class="form-control" id="ind" asp-for="residenza" name="residenza" maxlength="80" disabled readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Comune di Residenza</label>
+                                                                <input type="text" value="" class="form-control" id="loc" asp-for="residenza" name="residenza" maxlength="80" disabled readonly>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+
+
+                                                    <div class="form-row justify-content-end mt-3">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="next1">
+                                                            Avanti
+                                                        </a>
+                                                    </div>
+
+
+
+                                                    <br />
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Codice Posizione</label>
+                                                                <input type="text" value="@ViewBag.CodPos" id="codpos" name="codpos" asp-for="codpos" class="form-control" disabled readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data Infortunio</label>
+                                                                <input type="date" value="" id="datainf" name="datinf" asp-for="datinf" class="form-control" required pattern="\d{4}-\d{2}-\d{2}" required>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data Denuncia</label>
+                                                                <input type="text" value="@dtnas" id="datden" name="datden" asp-for="datiden" class="form-control" disabled readonly>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Tipo Infortunio</label>
+                                                                <select class="form-control" name="tipinf" asp-for="tipinf" id="tipinf" required>
+
+                                                                    @foreach (var tt in ViewBag.Infortuni)
+                                                                    {
+                                                                        <option value="@tt.Id">@tt.Descrizione</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-8">
+                                                            <div class="form-group align-items-center">
+                                                                <label>Diagnosi</label>
+                                                                <input type="text" value="" class="form-control" name="diagnosi" id="diagnosi" asp-for="progn" />
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group align-items-center">
+                                                                <label>Prognosi</label>
+                                                                <input type="number" placeholder="0" value="" class="form-control" name="prognosi" id="prognosi" asp-for="prognosi" />
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+
+
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Ind. R.D.</label>
+                                                                <select class="form-control" name="indrd" asp-for="indrd" id="indrd">
+
+                                                                    <option value="1">Si</option>
+                                                                    <option value="2">No</option>
+
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+
+                                                    <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="back2">
+                                                            Indietro
+                                                        </a>
+                                                        <a class="btn btn-block btn-outline-success col-3" id="next2">
+                                                            Avanti
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label></label>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Causa</label>
+                                                                @if (ViewBag.Cause != null)
+                                                                {
+                                                                    <select id="causa" asp-for="causa" name="causa" class="form-control">
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.Cause)
+                                                                        {
+                                                                            <option value="@std.Id">@std.Descrizione</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select id="causa" asp-for="causa" name="causa" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                }
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Sede</label>
+                                                                @if (ViewBag.Sede != null)
+                                                                {
+                                                                    <select id="sede1" asp-for="sede1" name="sede1" class="form-control">
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.Sede)
+                                                                        {
+                                                                            <option value="@std.Id">@std.Descrizione</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select id="sede1" asp-for="sede1" name="sede1" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Natura</label>
+
+                                                                @if (ViewBag.Natura != null)
+                                                                {
+                                                                    <select id="natura" asp-for="natura" name="Sede" class="form-control">
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.Natura)
+                                                                        {
+                                                                            <option value="@std.Id">@std.Descrizione</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    {
+                                                                        <select id="natura" asp-for="natura" name="Sede" class="form-control">
+                                                                            <option value=""></option>
+
+                                                                        </select>
+                                                                    }
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Agente</label>
+
+
+                                                                @if (ViewBag.Agente != null)
+                                                                {
+                                                                    <select id="agente" asp-for="agente" name="agente" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                        @foreach (var std in ViewBag.Agente)
+                                                                        {
+                                                                            <option value="@std.Id">@std.Descrizione</option>
+                                                                        }
+
+
+                                                                    </select>
+                                                                }
+
+                                                                else
+                                                                {
+                                                                    <select id="agente" asp-for="agente" name="agente" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                    <select id="agente" asp-for="agente" name="agente" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Tipo Agente</label>
+                                                                <input type="number" placeholder="0" class="form-control" id="tipage" asp-for="tipage" name="tipage">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Forma</label>
+                                                                @if (ViewBag.Agente != null)
+                                                                {
+                                                                    <select id="forma" asp-for="forma" name="forma" class="form-control">
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.Forma)
+                                                                        {
+                                                                            <option value="@std.Id">@std.Descrizione</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                { <select id="forma" asp-for="forma" name="forma" class="form-control">
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+
+
+                                                    <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="back3">
+                                                            Indietro
+                                                        </a>
+                                                        <a class="btn btn-block btn-outline-success col-3" id="next3">
+                                                            Avanti
+                                                        </a>
+
+                                                    </div>
+
+
+
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label></label>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="tab-pane fade" id="custom-tabs-one-documentale" role="tabpanel" aria-labelledby="custom-tabs-one-documentale-tab">
+
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Tipologia File</label>
+                                                                @if (ViewBag.Tipopratiche != null)
+                                                                {
+                                                                    <select id="tipfile" asp-for="tipfile" name="tipfile" class="form-control" required>
+                                                                        <option value=""></option>
+                                                                        @foreach (var std in ViewBag.Tipopratiche)
+                                                                        {
+                                                                            <option value="@std.ID">@std.Descrizione</option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <select id="tippra" asp-for="causa" name="causa" class="form-control" required>
+                                                                        <option value=""></option>
+
+                                                                    </select>
+                                                                }
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="col-6 cont_data">
+                                                        <div class="input-group">
+
+
+                                                            <div class="custom-file">
+                                                                <label class="form-label" for="file"></label>
+                                                                <input type="file" class="form-control" id="file" accept=".doc,.docx,.pdf" />
+                                                                <input type="button" value="Upload" name="file" onclick="ScaricaFile()" />
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="maxload"> <p class="text-md-left"><strong>File troppo grande </strong> le dimensioni non possono essere maggiori di <strog>4 MB</strog>.</p></div>
+                                                    <div class="row">
+                                                        <div class="card-body">
+                                                            <table id="my_table" class="table table-hover table-striped">
+                                                                <thead>
+                                                                    <tr class="header" style="background:#0c773c;color:white">
+                                                                        <th>Data Caricamento</th>
+                                                                        <th>NomeFile</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+
+
+
+
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="back4b">
+                                                            Indietro
+                                                        </a>
+                                                        <a class="btn btn-block btn-outline-success col-3" id="next4">
+                                                            Avanti
+                                                        </a>
+
+                                                    </div>
+
+
+                                                    <div class="form-row justify-content-between mt-3" style="column-gap : 10px">
+                                                        <a class="btn btn-block btn-outline-success col-3" id="back4">
+                                                            Annulla
+                                                        </a>
+                                                        <a id="custom-tabs-one-messages-tab-salva" class="btn btn-block btn-outline-success col-3" onclick="SalvaIscritto()">
+                                                            Salva
+                                                        </a>
+
+
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="form-group">
+                                                            <label></label>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+
+
+
+
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+                                                        <label></label>
+
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+
+
+
+                                        </div>
+                                        <div id="primasave" class="alert alert-secondary" role="alert">
+                                            Per salvare i dati premere il tasto salva alla fine della procedura.
+                                        </div>
+                                        <div id="save" class="alert alert-success">
+                                            <strong>Salvataggio Terminato</strong> la pratica e stata inserita correttamente.
+                                        </div>
+                                        <div id="errore" class="alert alert alert-danger">
+                                            <strong>Salvataggio Non Terminato</strong> la pratica non e stata inserita correttamente.
+                                        </div>
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<script type="text/javascript">
+    var isFirstLoad = true;
+    $('#save').hide();
+    $('#errore').hide();
+    $('#maxload').hide();
+
+
+    function UploadImage_Complete() {
+
+
+
+        //Check to see if this is the first load of the iFrame
+        if (isFirstLoad == true) {
+            isFirstLoad = false;
+
+            // if first ajax call for getting uploads if any exists on server against this id
+
+        }
+
+        // after successfull upload refreshing partial view to get the latest uploads
+
+
+
+
+
+        //Reset the image form so the file won't get uploaded again
+        document.getElementById("ImgForm").reset();
+
+        //if (!isFirstLoad)
+        //    GetFiles();
+        GetFiles();
+
+
+
+    }
+
+
+    function GetFiles() {
+
+        var url = "/Upload/";
+
+        var Id = $('input#ID').val();
+        url = url + "?id=" + Id
+        $.get(url, function (response) {
+
+            $('#uploadsContainer').html(response);
+
+
+        });
+
+    }
+
+</script>
+<script>
+
+    function ScaricaFile() {
+
+
+        var dataden = $("#datden").val();
+        var data = new FormData();
+
+        var isize = $('#file')[0].files[0].size / 1024 / 1000;
+        if (isize > 4) { $('#maxload').show(); return; }
+
+        var files = $("#file").get(0).files;
+        var file = $("#file").val();
+        var tdNome = '<td id="filecaricato">' + file.replace(/C:\\fakepath\\/, ''); + '</td>';
+        var dt = '<td id="dataora">' + dataden + '</td>';
+
+
+        $('#my_table').append('<tr id="riga">' + dt + tdNome + '</tr>')
+
+        if (files.length > 0) {
+            data.append("file", files[0]);
+        }
+
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: "NuovoInfortunio",
+            contentType: false,
+            processData: false,
+            data: data,
+        }, 'json');
+
+        ajaxRequest.done(function (xhr, textStatus) {
+
+
+
+        });
+
+    }
+    function Grandezza() {
+        alert("funzione grandezza");
+
+
+    }
+    function Annulla() {
+
+
+        const uri = '@Url.Action("NuovoInfortunio", "AziendaConsulente")';
+
+        var data = new FormData();
+
+
+
+        var ajaxRequest = $.ajax({
+            type: "POST",
+            url: uri,
+            contentType: false,
+            processData: false,
+            data: data,
+        }, 'json');
+
+        ajaxRequest.done(function (xhr, textStatus) {
+
+        });
+
+        $('#custom-tabs-one-home-tab').tab('show');
+    }
+
+    $('#next1').click(function () {
+        $("#matric").prop("disabled", true);
+
+        let checkFormValidity1 = document.getElementById('matric').reportValidity();
+
+        if (!checkFormValidity1) { return; }
+
+
+
+
+
+
+        if (checkFormValidity1) {
+            $('#matric').attr('readonly', true);
+            $('#matric').attr('disabled', true);
+            $('#nomesu').attr('disabled', true);
+            $('#cognomesu').attr('disabled', true);
+
+
+        }
+
+        if (checkFormValidity1)
+            $('#custom-tabs-one-profile-tab').tab('show');
+
+
+    });
+
+    $('#back2').click(function () {
+        $('#custom-tabs-one-home-tab').tab('show');
+    });
+
+    $('#next2').click(function (e) {
+
+
+        let checkFormValidity = document.getElementById('datainf').reportValidity()
+            && document.getElementById('tipinf').reportValidity();
+        ;
+        if (checkFormValidity)
+            $('#custom-tabs-one-messages-tab').tab('show');
+
+        if (checkFormValidity)
+            $('#custom-tabs-one-messages-tab-salva').hide();
+
+        if (checkFormValidity)
+            $('#custom-tabs-one-messages-tab-annulla').hide();
+
+
+    });
+
+    $('#back3').click(function () {
+
+        $('#custom-tabs-one-profile-tab').tab('show');
+
+
+
+    });
+
+    $('#next3').click(function (e) {
+        let checkFormValidity = document.getElementById('tipinf').reportValidity();
+
+
+        if (checkFormValidity)
+            $('#custom-tabs-one-messages-tab-salva').hide();
+
+
+
+
+        if (checkFormValidity)
+            $('#custom-tabs-one-documentale-tab').tab('show');
+
+
+
+        if (checkFormValidity)
+            $('#next3').val('hidden');
+
+        $('#custom-tabs-one-settings-tab').tab('show');
+    });
+
+    $('#next4').click(function (e) {
+        let checkFormValidity = document.getElementById('tipfile').reportValidity();
+
+
+
+        if (checkFormValidity)
+            $('#custom-tabs-one-messages-tab-salva').show();
+
+        if (checkFormValidity)
+            $('#next3').val('hidden');
+
+        $('#custom-tabs-one-settings-tab').tab('show');
+    });
+    $('#back4').click(function () {
+        Annulla();
+    });
+
+    $('#back4b').click(function () {
+        $('#custom-tabs-one-messages-tab').tab('show');
+    });
+
+    $("#ProvinciaS").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetComune", "Iscritto")';
+            const provincia = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { provincia: provincia },
+                success: function (data) {
+                    debugger;
+                    var s = '<option value="">Selezionare Comune</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].CODCOM + '">' + data[i].DENCOM + '</option>';
+                    }
+                    $("#ComuneS").html(s);
+                    $("#LocalitaS").val('');
+                    $("#ComuneS").attr('style', '');
+                    $("#CAPS").val('');
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+    });
+    $("#ComuneS").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetLocalita", "Iscritto")';
+            const comune = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { comune: comune },
+                success: function (data) {
+                    debugger;
+                    var s = '<option value="">Selezionare la Località</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].DENLOC + '">' + data[i].DENLOC + ' - ' + data[i].CAP + '</option>';
+                    }
+                    $("#LocalitaS").html(s);
+                    $("#LocalitaS").attr('style', '');
+                    $("#CAPS").val('');
+                },
+                error: function (result) {
+
+
+
+                },
+                complete: function () {
+                },
+            });
+        }
+    });
+
+    function Indietro() {
+        if (confirm('Sicuro di voler uscire? I dati inseriti e non salvati andranno persi.')) {
+
+            window.history.go(-1);
+        }
+        return false;
+    }
+
+
+
+
+    function SalvaIscritto() {
+
+
+
+        var matr = $('#matric').val();
+        var codpos = $('#codpos').val();
+        var nome = $("#nomesu").val();
+        var cognome = $("#cognomesu").val();
+        var Tipodip = $("#Tipodip").val();
+        var areaper = $("#Areaper").val();
+        var dtinf = $("#datainf").val();
+        var dataden = $("#datden").val();
+        var tipinf = $("#tipinf").val();
+        var indrd = $("#indrd").val();
+        var accme = $("#accme").val();
+        var tipdesc = $("#tipdesc").val();
+        var tipesc = $("#tipesc").val();
+        var sede = $('select#sede1 option:selected').val();
+        var causa = $('select#causa option:selected').val();
+        var natura = $('select#natura option:selected').val();
+        var agente = $('select#agente option:selected').val();
+        var tipage = $("#tipage").val();
+        var forma = $('select#forma option:selected').val();
+        var diagnosi = $("#diagnosi").val();
+        var prognosi = $("#prognosi").val();
+        var indrd = $('select#indrd option:selected').val();
+        var causa = $('select#causa option:selected').val();
+        var tipprat = $('select#tippra option:selected').val();
+        var tipfile = $('select#tipfile option:selected').val();
+
+        var file = $("#file").val();
+
+
+        var iscritto = {
+            Matricola: matr,
+            Nome: nome,
+            Cognome: cognome,
+            Tipodip: Tipodip,
+            AreaPer: areaper,
+            Codpos: codpos,
+            Datainf: dtinf,
+            Dataden: dataden,
+            Tipoinf: tipinf,
+            Indrd: indrd,
+            Accme: accme,
+            Tipesc: tipesc,
+            Codcauinf: causa,
+            Codsedinf: sede,
+            Codnatinf: natura,
+            Codageinf: agente,
+            Tipage: tipage,
+            Codform: forma,
+            Diagnosi: diagnosi,
+            Prognosi: prognosi,
+
+
+
+
+        };
+        var gfg = JSON.stringify(iscritto);
+
+
+        var myRows = [];
+        var $headers = $("th");
+        var $rows = $("tbody tr").each(function (index) {
+            $cells = $(this).find("td");
+            myRows[index] = {};
+            $cells.each(function (cellIndex) {
+                myRows[index][$($headers[cellIndex]).html()] = $(this).html();
+            });
+        });
+
+
+        var myObj = {};
+        myObj = myRows;
+        var Allegati = JSON.stringify(myObj);
+
+
+
+
+        $('#custom-tabs-one-messages-tab-salva').hide();
+        $('#primasave').hide();
+        if (matr != null) {
+            $.ajax(
+                {
+                    url: '@Url.Action("SalvaInfortunioAjax", "AziendaConsulente")',
+                    data: {
+                        'myObj': gfg, 'codpos': codpos, 'matr': matr, 'dt1': dataden, 'tipopratica': tipprat, 'FileAllegati': Allegati, 'tipodoc': tipfile
+                    },
+                    contentType: "multipart/form-data",
+                    success: function (data) {
+                        $('#save').show();
+
+
+                    },
+                    error: function () {
+                        $('#errore').show();
+                    },
+                    complete: function () { }
+                })
+        }
+        else
+            alert("selezionare la matricola");
+    }
+
+
+
+    function CercaIscritto() {
+
+
+        var matr = $('#matric').val();
+        var codpos = $('#tipRap').val();
+        var cognome = $('#cognomesu').val();
+        var nome = $('#nomesu').val();
+
+        let checkFormValidity1 = document.getElementById('matric').reportValidity();
+        let checkFormValidity2 = document.getElementById('cognomesu').reportValidity() && document.getElementById('nomesu').reportValidity();
+
+
+
+        if (!checkFormValidity1) { return; }
+
+        if (checkFormValidity1) {
+            $('#matric').attr('disabled', true);
+            $('#nomesu').attr('disabled', true);
+            $('#cognomesu').attr('disabled', true);
+
+        }
+
+
+        $.ajax(
+            {
+                url: '@Url.Action("CercaPerMtricola", "AziendaConsulente")',
+                data: { 'matr': matr, 'cognome': cognome, 'nome': nome },
+                success: function (data) {
+                    if (data == null) {
+                        alert('Utente non trovato!');
+                        return;
+                    }
+
+                    $("#nomesu").val(data.nome);
+                    $("#cognomesu").val(data.cognome);
+                    $("#nome").val(data.nome);
+                    $("#cognome").val(data.cognome);
+                    $("#matricola").val(matr);
+                    $("#Areaper").val(data.Areaper);
+                    $("#Tipodip").val(data.Tipodip);
+                    $("#uteagg").val(data.Uteagg);
+                    $("#codifis").val(data.codifis);
+                    $("#via").val(data.Via);
+                    $("#loc").val(data.Loc);
+                    $("#ind").val(data.Indirizzo);
+
+
+
+
+
+
+                },
+                error: function () {
+                    alert('Errore');
+                },
+                complete: function () { }
+            })
+
+
+    }
+
+    function setAttributeToField() {
+        $('#codFis').attr("placeholder", data.codFis);
+        $("#codFis").attr("readonly", true);
+        $("#matricola").attr("readonly", true);
+        $("#cognome").attr("readonly", true);
+        $("#nome").attr("readonly", true);
+        $("#dataNas").attr("readonly", true);
+        $("#comuneN").attr("readonly", true);
+        $("#comuneNCod").attr("readonly", true);
+        $("#provinciaN").attr("readonly", true);
+        $('#indirizzo').attr("readonly", false);
+        $('#titoloStudio').attr("readonly", false);
+        $('#sesso').attr("readonly", true);
+        $("#residenza").attr("readonly", false);
+        $("#civico").attr("readonly", false);
+        $("#comune").attr('style', '');
+        $("#provincia").attr("readonly", false);
+        $("#localita").attr('style', '');
+        $("#statoEsN").attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $("#statoEs").attr('style', '');
+        $("#co").attr("readonly", false);
+    }
+
+    //function calcolaFap() {
+    //    var percAliq = parseFloat("0" + document.getElementById("aliquota").value.replace(",", "."));
+    //    if (percAliq > 0) {
+    //        if (document.getElementById("fap").checked == true) {percAliq = percAliq + parseFloat(document.getElementById("aliquota").fap.replace(",", ".")); }
+    //        else {percAliq = percAliq - parseFloat(document.getElementById("aliquota").fap.replace(",", ".")); }
+    //        document.getElementById("aliquota").value = percAliq.toFixed(2).toString().replace(".", ",");
+    //    }
+    //}
+
+    var data = new Date();
+    var gg, mm, aaaa;
+    gg = data.getDate() + "/";
+    mm = data.getMonth() + 1 + "/";
+    aaaa = data.getFullYear();
+    document.getElementById("datDen").value = gg + mm + aaaa;
+
+</script>
+
+<script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var stringArray = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaComuni"]));
+    var stringArray2 = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaStati"]));
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("comuneN"), stringArray);
+    autocomplete(document.getElementById("comune"), stringArray);
+    autocomplete(document.getElementById("statoEsN"), stringArray2);
+    autocomplete(document.getElementById("statoEs"), stringArray2);
+
+    $("#tipRap").on('change', function () {
+        removeAllRequiredFromTipoContratto();
+        var $option = $(this).find('option:selected');
+        var a = $option.val();
+        if (a == 1) {
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+        }
+
+        //A TERMINE
+        if (a == 2) {
+            $("#data_termine").show();
+            $("#part_time").hide();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+            $("#datTerm").attr("required", 'required');
+        }
+
+        //Part time
+        if (a == 3) {
+            $("#part_time").show();
+            $("#data_termine").hide(); //????
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+            $("#PercPT").attr("required", 'required');
+        }
+        //Part time a termine
+        if (a == 4) {
+            $("#part_time").show();
+            $("#data_termine").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+            $("#PercPT").attr("required", 'required');
+            $("#datTerm").attr("required", 'required');
+        }
+
+        if (a == 6) {
+            $("#part_time").hide();
+            $("#data_termine").hide();
+            $("#da_al").css('display', 'flex');
+            $("#da_al1").css('display', 'flex');
+            $("#da_al2").css('display', 'flex');
+            $("#mesi").hide();
+            $("#periododll").show();
+            if ($('#datIsc').val() != '')
+                $('#daal').val($('#datIsc').val());
+
+            $("#daal").attr("required", 'required');
+            $("#daal2").attr("required", 'required');
+            $("#daal3").attr("required", 'required');
+            $("#alal").attr("required", 'required');
+            $("#alal2").attr("required", 'required');
+            $("#alal3").attr("required", 'required');
+            $("#perce1").attr("required", 'required');
+            $("#perce2").attr("required", 'required');
+            $("#perce3").attr("required", 'required');
+            $("#periodo").attr("required", 'required');
+        }
+
+        //APPRENDISTATO
+        if (a == 7) {
+            $("#part_time").hide();
+            $("#data_termine").hide();
+            $("#da_al").css('display', 'flex');
+            $("#da_al1").css('display', 'flex');
+            $("#da_al2").css('display', 'flex');
+            $("#mesi").hide();
+            $("#periododll").show();
+            if ($('#datIsc').val() != '')
+                $('#daal').val($('#datIsc').val());
+
+            $("#daal").attr("required", 'required');
+            $("#daal2").attr("required", 'required');
+            $("#daal3").attr("required", 'required');
+            $("#alal").attr("required", 'required');
+            $("#alal2").attr("required", 'required');
+            $("#alal3").attr("required", 'required');
+            $("#perce1").attr("required", 'required');
+            $("#perce2").attr("required", 'required');
+            $("#perce3").attr("required", 'required');
+            $("#periodo").attr("required", 'required');
+        }
+
+        if (a == 8) {
+            $("#part_time").show();
+            $("#data_termine").hide();
+            $("#da_al").css('display', 'flex');
+            $("#da_al1").css('display', 'flex');
+            $("#da_al2").css('display', 'flex');
+            $("#mesi").hide();
+            $("#periododll").show();
+            if ($('#datIsc').val() != '')
+                $('#daal').val($('#datIsc').val());
+
+            $("#daal").attr("required", 'required');
+            $("#daal2").attr("required", 'required');
+            $("#daal3").attr("required", 'required');
+            $("#alal").attr("required", 'required');
+            $("#alal2").attr("required", 'required');
+            $("#alal3").attr("required", 'required');
+            $("#perce1").attr("required", 'required');
+            $("#perce2").attr("required", 'required');
+            $("#perce3").attr("required", 'required');
+            $("#PercPT").attr("required", 'required');
+            $("#periodo").attr("required", 'required');
+        }
+
+        //Contratto di inserimento
+        if (a == 9) {
+            $("#data_termine").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#mesi").hide();
+            $("#part_time").hide();
+            $("#periododll").hide();
+            $("#datTerm").attr("required", 'required');
+        }
+
+        //Apprendistato %
+        if (a == 10) {
+            $("#part_time").show();
+            $("#data_termine").hide();
+            $("#da_al").css('display', 'flex');
+            $("#da_al1").css('display', 'flex');
+            $("#da_al2").css('display', 'flex');
+            $("#mesi").hide();
+            $("#periododll").show();
+            if ($('#datIsc').val() != '')
+                $('#daal').val($('#datIsc').val());
+
+            $("#PercPT").attr("required", 'required');
+            $("#daal").attr("required", 'required');
+            $("#daal2").attr("required", 'required');
+            $("#daal3").attr("required", 'required');
+            $("#alal").attr("required", 'required');
+            $("#alal2").attr("required", 'required');
+            $("#alal3").attr("required", 'required');
+            $("#perce1").attr("required", 'required');
+            $("#perce2").attr("required", 'required');
+            $("#perce3").attr("required", 'required');
+            $("#periodo").attr("required", 'required');
+        }
+
+        if (a == 11) {
+            $("#part_time").show();
+            $("#mesi").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#data_termine").hide();
+            $("#periododll").hide();
+            $("#PercPT").attr("required", 'required');
+            setRequiredToMesi();
+        }
+
+        //Apprendistato professionalizzante
+        if (a == 12) {
+            $("#data_termine").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+            $("#datTerm").attr("required", 'required');
+        }
+
+        if (a == 13) {
+            $("#data_termine").show();
+            $("#part_time").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#mesi").hide();
+            $("#periododll").hide();
+            $("#datTerm").attr("required", 'required');
+            $("#PercPT").attr("required", 'required');
+        }
+
+        if (a == 16) {
+            $("#mesi").show();
+            $("#data_termine").show();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").hide();
+            $("#periododll").hide();
+            $("#datTerm").attr("required", 'required');
+            setRequiredToMesi();
+        }
+
+        //Part time verticale
+        if (a == 17) {
+            $("#mesi").show();
+            $("#data_termine").hide();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").hide();
+            $("#periododll").hide();
+            setRequiredToMesi();
+        }
+
+        //19 smart warking part time
+        if (a == 19) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").show();
+            $("#periododll").hide();
+            $("#PercPT").attr("required", 'required');
+        }
+
+        //Apprendistato di alta formazione e ricerca %
+        if (a == 21) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").show();
+            $("#periododll").hide();
+            $("#PercPT").attr("required", 'required');
+        }
+
+        if (a == 1 || a == 14 || a == 15 || a == 18 || a == 20 || a == 5) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#da_al").hide();
+            $("#da_al1").hide();
+            $("#da_al2").hide();
+            $("#part_time").hide();
+            $("#periododll").hide();
+        }
+
+    });
+
+    $("#datIsc").on('change', function () {
+        var datIni = $('#datIsc').val();
+        var daal = $('#daal');
+
+        var $option = $('#tipRap').find('option:selected');
+        var a = $option.val();
+
+        if (a == 6 || a == 7 || a == 8 || a == 10)
+            daal.val(datIni);
+
+        if ($('#periodo').val() != '') {
+            setDaalPerFields();
+        }
+        $.ajax({
+
+            url: '@Url.Action("DdlContratto", "AziendaConsulente")',
+            data: { 'datIni': datIni },
+            success: function (data) {
+                var s = '<option value=""></option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option id="contratto" value="' + data[i].CODCON + '">' + data[i].DENCON + '</option>';
+                    s += '<option id="procon" value="' + data[i].PROCON + '" hidden></option>';
+                    s += '<option id="CODQUACON" value="' + data[i].CODQUACON + '" hidden></option>';
+
+                    listaAssConContratti.push(
+                        { 'CODCON': data[i].CODCON, 'ASSCON': data[i].ASSCON });
+                }
+                $("#contratto").html(s);
+            },
+            error: function () {
+                alert('Errore');
+            },
+            complete: function () { }
+        })
+    });
+
+    $("#periodo").on('change', function () {
+
+        if ($(this).val() == '') {
+            $('#alal').val('');
+            $('#daal2').val('');
+            $('#alal2').val('');
+            $('#daal3').val('');
+            $('#alal3').val('');
+            $('#perce1').val('');
+            $('#perce2').val('');
+            $('#perce3').val('');
+            return;
+        }
+        if ($("#datIsc").val() == "") return;
+        setDaalPerFields();
+    });
+
+    $('#contratto').on('change', function () {
+        var $option = $(this).find('option:selected');
+        var dencon = $option.text();
+        var codcon = $option.val();
+
+        $.ajax({
+            url: '@Url.Action("DdlLivello", "AziendaConsulente")',
+            data: { 'codcon': codcon, 'dencon': dencon },
+            success: function (datal) {
+                var s = '<option value=""></option>';
+                for (var i = 0; i < datal.length; i++) {
+                    s += '<option value="' + datal[i].codliv + '">' + datal[i].denliv + '</option>';
+
+                }
+                $("#denconnew").val(dencon);
+                $("#livello").html(s);
+            },
+            error: function () {
+                alert('Errore');
+            },
+            complete: function () {
+                Mensilita(dencon);
+                Aliquote(dencon, codcon);
+                compilaAssConFrom(codcon);
+            },
+        });
+
+        function compilaAssConFrom(codcon) {
+            for (let contratto of listaAssConContratti) {
+                let codConFromListaContratti = contratto['CODCON'];
+                if (codConFromListaContratti != codcon)
+                    continue;
+                contratto['ASSCON'] == 'S' ? checkOrUncheck(true) : checkOrUncheck(false);
+                break;
+            }
+
+            function checkOrUncheck(isAsscon) {
+                if (isAsscon) {
+                    $("#assistenzaCon").val(isAsscon);
+                    $("#assistenzaCon").attr('checked', isAsscon);
+                    $("#assistenzaCon").attr('style', 'pointer-events: none;background: #E9ECEF;');
+                }
+                else {
+                    $("#assistenzaCon").val(isAsscon);
+                    $("#assistenzaCon").attr('checked', isAsscon);
+                    $("#assistenzaCon").attr('style', 'pointer-events: none;background: #E9ECEF;');
+                }
+            }
+        }
+
+    });
+    $('#livello').on('change', function () {
+        $("#denLiv").val($("#livello option:selected").text().trim());
+    })
+
+    function Aliquote(dencon, codcon) {
+        var dataNas = $('#dataNas').val();
+
+        $.ajax({
+
+            url: '@Url.Action("DdlAliquota", "AziendaConsulente")',
+            data: { 'dataNas': dataNas, 'codcon': codcon, 'dencon': dencon },
+            success: function (datas) {
+                var s = '<option value=""></option>';
+                /* s += '<option id="denconnew" value="' + dencon + '" hidden></option>';*/
+                for (var i = 0; i < datas.length; i++) {
+                    s += '<option value="' + datas[i].CODGRUASS + '">' + datas[i].DENGRUASS + '</option>';
+
+                }
+                $("#aliqCont").html(s);
+            },
+            error: function () {
+                alert('Per determinare correttamente le aliquote inserire la data di nascita!');
+            },
+            complete: function () {
+
+            },
+
+        });
+    }
+
+    function Mensilita(dencon) {
+
+        $.ajax({
+
+            url: '@Url.Action("Mensilita", "AziendaConsulente")',
+            data: { 'dencon': dencon },
+            success: function (datam) {
+                s = '<option selected value="' + datam.qualifica + '">' + datam.qualifica + '</option>';
+                $("#qualifica").html(s);
+                $("#numMes").val(datam.mensilita);
+                $("#m14").val(datam.m14);
+                $("#m15").val(datam.m15);
+                $("#m16").val(datam.m16);
+                $("#tipspe").val(datam.tipspe);
+                $("#codloc").val(datam.codloc);
+                setNumMes(datam.mensilita)
+            },
+            error: function () {
+
+            },
+            complete: function () {
+
+            },
+
+        });
+    }
+
+    $("#aliqCont").on('change', function () {
+
+        var $option = $(this).find('option:selected');
+        var CODGRUASS = $option.val();
+        var dencon = $('#denconnew').val();
+        var dataNas = $('#dataNas').val();
+        var datIsc = $('#datIsc').val();
+        var datMod = $('#datDen').val();
+        var fap = $('#fap').is('checked');
+
+
+        $.ajax({
+
+            url: '@Url.Action("ValAliquota", "AziendaConsulente")',
+            data: { 'CODGRUASS': CODGRUASS, 'dencon': dencon, 'datIsc': datIsc, 'datMod': datMod, 'dataNas': dataNas, 'fap': fap },
+
+            success: function (data) {
+                $("#aliquota").val(data);
+
+            },
+            error: function () {
+                alert('Errore');
+            },
+            complete: function () {
+            },
+        })
+    });
+    $("#tipRap").on('change', function () {
+        var $option = $(this).find('option:selected');
+        var tiprap = $option.val();
+        $('#tiprapval').val(tiprap);
+        cleanFormField();
+    });
+    $("#livello").on('change', function () {
+        var $option = $(this).find('option:selected');
+        var codliv = $option.val();
+        var dencon = $('#denconnew').val();
+        var datMod = $('#datDen').val();
+        $.ajax({
+
+            url: '@Url.Action("Emolumenti", "AziendaConsulente")',
+            data: { 'codliv': codliv, 'dencon': dencon, 'datMod': datMod },
+
+            success: function (data) {
+                $("#emolumenti").val(data);
+                $('#codlival').val(codliv);
+            },
+            error: function () {
+                alert('Errore');
+            },
+            complete: function () {
+            },
+        })
+    });
+
+    $("#numMes").on('keyup', function () {
+        setNumMes($(this).val())
+        setNumMesEmolumenti($(this).val())
+    });
+    function setNumMes(valore) {
+        if (valore == '14') {
+            $("#m14").prop("readonly", false);
+            $("#m15").prop("readonly", true);
+            $("#m16").prop("readonly", true);
+        } else if (valore == '15') {
+            $("#m14").prop("readonly", false);
+            $("#m15").prop("readonly", false);
+            $("#m16").prop("readonly", true);
+        } else if (valore == '16') {
+            $("#m14").prop("readonly", false);
+            $("#m15").prop("readonly", false);
+            $("#m16").prop("readonly", false);
+        }
+        else {
+            $("#m14").prop("readonly", true);
+            $("#m15").prop("readonly", true);
+            $("#m16").prop("readonly", true);
+        }
+    }
+
+    function setNumMesEmolumenti(valore) {
+        if (valore == '14') {
+            $("#S14").prop("readonly", false);
+            $("#S15").prop("readonly", true);
+            $("#S16").prop("readonly", true);
+        } else if (valore == '15') {
+            $("#S14").prop("readonly", false);
+            $("#S15").prop("readonly", false);
+            $("#S16").prop("readonly", true);
+        } else if (valore == '16') {
+            $("#S14").prop("readonly", false);
+            $("#S15").prop("readonly", false);
+            $("#S16").prop("readonly", false);
+        }
+        else {
+            $("#S14").prop("readonly", true);
+            $("#S15").prop("readonly", true);
+            $("#S16").prop("readonly", true);
+        }
+    }
+
+    $("#contratto").on('click', function () {
+        if ($("#contratto").val() == "") {
+            $("#alertDataIscrizione").show();
+            setTimeout(function () {
+                $("#alertDataIscrizione").hide(500);
+            }, 5000);
+        }
+    });
+
+
+    $("#scattiAnz").on('change', function () {
+
+
+        var codliv = $("#livello").val();
+        var datIsc = $('#datIsc').val();
+        var datMod = $('#datDen').val();
+        var numScatti = $('#scattiAnz').val();
+        var dencon = $('#denconnew').val();
+        var prorap = null;
+        var tiprap = $('#tiprapval').val();
+
+        $.ajax({
+
+            url: '@Url.Action("SelLivello", "AziendaConsulente")',
+            data: { 'numScatti': numScatti, 'dencon': dencon, 'codliv': codliv, 'datMod': datMod, 'datIsc': datIsc, 'prorap': prorap, 'tiprap': tiprap },
+
+            success: function (data) {
+                $("#importoSc").val(data);
+                calcolaImportoTotale();
+            },
+            error: function () {
+                alert('Errore selezionare livello');
+            },
+            complete: function () {
+            },
+        })
+    });
+
+    $("#piAZ").on('keyup', function () {
+
+        var piva = $('#piAZ').val();
+
+        $.ajax({
+
+            url: '@Url.Action("CercaAziendaConPiva", "Amministrativo")',
+            data: { 'piva': piva },
+            success: function (data) {
+                $("#ragsocAZ").val(data.ragsocAz);
+                $("#cfAz").val(data.codfisAz);
+                $("#pozioneAZ").val(data.codpos);
+                $("#LocalitaS").val(data.localitaAz);
+                $("#LocalitaS").html(`<option value="${data.localitaAz}" selected)>${data.localitaAz}</option>`);
+                $("#DUG").val(data.dugCodAz);
+                $("#indirizzoAZ").val(data.indirizzoAz);
+                $("#numCivAZ").val(data.civicoAz);
+                $("#ProvinciaS").val(data.provAz);
+                $("#CAPS").val(data.capAz);
+                $("#telefonoAZ").val(data.telefonoAz);
+                $("#ComuneS").val(data.comuneCodAz);
+                $("#ComuneS").html(`<option value="${data.comuneCodAz}" selected)>${data.comuneAz}</option>`);
+            },
+            error: function () {
+                $("#ragsocAZ").val('');
+                $("#cfAz").val('');
+                $("#pozioneAZ").val('');
+                $("#LocalitaS").val('');
+                $("#LocalitaS").html('');
+                $("#DUG").val('');
+                $("#indirizzoAZ").val('');
+                $("#numCivAZ").val('');
+                $("#ProvinciaS").val('');
+                $("#CAPS").val('');
+                $("#telefonoAZ").val('');
+                $("#ComuneS").val('');
+                $("#ComuneS").html('');
+            },
+            complete: function () {
+            }
+        })
+    });
+    //CONTROLLO INPUT SOLO NUMERI SEGUITI DA VIRGOLA CON 2 DECIMALI
+    function setInputFilter(textbox, inputFilter) {
+        ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+            textbox.addEventListener(event, function () {
+                if (inputFilter(this.value)) {
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                } else {
+                    this.value = "";
+                }
+            });
+        });
+    }
+
+    setInputFilter(document.getElementById("S12"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("S13"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("S14"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+
+    $(document).on('change', function () {
+        calcolaImportoTotale();
+    });
+
+    $("#provincia").change(function () {
+        if ($(this).val() != "") {
+            $("#statoEs").val("");
+            const uri = '@Url.Action("GetComune", "Iscritto")';
+            const provincia = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { provincia: provincia },
+                success: function (data) {
+                    var s = '<option value="">Selezionare Comune</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].CODCOM + '">' + data[i].DENCOM + '</option>';
+                    }
+                    $("#comune").html(s);
+                    $("#localita").html('');
+                    $('#cap').val('');
+                },
+                error: function (result) { }
+            });
+        }
+        if ($(this).val() != "" && $("#statoEs").val() == "") {
+            $('#provincia').attr('style', '');
+            $("#localita").attr('style', '');
+            $("#comune").attr('style', '');
+            $("#comune").attr("required", true);
+            $("#localita").attr("required", true);
+            $("#cap").attr("required", true);
+            $("#provincia").attr("required", true);
+            $("#statoEs").attr("required", false);
+
+        }
+
+
+    });
+
+    $("#comune").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetLocalita", "Iscritto")';
+            const comune = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { comune: comune },
+                success: function (data) {
+                    var s = '<option value="">Selezionare la Località</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].DENLOC + '">' + data[i].DENLOC + ' - ' + data[i].CAP + '</option>';
+                    }
+                    $("#localita").html(s);
+                    $('#cap').val('');
+                },
+                error: function (result) { }
+            });
+        }
+    });
+
+    $("#localita").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetCap", "Iscritto")';
+            const LocalitaS = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { loc: LocalitaS },
+                success: function (data) {
+                    const loc = $("select#localita>option:selected").text();
+                    const locArray = loc.split("-");
+                    if (locArray !== undefined && locArray.length == 2) {
+                        const CAPS = locArray[1].trim();
+                        indexCAPS = data.findIndex(x => x.CAP === CAPS);
+                        if (indexCAPS > 0) {
+                            $("#cap").val(data[indexCAPS].CAP);
+                        }
+                        else {
+                            $("#cap").val(data[0].CAP);
+                        }
+                    }
+                    else {
+                        $("#cap").val(data[0].CAP);
+                    }
+                },
+                error: function (result) { },
+                complete: function () { },
+            });
+        }
+    });
+
+    $("#statoEs").change(function () {
+        if ($(this).val() != "") {
+            $("#comune").html('');
+            $("#localita").html('');
+            $("#cap").val('');
+            $("#provincia").val('');
+            $("#comune").attr("required", false);
+            $("#localita").attr("required", false);
+            $("#cap").attr("required", false);
+            $("#provincia").attr("required", false);
+            $("#statoEs").attr("required", true);
+            $("#localita").attr('style', 'pointer-events: none;background: #E9ECEF;');
+            $("#comune").attr('style', 'pointer-events: none;background: #E9ECEF;');
+        }
+        else {
+            $("#localita").attr('style', '');
+            $("#comune").attr('style', '');
+            $("#comune").attr("required", true);
+            $("#localita").attr("required", true);
+            $("#cap").attr("required", true);
+            $("#provincia").attr("required", true);
+            $("#statoEs").attr("required", false);
+        }
+    });
+
+    var listaAssConContratti = [];
+
+</script>
+
+<script>
+    //Metodi relativi a controllo e compilazione Codice Fiscale
+
+    var listaComuni = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ListaComuni));
+    let listaGeneri = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ListaGeneri));
+    let listaStatiEsteri = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ListaStatiEsteri));
+
+    function threeThingsAllTruthy(one, two, three) {
+        let isEverythingReady = false
+        if (one && two && three)
+            isEverythingReady = true;
+        return isEverythingReady;
+    }
+
+    function isCittadinoEstero(lettera) {
+        let isEstero = false;
+        if (lettera == 'Z')
+            isEstero = true;
+        return isEstero;
+    }
+
+    function isCfModified(codiceFiscaleInserito) {
+        let isCfModified = false;
+        if (codiceFiscaleInserito)
+            isCfModified = true;
+        return isCfModified;
+    }
+
+    function sonoValidiNomeCognomeCf() {
+        let sonoValidi = false;
+        if (document.getElementById('cognome').reportValidity() && document.getElementById('nome').reportValidity() && document.getElementById('codFis').reportValidity())
+            sonoValidi = true;
+        return sonoValidi;
+    }
+
+    function getConsonantiAndVocali(parola) {
+        let isConsonante = true;
+        const vocali = ['A', 'E', 'I', 'O', 'U', 'Y'];
+        let consonantiOfParola = [];
+        let vocaliOfParola = [];
+
+        for (let lettera of parola) {
+            for (let vocale of vocali) {
+                if (lettera == vocale) {
+                    isConsonante = false;
+                    vocaliOfParola.push(lettera);
+                    break;
+                }
+            }
+            if (isConsonante)
+                consonantiOfParola.push(lettera);
+            isConsonante = true;
+        }
+
+        return {
+            consonanti: consonantiOfParola,
+            vocali: vocaliOfParola
+        };
+    }
+
+    function sonoCongruentiNomeCognome(nomeFromCodFis, consonantiOfNome, consonantiOfCognome, vocaliOfNome, vocaliOfCognome) {
+        let isTuttoCongruente = false;
+
+        let isCognomeCongruo = false;
+        if (consonantiOfCognome.length >= 3) {
+            if (nomeFromCodFis[0] == consonantiOfCognome[0] && nomeFromCodFis[1] == consonantiOfCognome[1] && nomeFromCodFis[2] == consonantiOfCognome[2])
+                isCognomeCongruo = true;
+        }
+        else if (consonantiOfCognome.length == 2) {
+            if (nomeFromCodFis[0] == consonantiOfCognome[0] && nomeFromCodFis[1] == consonantiOfCognome[1] && nomeFromCodFis[2] == vocaliOfCognome[0])
+                isCognomeCongruo = true;
+        }
+        else if (consonantiOfCognome.length == 1) {
+            if (nomeFromCodFis[0] == consonantiOfCognome[0] && nomeFromCodFis[1] == vocaliOfCognome[0] && nomeFromCodFis[2] == vocaliOfCognome[1])
+                isCognomeCongruo = true;
+        }
+
+        let isNomeCongruo = false;
+        if (consonantiOfNome.length >= 4) {
+            if (nomeFromCodFis[3] == consonantiOfNome[0] && nomeFromCodFis[4] == consonantiOfNome[2] && nomeFromCodFis[5] == consonantiOfNome[3]) {
+                isNomeCongruo = true;
+            }
+        }
+        else if (consonantiOfNome.length == 3) {
+            if (nomeFromCodFis[3] == consonantiOfNome[0] && nomeFromCodFis[4] == consonantiOfNome[1] && nomeFromCodFis[5] == consonantiOfNome[2]) {
+                isNomeCongruo = true;
+            }
+        }
+        else if (consonantiOfNome.length == 2) {
+            if (nomeFromCodFis[3] == consonantiOfNome[0] && nomeFromCodFis[4] == consonantiOfNome[1] && nomeFromCodFis[5] == vocaliOfNome[0]) {
+                isNomeCongruo = true;
+            }
+        }
+        else if (consonantiOfNome.length == 1) {
+            if (nomeFromCodFis[3] == consonantiOfNome[0] && nomeFromCodFis[4] == vocaliOfNome[0] && nomeFromCodFis[5] == vocaliOfNome[1])
+                isNomeCongruo = true;
+        }
+
+        if (isCognomeCongruo && isNomeCongruo)
+            isTuttoCongruente = true;
+
+        return isTuttoCongruente;
+    }
+
+    function checkCongruenzaNomeCognomeConCodFis(nomeFromCodFis, nome, cognome) {
+        let isTuttoCongruente = false;
+        const cognomeDecostruito = getConsonantiAndVocali(cognome);
+        const nomeDecostruito = getConsonantiAndVocali(nome);
+
+        isTuttoCongruente = sonoCongruentiNomeCognome(
+            nomeFromCodFis, nomeDecostruito.consonanti, cognomeDecostruito.consonanti, nomeDecostruito.vocali, cognomeDecostruito.vocali);
+
+        return isTuttoCongruente;
+    }
+
+    function getAnnoNascita(numero) {
+        let annoNascita = '';
+        if (numero < 25)
+            annoNascita += '20' + numero;
+        else
+            annoNascita += '19' + numero;
+        return annoNascita;
+    }
+
+    function getMeseNascita(lettera) {
+        switch (lettera) {
+            case 'A': return '01';
+            case 'B': return '02';
+            case 'C': return '03';
+            case 'D': return '04';
+            case 'E': return '05';
+            case 'H': return '06';
+            case 'L': return '07';
+            case 'M': return '08';
+            case 'P': return '09';
+            case 'R': return '10';
+            case 'S': return '11';
+            case 'T': return '12';
+            default: return '';
+        }
+    }
+
+    function getGiornoNascita(numero) {
+        let giornoNascita = parseInt(numero);
+        if (giornoNascita >= 40)
+            giornoNascita -= 40;
+        if (giornoNascita < 10)
+            giornoNascita = '0' + giornoNascita;
+        return giornoNascita;
+    }
+
+    function caricaNumeriLettere() {
+        return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    }
+
+    function caricaEvenValues() {
+        let evenValues = [];
+        let altroContatore = 0;
+        for (let i = 0; i < 36; i++) {
+            if (i >= 10) {
+                evenValues.push(altroContatore)
+                altroContatore++;
+            }
+            else
+                evenValues.push(i);
+        }
+        return evenValues;
+    }
+
+    function caricaUnevenValues() {
+        return [1, 0, 5, 7, 9, 13, 15, 17, 19, 21, 1, 0, 5, 7, 9, 13, 15, 17, 19, 21, 2, 4, 18, 20, 11, 3, 6, 8, 12, 14, 16, 10, 22, 25, 24, 23];
+    }
+
+    function convertLetteraToValore(lettera, isEven, totaleNumeriLettere, evenValues, unevenValues) {
+        let valore = 0;
+        for (let i = 0; i < totaleNumeriLettere.length; i++)
+            if (totaleNumeriLettere[i] == lettera) {
+                isEven ? valore = evenValues[i] : valore = unevenValues[i];
+                break;
+            }
+        return valore;
+    }
+
+    function convertLettera(lettera, isEven) {
+        let totaleNumeriLettere = caricaNumeriLettere();
+        let evenValues = caricaEvenValues();
+        let unevenValues = caricaUnevenValues();
+
+        return convertLetteraToValore(lettera, isEven, totaleNumeriLettere, evenValues, unevenValues)
+    }
+
+    function convertResto(resto) {
+        let letteraDaNumero;
+        let alfabeto = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        for (let i = 0; i < 26; i++) {
+            if (resto == i) {
+                letteraDaNumero = alfabeto[i];
+                break;
+            }
+        }
+        return letteraDaNumero;
+    }
+
+    function calcoloUltimaLetteraCf(codiceFiscaleNoUltimaLettera) {
+        let sommaLettere = 0;
+        let isEven = false;
+        for (let lettera of codiceFiscaleNoUltimaLettera) {
+            isEven ? sommaLettere += convertLettera(lettera, isEven) : sommaLettere += convertLettera(lettera, isEven);
+            isEven = !isEven;
+        }
+        return convertResto(sommaLettere % 26);
+    }
+
+    function isUltimaLetteraCfValid(codiceFiscale) {
+        const codiceFiscaleNoUltimaLettera = codiceFiscale.slice(0, 15);
+        const ultimaLetteraCfInserito = codiceFiscale[15];
+        const ultimaLetteraCalcolata = calcoloUltimaLetteraCf(codiceFiscaleNoUltimaLettera);
+
+        return ultimaLetteraCalcolata == ultimaLetteraCfInserito;
+    }
+
+    function svuotaCampifromCodFis() {
+        $('#dataNas').val('');
+        $('#sesso').val('');
+        $('#cognome').attr("readonly", false);
+        $('#nome').attr("readonly", false);
+        $('#statoEsN').val('');
+        $('#statoEsN').html('');
+        $('#comuneN').val('');
+        $('#provinciaN').val('');
+    }
+
+    function getDenominazioneStatoEstero(codiceStatoEstero) {
+        let denominazioneStatoEstero;
+        for (let statoEstero of listaStatiEsteri) {
+            if (statoEstero['CODCOMSE'] == codiceStatoEstero) {
+                denominazioneStatoEstero = statoEstero['DENCOMSE'].trim();
+                break;
+            }
+        }
+        return denominazioneStatoEstero;
+    }
+
+    function compilaStatoEstero(codiceStatoEstero, denominazioneStatoEstero) {
+        $('#statoEsN').val(codiceStatoEstero);
+        $('#statoEsN').html('<option value="' + codiceStatoEstero + '">' + denominazioneStatoEstero + '</option>');
+        $('#statoEsN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#comuneN').val('');
+        $('#comuneN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#provinciaN').val('');
+        $('#provinciaN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $("#comuneN").attr("required", false);
+        $("#provinciaN").attr("required", false);
+        $("#statoEsN").attr("required", true);
+
+    }
+
+    function getCodiceProvinciaFromCodiceComune(codiceComune) {
+        let codiceProvinciaFromCodiceComune;
+        for (let comune of listaComuni) {
+            if (comune['CODCOM'] == codiceComune) {
+                codiceProvinciaFromCodiceComune = comune['SIGPRO'];
+                break;
+            }
+        }
+        return codiceProvinciaFromCodiceComune;
+    }
+
+    function compilaCampiComuneProvincia(codiceComune, codiceProvinciaFromCodiceComune) {
+        $('#comuneN').val(codiceComune);
+        $('#comuneN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#provinciaN').val(codiceProvinciaFromCodiceComune);
+        $('#provinciaN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#statoEsN').attr('placeholder', '');
+        $('#statoEsN').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $("#comuneN").attr("required", true);
+        $("#provinciaN").attr("required", true);
+        $("#statoEsN").attr("required", false);
+    }
+
+    function completaCompilazioneCampiFromCodFis(annoNascita, meseNascita, giornoNascita, genere) {
+        $('#dataNas').val(annoNascita + '-' + meseNascita + '-' + giornoNascita);
+        $('#dataNas').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#sesso').val(genere);
+        $('#sesso').attr('style', 'pointer-events: none;background: #E9ECEF;');
+        $('#cognome').attr("readonly", true);
+        $('#nome').attr("readonly", true);
+    }
+
+    function compilaCampiFromCodFis(codiceFiscaleInserito) {
+        const annoNascita = getAnnoNascita(codiceFiscaleInserito[6] + codiceFiscaleInserito[7]);
+        const meseNascita = getMeseNascita(codiceFiscaleInserito[8]);
+        const giornoNascita = getGiornoNascita(codiceFiscaleInserito[9] + codiceFiscaleInserito[10]);
+
+        let genere;
+        parseInt(codiceFiscaleInserito[9] + codiceFiscaleInserito[10]) >= 40 ? genere = 2 : genere = 1;
+
+        if (isCittadinoEstero(codiceFiscaleInserito[11])) {
+            const codiceStatoEstero = codiceFiscaleInserito[11] + codiceFiscaleInserito[12] + codiceFiscaleInserito[13] + codiceFiscaleInserito[14];
+            const denominazioneStatoEstero = getDenominazioneStatoEstero(codiceStatoEstero);
+
+            if (denominazioneStatoEstero)
+                compilaStatoEstero(codiceStatoEstero, denominazioneStatoEstero);
+            else
+                return;
+        }
+        else {
+            const codiceComune = codiceFiscaleInserito[11] + codiceFiscaleInserito[12] + codiceFiscaleInserito[13] + codiceFiscaleInserito[14];
+            const codiceProvinciaFromCodiceComune = getCodiceProvinciaFromCodiceComune(codiceComune);
+
+            if (codiceProvinciaFromCodiceComune)
+                compilaCampiComuneProvincia(codiceComune, codiceProvinciaFromCodiceComune);
+            else
+                return;
+        }
+
+        completaCompilazioneCampiFromCodFis(annoNascita, meseNascita, giornoNascita, genere);
+    }
+
+    function checkAndCompilaFromCodFis() {
+
+        const nomeInserito = $("#nome").val().replace(/\s+/g, '').trim().toUpperCase();
+        const cognomeInserito = $("#cognome").val().replace(/\s+/g, '').trim().toUpperCase();
+        const codiceFiscaleInserito = $("#codFis").val().toUpperCase();
+        const nomeFromCodFis = codiceFiscaleInserito.slice(0, 6);
+
+        if (isCfModified(codiceFiscaleInserito))
+            svuotaCampifromCodFis();
+
+        if (threeThingsAllTruthy(codiceFiscaleInserito, cognomeInserito, nomeInserito)) {
+
+            if (checkCongruenzaNomeCognomeConCodFis(nomeFromCodFis, nomeInserito, cognomeInserito)) {
+
+                if (isUltimaLetteraCfValid(codiceFiscaleInserito)) {
+
+                    if (sonoValidiNomeCognomeCf())
+                        compilaCampiFromCodFis(codiceFiscaleInserito);
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function cleanFormField() {
+        var $option = $('#tipRap').find('option:selected');
+        var a = $option.val();
+        var datIni = $('#datIsc').val();
+        $("#periodo").val('');
+        $("#datTerm").val('');
+        $("#daal").val('');
+        $("#daal2").val('');
+        $("#daal3").val('');
+        $("#alal").val('');
+        $("#alal2").val('');
+        $("#alal3").val('');
+        $("#perce1").val('');
+        $("#perce2").val('');
+        $("#perce3").val('');
+        $("#mesi").val('');
+        $("#PercPT").val('');
+
+        if (a == 6 || a == 7 || a == 8 || a == 10)
+            $("#daal").val(datIni);
+
+        var divMesi = document.getElementById("mesi");
+        var checkboxes = divMesi.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
+    }
+
+    function setDaalPerFields() {
+        $('#daal').val($("#datIsc").val());
+        var mesi = $('#periodo').val() / 3;
+        var data1 = new Date($("#datIsc").val());
+        var data2 = new Date(data1);
+        var data2 = new Date(data2.setMonth(data2.getMonth() + mesi));
+        var data3 = new Date(data2);
+        data2.setDate(data2.getDate() - 1);
+        var data4 = new Date(data3);
+        data4 = new Date(data4.setMonth(data4.getMonth() + mesi));
+        var data5 = new Date(data4);
+        data4.setDate(data4.getDate() - 1);
+        var data6 = new Date(data5);
+        data6 = new Date(data6.setMonth(data6.getMonth() + mesi));
+        data6.setDate(data6.getDate() - 1);
+
+        var d3 = data3.getFullYear() + '-' + (+data3.getMonth() + 1).toString().padStart(2, '0') + '-' + data3.getDate().toString().padStart(2, '0');
+        var d2 = data2.getFullYear() + '-' + (+data2.getMonth() + 1).toString().padStart(2, '0') + '-' + data2.getDate().toString().padStart(2, '0');
+        var d4 = data4.getFullYear() + '-' + (+data4.getMonth() + 1).toString().padStart(2, '0') + '-' + data4.getDate().toString().padStart(2, '0');
+        var d5 = data5.getFullYear() + '-' + (+data5.getMonth() + 1).toString().padStart(2, '0') + '-' + data5.getDate().toString().padStart(2, '0');
+        var d6 = data6.getFullYear() + '-' + (+data6.getMonth() + 1).toString().padStart(2, '0') + '-' + data6.getDate().toString().padStart(2, '0');
+
+        $("#alal").val(d2);
+        $("#daal2").val(d3);
+        $("#alal2").val(d4);
+        $("#daal3").val(d5);
+        $("#alal3").val(d6);
+
+        $('#perce1').val('70');
+        $('#perce2').val('80');
+        $('#perce3').val('90');
+    }
+
+    function removeAllRequiredFromTipoContratto() {
+        $("#periodo").attr("required", false);
+        $("#datTerm").attr("required", false);
+        $("#daal").attr("required", false);
+        $("#daal2").attr("required", false);
+        $("#daal3").attr("required", false);
+        $("#alal").attr("required", false);
+        $("#alal2").attr("required", false);
+        $("#alal3").attr("required", false);
+        $("#perce1").attr("required", false);
+        $("#perce2").attr("required", false);
+        $("#perce3").attr("required", false);
+        $("#PercPT").attr("required", false);
+        removeRequiredFromMesi();
+    }
+
+
+    $("#mesi input[type='checkbox']").change(function () {
+        checkRequiredToMesi();
+    });
+
+    function checkRequiredToMesi() {
+        var divMesi = document.getElementById("mesi");
+        var checkboxes = divMesi.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                removeRequiredFromMesi();
+                return;
+            }
+        }
+        setRequiredToMesi();
+    }
+
+    function removeRequiredFromMesi() {
+        var divMesi = document.getElementById("mesi");
+        var checkboxes = divMesi.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].removeAttribute("required");
+        }
+    }
+
+    function setRequiredToMesi() {
+        var divMesi = document.getElementById("mesi");
+        var checkboxes = divMesi.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].setAttribute("required", 'required');
+        }
+    }
+
+    function checkValiditaMesi() {
+        var divMesi = document.getElementById("mesi");
+        var checkboxes = divMesi.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                return true;
+            }
+        }
+        return checkboxes[0].reportValidity();
+    }
+    function valida() {
+
+    }
+
+    function calcolaImportoTotale() {
+        var a = (parseFloat($('#emolumenti').val().replace(".", "").replace(",", ".") || 0.00).toFixed(2));
+        var b = (parseFloat($('#retDic').val().replace(",", ".") || 0.00).toFixed(2));
+        var c = (parseFloat($('#importoSc').val().replace(",", ".") || 0.00).toFixed(2));
+        var d = (parseFloat($('#S12').val().replace(",", ".") || 0.00).toFixed(2));
+        var e = (parseFloat($('#S13').val().replace(",", ".") || 0.00).toFixed(2));
+        var f = (parseFloat($('#S14').val().replace(",", ".") || 0.00).toFixed(2));
+        var g = (parseFloat($('#S15').val().replace(",", ".") || 0.00).toFixed(2));
+        var h = (parseFloat($('#S16').val().replace(",", ".") || 0.00).toFixed(2));
+
+        var sum = 0;
+        sum = parseFloat(a) + parseFloat(b) + parseFloat(c) + parseFloat(d) + parseFloat(e) + parseFloat(f) + parseFloat(g) + parseFloat(h);
+        var totale = sum.toFixed(2).toString().replace(".", ",")
+        $("#totaleS").val(totale);
+    }
+</script>
+
+<script>
+    var listaLocalita = @Html.Raw(JsonConvert.SerializeObject(ViewBag.ListaLocalita));
+
+    function setSelectComuniLocalita(sigPro, comune) {
+        let listaComuni = getComuniFrom(sigPro);
+        let listaLocalitaToShow = getLocalitaFrom(comune);
+
+        return { 'comuni': listaComuni, 'localita': listaLocalitaToShow };
+    }
+
+    function getComuniFrom(sigPro) {
+        let listOfComuniToShow = [];
+        for (let comune of listaComuni) {
+            if (comune['SIGPRO'] == sigPro) {
+                listOfComuniToShow.push(comune);
+            }
+        }
+        return listOfComuniToShow;
+    }
+
+    function getLocalitaFrom(comune) {
+        let listaLocalitaToShow = []
+
+        for (let localita of listaLocalita) {
+            if (localita['CODCOM'] == comune['codiceComune'])
+                listaLocalitaToShow.push(localita);
+        }
+        return listaLocalitaToShow;
+    }
+
+
+
+</script>

@@ -1,0 +1,157 @@
+﻿@model TFI.OCM.Amministrativo.GestioneContrattiOCM
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@{
+    var con = Model;
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+@using (Html.BeginForm("ModificaContratto", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Modifica Contratto</h3>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-4">
+                <label>Qualifica</label>
+                <select class="form-control" id="Qualifica" name="Qualifica" asp-for="Qualifica">
+                    <option value="@con.contratti.CODQUACON" selected disabled>@con.contratti.Qualifica</option>
+                    <option value="@con.contratti.CODQUACON" selected hidden>@con.contratti.Qualifica</option>
+                    <option value="1">DIRIGENTE</option>
+                    <option value="2">IMPIEGATO</option>
+                    <option value="0">IMPIEGATO QUADRO</option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <label>Nome Contratto</label>
+                <input type="text" class="form-control" id="Denominazione" name="Denominazione" value="@con.contratti.Denominazione" />
+            </div>
+            <div class="col-sm-4">
+                <label> Assistenza Contrattuale</label>
+                <select class="form-control" id="ASSCON" name="ASSCON" asp-for="ASSCON">
+                    <option value="@con.contratti.ASSCON" selected disabled>@con.contratti.ASSCON</option>
+                    <option value="@con.contratti.ASSCON" selected hidden>@con.contratti.ASSCON</option>
+                    <option value="S">S</option>
+                    <option value="N">N</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Data Inizio Validità</label>
+                <input type="date" id="DATINI" class="form-control" name="DATINI" value="@con.contratti.DATINI" />
+            </div>
+            <div class="col-sm-4">
+                <label>Data Fine Validità</label>
+                <input type="date" id="DATFIN" class="form-control" name="DATFIN" value="@con.contratti.DATFIN" />
+            </div>
+            <div class="col-sm-4">
+                <label>Mensilità</label>
+                <select class="form-control" id="NUMMEN" name="NUMMEN" asp-for="NUMMEN">
+                    <option value="@con.contratti.NUMMEN" selected disabled>@con.contratti.NUMMEN</option>
+                    <option value="@con.contratti.NUMMEN" selected hidden>@con.contratti.NUMMEN</option>
+                    <option value="12">12°</option>
+                    <option value="13">13°</option>
+                    <option value="14">14°</option>
+                    <option value="15">15°</option>
+                    <option value="16">16°</option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Scatti</label>
+                <input type="number" class="form-control" id="MAXSCA" name="MAXSCA" value="@con.contratti.MAXSCA" />
+            </div>
+            <div class="col-sm-4">
+                <label>Durata Scatto</label>
+                <input type="text" class="form-control" id="PERSCA" name="PERSCA" value="@con.contratti.PERSCA" />
+            </div>
+            <div class="col-sm-4">
+                <label>Rivalutazione</label>
+                <select class="form-control" id="RIVAUT" name="RIVAUT" asp-for="RIVAUT">
+                    <option selected disabled>@con.contratti.RIVAUT</option>
+                    <option value="@con.contratti.RIVAUT" selected hidden>@con.contratti.RIVAUT</option>
+                    <option value="S">S</option>
+                    <option value="N">N</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <input id="checkInput" name="checkInput" value="@con.contratti.checkInput" hidden />
+            <input id="PROCON" name="PROCON" value="@con.contratti.PROCON" hidden />
+            <input id="CODCON" name="CODCON" value="@con.contratti.CODCON" hidden />
+            <input id="CODTIPCON" name="CODTIPCON" value="@con.contratti.CODTIPCON" hidden />
+            <input id="CODQUACON" name="CODQUACON" value="@con.contratti.CODQUACON" hidden />
+        </div>
+
+        <div class="row">
+            <div class="input-group offset-lg-3">
+                <div class="col-lg-3">
+                    <label>&nbsp;</label>
+                    <button name="" id="" asp-for="" type="button" class="btn btn-block btn-outline-success float-end" onclick="window.location.href='@Url.Action("ContrattiRicerca", "Amministrativo")'">Indietro</button>
+                </div>
+                <div class="col-lg-3 offset-lg-4">
+                    <div>
+                        <label>&nbsp;</label>
+                        <input name="salva" id="salva" asp-for="salva" type="submit" value="Salva" class="btn btn-block btn-outline-success float-end">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        @if (Model.ListCont != null)
+        {
+
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="height: 400px; overflow:scroll;">
+                                <table id="" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center; ">
+                                    <thead>
+                                        <tr class="header">
+                                            <th>Dal </th>
+                                            <th>Al</th>
+                                            <th>Mansione e Qualifica</th>
+                                            <th>Livello</th>
+                                            <th>Importo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var i in Model.ListCont)
+                                        {
+                                            <tr style="vertical-align:middle;text-align:center">
+                                                <td>@i.DATAPPINI.Substring(0, 10)</td>
+                                                <td>@i.DATAPPFIN.Substring(0, 10)</td>
+                                                <td>@i.Mansione</td>
+                                                <td>@i.DENLIV</td>
+                                                <td>@i.Importo</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        }
+
+    </div>
+}

@@ -1,0 +1,102 @@
+@using OCM.TFI.OCM.Infortuni
+@model InserimentoInfortunio
+
+@{
+    ViewBag.Title = "Enpaia | Nuovo Infortunio";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+
+<div class="container-fluid bg-white">
+    <div class="nuovo-infortunio-title text-center text-white py-3">
+        <h2>Inserimento Nuovo Infortunio</h2>
+    </div>
+    <div id="RicercaIscrittoPartial" class="mt-4 mb-5">
+        @Html.Partial("_RicercaIscritto", new RicercaIscrittoModel())
+    </div>
+    <div class="container-fluid pb-5">
+        <ul class="nav nav-tabs tabs-container">
+            <li class="nav-item col px-0" role="presentation">
+                <button class="nav-link custom-tab active show w-100 text-left not-interactive" id="dati-iscritto-tab" data-toggle="tab" data-target="#dati-iscritto" role="tab">Dati Iscritto</button>
+            </li>
+            <li class="nav-item col px-0" role="presentation">
+                <button class="nav-link custom-tab w-100 text-left not-interactive" id="dati-infortunio-tab" data-toggle="tab" data-target="#dati-infortunio" role="tab">Dati Infortunio</button>
+            </li>
+        </ul>
+        <div class="tab-content border p-3">
+            <div class="tab-pane fade show active" id="dati-iscritto" role="tabpanel">
+                <div class="row">
+                    <div class="col-2">
+                        @Html.LabelFor(model => model.Matricola)
+                        @Html.TextBoxFor(model => model.Matricola, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                    <div class="col">
+                        @Html.LabelFor(model => model.Nome)
+                        @Html.TextBoxFor(model => model.Nome, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                    <div class="col">
+                        @Html.LabelFor(model => model.Cognome)
+                        @Html.TextBoxFor(model => model.Cognome, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        @Html.LabelFor(model => model.Regione)
+                        @Html.TextBoxFor(model => model.Regione, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                    <div class="col-2">
+                        @Html.LabelFor(model => model.Qualifica)
+                        @Html.TextBoxFor(model => model.Qualifica, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        @Html.LabelFor(model => model.Dug)
+                        @Html.TextBoxFor(model => model.Dug, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                    <div class="col">
+                        @Html.LabelFor(model => model.Indirizzo)
+                        @Html.TextBoxFor(model => model.Indirizzo, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                    <div class="col">
+                        @Html.LabelFor(model => model.Comune)
+                        @Html.TextBoxFor(model => model.Comune, new { @class = "form-control", @readonly = "true" })
+                    </div>
+                </div>
+                <div class="row justify-content-end mt-5">
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-success w-100" id="next-dati-iscritto-button">Avanti</button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="dati-infortunio" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-2">
+                        @Html.LabelFor(model => model.DataInfortunio)
+                        @Html.TextBoxFor(model => model.DataInfortunio, new { type = "date", @class = "form-control" })
+                    </div>
+                    <div class="col-2">
+                        @Html.LabelFor(model => model.DataDenuncia)
+                        @Html.TextBoxFor(model => model.DataDenuncia, "{0:dd/MM/yyyy}", new { @class = "form-control", @readonly = true })
+                    </div>
+                    <div class="col-3">
+                        @Html.LabelFor(model => model.SelectedTipoInfortunio)
+                        @Html.DropDownListFor(model => model.SelectedTipoInfortunio, (IEnumerable<SelectListItem>)ViewBag.TipiInfortunio, "Seleziona tipo infortunio", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-3">
+                        <button class="btn btn-outline-success w-100" id="back-dati-infortunio-button">Indietro</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-outline-success w-100">Salva</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="~/dist/js/pages/Infortuni/Nuovo/Nuovo.js"></script>
+<script type="module" src="~/dist/js/pages/Infortuni/Nuovo/Selector.js"></script>
+<link rel="stylesheet" href="/dist/css/pages/Infortunio/Nuovo.css" />

@@ -1,0 +1,202 @@
+﻿@using OCM.TFI.OCM.AziendaConsulente;
+@model RDLPaginatiModel
+
+@{
+    ViewBag.Title = "Rapporti di Lavoro";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+
+        .table th:nth-child(-n+6) {
+            cursor: pointer;
+        }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+
+    .selected {
+        background-color: lightgrey;
+    }
+
+    .page-number {
+        border-radius: 0.25rem;
+    }
+</style>
+
+<title>Enpaia | Rapporti di lavoro</title>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 20px">
+                        Rapporti di lavoro
+                    </div>
+                    <div class="card-body">
+                        <div class="input-group row">
+                            <div class="input-group justify-content-start" style=" width: 33%;">
+                                <button class="btn btn-outline-success" type="button" onclick="window.location.href='@Url.Action("NuovoRapportiLavoro","AziendaConsulente"@*,new { nuovoIscritto=NuovoIscritto() }*@)'">Nuovo Rapporto di Lavoro</button>
+                            </div>
+                            <div class="input-group justify-content-start" style=" width: 33%;">
+                                <input id="filterText" class="form-control" type="text" placeholder="Cerca Rapporto di Lavoro" onkeyup="filter()" />
+                            </div>
+                            <div class="input-group justify-content-end" style=" width: 33%;">
+
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Tutti" value="2">
+                                    <label class="form-check-label" for="Tutti">
+                                        Tutti
+                                    </label>
+                                </div>
+                                &emsp;
+
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Attivo" checked value="0">
+                                    <label class="form-check-label" for="Attivo">
+                                        Attivi
+                                    </label>
+                                </div>
+                                &emsp;
+                                <div class="icheck-success d-inline">
+                                    <input type="radio" name="Filtro" id="Cessato" value="1">
+                                    <label class="form-check-label" for="Cessato">
+                                        Cessati
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="width: 100%; margin-top: 1%;">
+                                <div id="partial">
+                                    @Html.Partial("PartialViewRDL", Model)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+<script>
+    function Sospensioni() {
+        if (confirm('Impossibile inserire sospensioni! Il Rapporto di Lavoro è cessato.')) {
+            //this.submit();
+        }
+        return false;
+    };
+    function Modifica() {
+        if (confirm('Impossibile Modificare! Il Rapporto di Lavoro è cessato.')) {
+            //this.submit();
+        }
+        return false;
+    };
+
+    function HttpCallFilterPagination(pageNumber, orderBy, orderType) {
+        event.preventDefault();
+        var checkedValue = $("[name='Filtro']:checked").val();
+        var filterText = $('#filterText').val();
+        var pageSize = $('#pageSize').val();
+        $.ajax({
+            type: "GET"
+            , url: "RapportiLavoroPartialFiltered?filter=" + filterText + "&tipoRdl=" + checkedValue + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize + "&orderBy=" + orderBy + "&orderDesc=" + orderType
+            , success: function (result) {
+                $("#partial").html(result);
+            }
+        });
+    }
+
+    function filter() {
+        HttpCallFilterPagination(1);
+    };
+
+    function MovePageNumber(pageNumber) {
+        if (pageNumber == actualPageNumber)
+            return;
+        HttpCallFilterPagination(pageNumber);
+    }
+    function PreviousPage(pageNumber, nPrev, orderBy, orderDesc) {
+        if (pageNumber == 1)
+            return;
+        if (pageNumber - nPrev < 1) {
+            HttpCallFilterPagination(1, orderBy, orderDesc);
+            return;
+        }
+        HttpCallFilterPagination(+pageNumber - nPrev, orderBy, orderDesc);
+    }
+
+    function NextPage(pageNumber, totalPage, nNext, orderBy, orderDesc) {
+        if (pageNumber == totalPage || totalPage == 0)
+            return;
+        if (+pageNumber + nNext > totalPage) {
+            HttpCallFilterPagination(totalPage, orderBy, orderDesc);
+            return;
+        }
+        HttpCallFilterPagination(+pageNumber + nNext, orderBy, orderDesc);
+    }
+
+    $("[name='Filtro']").change(function () {
+        HttpCallFilterPagination(1)
+    });
+
+    function OrderBy(orderBy, orderType) {
+        HttpCallFilterPagination(1, orderBy, orderType)
+    }
+</script>
+<script>
+    //$(document).ready(function () {
+    //    $("#dtRDL").DataTable({ "paging": true, "ordering": false, "lengthChange": false, "responsive": false, "autoWidth": false, "info": false, "searching": false });
+    //});
+
+
+</script>
+
+<script>
+    //$(document).ready(function () {
+    //    $('#dtRDL').after('<ul id="nav" class="pagination"></ul>');
+    //    var rowsShown = 5;
+    //    var rowsTotal = $('#dtRDL tbody tr').length;
+    //    var numPages = rowsTotal / rowsShown;
+
+    //    for (i = 1; i < numPages; i++) {
+    //        var pageNum = i + 1;
+    //        $('#nav').append('<li class="page-item"><a class="page-link" href="#" rel="' + i + '">' + pageNum + '</a></li>');
+    //    }
+    //    $('#dtRDL tbody tr').hide();
+    //    $('#dtRDL tbody tr').slice(0, rowsShown).show();
+    //    $('#nav a:first').addClass('active');
+    //    $('#nav a').on('click', function (e) {
+    //        $('#nav a').removeClass('active');
+    //        $(this).addClass('active');
+    //        var currPage = $(this).attr('rel');
+    //        var startItem = currPage * rowsShown;
+    //        var endItem = startItem + rowsShown;
+    //        $('#dtRDL tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+    //            css('display', 'table-row').animate({ opacity: 1 }, 300);
+    //        e.preventDefault();
+    //    });
+    //});
+</script>
+
+
+

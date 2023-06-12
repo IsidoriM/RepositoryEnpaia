@@ -1,0 +1,238 @@
+﻿
+@{
+    ViewBag.Title = "Annullamento Denunce";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    List<SelectListItem> listaMesi = ViewBag.listaMesi as List<SelectListItem>;
+    List<TFI.OCM.Amministrativo.TipiMovimento> listaTipiMovimento = ViewBag.listaTipiMovimento as List<TFI.OCM.Amministrativo.TipiMovimento>;
+
+    string codPosAutorizz = ViewBag.codPos != null ? ViewBag.codPos.ToString() : String.Empty;
+    string codPosReadonly = ViewBag.codPos != null ? "Y" : "N";
+}
+
+@model List<TFI.OCM.Amministrativo.AnnullamentoDenunceOCM>
+
+
+<div class="modal" tabindex="-1" id="confirm_modal_1">
+    <div class="modal-dialog">
+        <div class="modal-content">           
+                <div class="modal-body" style="max-height:400px; overflow:scroll;">
+                    <div class="cont_messages">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn_official" id="confirm_si">SI</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn_official" id="confirm_no" data-dismiss="modal">NO</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" id="confirm_modal_2">
+    <div class="modal-dialog">
+        <div class="modal-content">            
+            <div class="modal-body">
+                <div class="cont_messages">
+
+                </div>
+                <table style="display:none; width: 100%;">
+                    <thead></thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.ActionLink("SI", "AnnullaDenuncia_Step3", null, new { @class = "btn btn_official" })
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn_official" data-dismiss="modal">NO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card" id="annullamentoDenunce">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        Annullamento Movimenti: DIPA/Notifiche/Arretrati/Rettifiche/Sanzioni
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("AnnullamentoDenunce", "Amministrativo", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="col-4">
+                    @Html.Label("Codice Posizione")
+                    @Html.TextBox("codPos", codPosAutorizz, new { id = "codPos", @class = "form-control", required = true })
+                    <input type="hidden" id="hidden_codPosReadonly" value="@codPosReadonly" />
+                </div>
+                <div class="col-8">
+                    @Html.Label("Ragione Sociale", new { required = true })
+                    @Html.TextBox("ragSoc", "", new { id = "ragSoc", @class = "form-control", @readonly = true })
+                    <input type="hidden" value="@ViewBag.ragioneSociale" id="oldRagSoc" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-8">
+                            @Html.Label("Da Anno/Mese", new { style = "margin-right: 27px;" })
+                            @Html.TextBox("anno_da", "", new { placeholder = "Inserisci anno...", @class = "form-control", id = "anno_da", maxlength = "4" })
+                        </div>
+                        <div class="col-4">
+                            <select name="mese_da" class="form-control" id="mese_da">
+                                @foreach (SelectListItem item in listaMesi)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <input type="hidden" id="oldMese_da" value="@ViewBag.meseDa" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-8">
+                            @Html.Label("Ad Anno/Mese")
+                            @Html.TextBox("anno_a", "", new { placeholder = "Inserisci anno...", @class = "form-control", id = "anno_a", maxlength = "4" })
+                        </div>
+                        <div class="col-4">
+                            <select name="mese_a" class="form-control" id="mese_a">
+                                @foreach (SelectListItem item in listaMesi)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <input type="hidden" id="oldMese_a" value="@ViewBag.meseA" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    @Html.Label("Tipo Movimento", new { style = "margin-right: 13px;" })
+                    <select required class="form-control" name="tipMov" id="tipMov">
+                        @foreach (TFI.OCM.Amministrativo.TipiMovimento item in listaTipiMovimento)
+                        {
+                            <option value="@item.Codice">@item.Denominazione</option>
+                        }
+                    </select>
+                    <input type="hidden" value="@ViewBag.tipMov" id="oldTipMov" />
+                </div>
+                <div class="col-8">
+                    <button type="submit" class="btn_official" id="btn_cerca" style="float:right; margin-right: 70px;">Cerca</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@if (Model != null)
+{
+    <div class="card" id="annullamentoDenunce_tabella">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-6">
+                    <p>Occorrenze trovate: @ViewBag.numRecord</p>
+                    <input type="hidden" value="@ViewBag.numRecord" id="numRecord" />
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+                            @Html.Label("Seleziona tutte", new { style = "margin-right: 10px;", @for = "rb_selezionaTutte" })
+                            @Html.RadioButton("seleziona", 1, false, new { @class = "rb_seleziona" })
+                        </div>
+                        <div class="col-6">
+                            @Html.Label("Deseleziona tutte", new { style = "margin-right: 10px;", @for = "rb_deselezionaTutte" })
+                            @Html.RadioButton("seleziona", 0, false, new { @class = "rb_seleziona" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div style="height: 310px; overflow:scroll; margin-bottom:30px;">
+                <table class="table table-striped" id="tb_AnnullamentoDenunce">
+                    <thead>
+                        <tr>
+                            <th>Codice Posizione</th>
+                            <th>Ragione Sociale</th>
+                            <th>Anno</th>
+                            <th>Mese</th>
+                            <th>Tipo Movimento</th>
+                            <th>Seleziona</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TFI.OCM.Amministrativo.AnnullamentoDenunceOCM denuncia in Model)
+                        {
+                            <tr>
+                                <td>@denuncia.CodPos</td>
+                                <td>@denuncia.RagSoc</td>
+                                <td>@denuncia.AnnDen</td>
+                                <td>@denuncia.MesDen</td>
+                                <td>@denuncia.DenTipMov</td>
+                                <td hidden class="hd_codPos">@denuncia.CodPos</td>
+                                <td hidden class="hd_annDen">@denuncia.AnnDen</td>
+                                <td hidden class="hd_mese">@denuncia.Mese</td>
+                                <td hidden class="hd_proDen">@denuncia.ProDen</td>
+                                <td hidden class="hd_numMov">@denuncia.NumMov</td>
+                                <td hidden class="hd_tipMov">@denuncia.TipMov</td>
+                                <td hidden class="hd_impAbb">@denuncia.ImpAbb</td>
+                                <td hidden class="hd_impCon">@denuncia.ImpCon</td>
+                                <td hidden class="hd_numSan">@denuncia.NumSan</td>
+                                <td hidden class="hd_numSanAnn">@denuncia.NumSanAnn</td>
+                                <td hidden class="hd_impSanDet">@denuncia.ImpSanDet</td>
+                                <td hidden class="hd_impAddRec">@denuncia.ImpAddRec</td>
+                                <td hidden class="hd_impAssCon">@denuncia.ImpAssCon</td>
+                                <td hidden class="hd_impConDel">@denuncia.ImpConDel</td>
+                                <td hidden class="hd_impAddRecDel">@denuncia.ImpAddRecDel</td>
+                                <td hidden class="hd_impSanRet">@denuncia.ImpSanRet</td>
+                                <td hidden class="hd_impDis">@denuncia.ImpDis</td>
+                                <td hidden class="hd_codCauSan">@denuncia.CodCauSan</td>
+                                <td hidden class="hd_codCauMov">@denuncia.CodCauMov</td>
+                                <td hidden class="hd_ultAgg">@denuncia.UltAgg</td>
+                                <td>@Html.CheckBox("chk_annulla", false, new { @class = "chk_annulla" })</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    @Html.ActionLink("Pulisci", "AnnullamentoDenunce", null, new { @class = "btn_official" })                    
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn_official" id="btn_stampa">Stampa video</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" class="btn_official" id="btn_annullaMovimenti">Annulla movimenti selezionati</button>
+                </div>
+                <div class="col-2">
+                    @Html.ActionLink("Chiudi","Index","Amministrativo", new { @class = "btn_official" })                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+
+    @Scripts.Render("~/dist/js/pages/AnnullamentoDenunce.js")
+}
+

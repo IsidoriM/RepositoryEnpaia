@@ -1,0 +1,342 @@
+﻿@model IEnumerable<TFI.OCM.Admin>
+
+@{
+    ViewBag.Title = "Dettagli Utenti";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    var webGrid2 = new WebGrid(Session["GruppiWeb"] as List<TFI.OCM.Admin>, canPage: true, rowsPerPage: 50, canSort: false);
+    var webGrid3 = new WebGrid(Session["FunzioniWeb"] as List<TFI.OCM.Admin>, canPage: true, rowsPerPage: 50, canSort: false);
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .cancelBtn::after {
+        visibility: visible;
+        background-color: #0c773c;
+        color: white;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .applyBtn::after {
+        background-color: #0c773c;
+        color: white;
+        visibility: visible;
+        border: 1px solid black;
+        padding: 5px 10px 5px 10px;
+    }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .webgrid-footer {
+        text-align: center;
+        background-color: #0c773c;
+        color: white;
+    }
+
+    .webgrid-header {
+        font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        background-color: #0c773c;
+        color: white;
+    }
+
+        .webgrid-header a {
+            font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+            color: white;
+        }
+
+    .webgrid-table {
+        width: 100%;
+    }
+
+    .StileGruppi {
+        width: 90%;
+    }
+
+    .StileCheckBox {
+        width: 10%;
+    }
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+@using (Html.BeginForm("_Salva", "Admin", FormMethod.Post))
+{
+
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Modifica Utente</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" col-lg="6">
+                    <label>Codice Utente:</label>
+                    <div class="input-group">
+                        @try
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (item.codUtente != null)
+                                {
+                                    <input class="form-control" readonly="readonly" type="text" id="codUtente" name="codUtente" placeholder="@item.codUtente" value="@item.codUtente" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <label>Denominazione:</label>
+                    <div class="input-group">
+                        @try
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (item.nome != null)
+                                {
+                                    <input class="form-control" type="text" id="nome" name="nome" placeholder="@item.nome" value="@item.nome" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group" col-lg="6">
+                    <label>Codice Fiscale:</label>
+                    <div class="input-group">
+                        @try
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (item.codFis != null)
+                                {
+                                    <input class="form-control" type="text" id="codFis" name="codFis" placeholder="@item.codFis" value="@item.codFis" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group" col-lg="6">
+                    <label>Email Utente:</label>
+                    <div class="input-group">
+                        @try
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (item.email != null)
+                                {
+                                    <input class="form-control" type="text" id="email" name="email" placeholder="@item.email" value="@item.email" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group" col-lg="6">
+                    <label>Utente Windows:</label>
+                    <div class="input-group">
+                        @try
+                        {
+                            foreach (var item in Model)
+                            {
+                                if (item.winUt != null)
+                                {
+                                    <input class="form-control" type="text" id="winUt" name="winUt" placeholder="@item.winUt" value="@item.winUt" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                                }
+                            }
+
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-right: 20px">
+                    <label>Tipologia Utente:</label>
+                    <select asp-for="DropLogin" required="required" class="form-control" id="tipologiaUtente" name="tipologiaUtente" style="border-color:#0c773c;background:white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <option selected>Selezionare un tipo utente</option>
+                        <option name="N" value="N">Normale</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-block btn-outline-success">Salva</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 col-sm-12">
+            <div class="card card-primary card-tabs">
+                <div class="card-header p-0 pt-1" style="background-color: #0c773c;">
+                    <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                        <li class="col-6 col-sm-6">
+                            <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Gruppi Funzioni Web</a>
+                        </li>
+                        <li class="col-6 col-sm-6">
+                            <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Funzioni Web</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="custom-tabs-one-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table table-hover table-striped ">
+
+                                        @webGrid2.GetHtml(
+                                         htmlAttributes: new { @id = "WebGrid2" },
+                                         tableStyle: "webgrid-table",
+                                         headerStyle: "webgrid-header",
+                                         footerStyle: "webgrid-footer",
+                                         alternatingRowStyle: "webgrid-alternating-row",
+                                         selectedRowStyle: "webgrid-selected-row",
+                                         rowStyle: "webgrid-row-style",
+
+                                         columns: webGrid2.Columns(
+                                         webGrid2.Column(header: "Selezione", style: "StileCheckBox", format: @<text><input class="searchType" name="Gruppi" id="@item.idCheckbox"
+                                                                                                                            type="checkbox" @(item.checkGruppo ? "checked='checked'" : "") value="@item.denGrusis" /></text>),
+webGrid2.Column("denGrusis", "Nome Gruppo", style: "StileGruppi")))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                            <div class="table table-hover table-striped ">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        @webGrid3.GetHtml(
+                                         htmlAttributes: new { @id = "WebGrid3" },
+
+                                         tableStyle: "webgrid-table",
+                                         headerStyle: "webgrid-header",
+                                         footerStyle: "webgrid-footer",
+                                         alternatingRowStyle: "webgrid-alternating-row",
+                                         selectedRowStyle: "webgrid-selected-row",
+                                         rowStyle: "webgrid-row-style",
+
+                                         columns: webGrid3.Columns(
+                                         webGrid3.Column(header: "Selezione", style: "StileCheckBox", format: @<text><input class="funzioni" name="Funzioni" id="@item.idCheckbox"
+                                                                                                                            type="checkbox" @(item.checkFunzione ? "checked='checked'" : "") value="@item.denFunsis" /></text>),
+webGrid3.Column("denFunsis", "Nome Gruppo", style: "StileGruppi")))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+<script>
+
+    $('.searchType').on("click",function () {
+        var valore = $(this).attr('id');
+        if (this.checked) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CatturaCheck", "Admin")',
+                data: { 'id': valore },
+                beforeSend: function () {
+                    // Show image container
+                    $('.pannelloOpaco').fadeIn()
+                    //
+                },
+                success: function (data) {
+                    for (var i in data) {
+                        $(".funzioni[id=" + data[i].codFun + "]").prop('checked', true);
+                    }
+                    $('#container').html(data);
+                },
+                error: function () {
+                    alert('Errore');
+                },
+                complete: function () {
+
+                    // Hide image container
+                    $('.pannelloOpaco').fadeOut();
+                    //
+                }
+            });
+        }
+        if (this.checked == false) {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("CatturaCheck", "Admin")',
+                 data: { 'id': valore },
+                 beforeSend: function () {
+                     // Show image container
+                     $('.pannelloOpaco').fadeIn()
+                     //
+                 },
+                success: function (data) {
+                    for (var i in data) {
+                        $(".funzioni[id=" + data[i].codFun + "]").prop('checked', false);
+                    }
+                    $('#container').html(data);
+                },
+                error: function () {
+                    alert('Errore');
+                },
+                complete: function () {
+
+                    // Hide image container
+                    $('.pannelloOpaco').fadeOut();
+                    //
+                }
+            });
+        }
+    });
+
+</script>
+
+

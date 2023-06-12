@@ -1,0 +1,544 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #0c773c">
+    <!-- Brand Logo -->
+
+    <center style="background:whitesmoke"> <img style="max-width:100%;height:auto" src="~/Images/Logo-Fondazione-Enpaia.png" alt="Enpaia"></center>
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/Images/user.png" class="img-circle elevation-2" alt="Admin Image" />
+            </div>
+            <div class="info">
+                <a href="#" name="Utente" title="@ViewBag.NomeUtente" class="d-block">@Session["NomeUtente"]</a>
+            </div>
+        </div>
+        @{TFI.OCM.Utente.Utente utente = Session["utente"] as TFI.OCM.Utente.Utente;}
+
+        @if (utente.Tipo == "E" && !String.IsNullOrEmpty(utente.CodPosizione))
+        {
+            <text>
+                <div class="row" id="cont_associamento">
+                    <div class="col-12">
+                        <label id="lblAssociamento">STAI LAVORANDO L'AZIENDA:</label>
+                    </div>
+                    <div class="row col-12">
+                        <div class="col-11">
+                            <label id="lblAzienda">@utente.CodPosizione - @utente.NomeAzienda</label>
+                        </div>
+                        <div class="col-1">
+                            <a id="linkDissociaAzienda" href='@Url.Action("DissociaAzienda", "UtenteEnpaia")' title="dissocia azienda">
+                                <i class="far fa-times-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </text>
+        }
+
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                <!--<li class="nav-item">
+                <a href='#' class="nav-link">
+                    <i class="nav-icon fas fa-id-card"></i>
+                    <p>Iscritto<i class="fas fa-angle-left right"></i></p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href= '#-->
+                @*@Url.Action("ListaIscritti", "Amministrativo", new { src="ana"})*@
+                <!--' class="nav-link primary">
+                                <i class="nav-icon fas fa-id-card"></i><p>Anagrafica</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>-->
+                <!-- MENU CORRETTO -->
+                <li class="nav-item">
+                    <a href='@Url.Action("SearchDelega", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-id-badge"></i><p>Gestione Deleghe</p>
+                    </a>
+                </li>
+                <li class="nav-item parentElement">
+                    <a href='#' class="nav-link">
+                        <i class="nav-icon fas fa-id-card"></i>
+                        <p>Azienda<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href='@Url.Action("RicRappLeg", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fa-id-badge"></i><p>Richieste Rappresentanti legali</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href='@Url.Action("GestioneAziendeWeb", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fa-clipboard-list"></i><p>Gestione Azienda</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @if (utente.Tipo == "E")
+                {
+                    <li class="nav-item parentElement">
+                        <a href='#' class="nav-link">
+                            <i class="nav-icon fas fa-file-contract"></i>
+                            <p>Denunce<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="@Url.Action("DenunciaMensile_Index","AziendaConsulente")" class="nav-link primary">
+                                    <i class="fas fa-clipboard-list nav-icon"></i>
+                                    <p>Denunce Mensili</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("RicercaArretrati","AziendaConsulente")" class="nav-link primary">
+                                    <i class="fas fa-search nav-icon"></i>
+                                    <p>Denunce Arretrati</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("UploadArretrati","AziendaConsulente")" class="nav-link primary">
+                                    <i class="fas fa-upload nav-icon"></i>
+                                    <p>Upload Arretrati</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                <li class="nav-item parentElement">
+                    <a href='#' class="nav-link">
+                        <i class="nav-icon fas fa-id-card"></i>
+                        <p>Gestione RDL<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href='@Url.Action("GestioneRapportiLavoroIscritti", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fa-clipboard-list"></i><p>RDL/Iscritti </p>
+                            </a>
+                        </li>
+                        @*<li class="nav-item">
+                            <a href='#' class="nav-link primary">
+                                <i class="nav-icon fas fa-file-excel"></i><p>Cessazioni</p>
+                            </a>
+                        </li>*@
+                        <li class="nav-item">
+                            <a href='@Url.Action("ListaIscrittiX_Trasferimenti", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fa-id-badge"></i><p>Trasferimento RDL</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href='@Url.Action("RicercaTrasferimentiRDL", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fas fa-search"></i><p>Annulla Trasf. RDL</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item parentElement">
+                    <a href='#' class="nav-link">
+                        <i class="nav-icon fas fa-file-excel"></i>
+                        <p>Annullamenti<i class="fas fa-angle-left right"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href='@Url.Action("AnnullamentoDenunce", "Amministrativo")' class="nav-link primary">
+                                <i class="nav-icon fas fa-folder-minus"></i><p>Annullam. Denunce</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("CaricaDatiModelloPrev", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-money-check-alt"></i><p>Modello Prev</p>
+                    </a>
+                </li>
+                @*<li class="nav-item">
+                        <a href='#' class="nav-link primary">
+                            <i class="nav-icon fas fa-id-badge"></i><p>Annullamenti</p>
+                        </a>
+                    </li>*@
+                <li class="nav-item">
+                    <a href='@Url.Action("GeneraNotifiche","Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-calculator"></i><p>Notifiche Ufficio</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("RettifichePA_AC", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-pen"></i><p>Rettifiche PA/AC</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("Rettifiche", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-edit"></i><p>Rettifiche</p>
+                    </a>
+                </li>
+                @*<li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-chart-line"></i><p>Contabilità Aziendale</p>
+                    </a>
+                </li>*@
+                <li class="nav-item">
+                    <a href='@Url.Action("RicercaDiffide", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fas fa-search"></i><p>Ricerca Diffide</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='@Url.Action("ContrattiRicerca", "Amministrativo")' class="nav-link primary">
+                        <i class="nav-icon fas fa-clipboard-list"></i><p>Gestione Contratti </p>
+                    </a>
+                </li>
+                @*<li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-user"></i><p>Gestione Anag. Iscritto</p>
+                    </a>
+                </li>*@
+                <li class="nav-item parentElement">
+                    <a title="ESTRATTI CONTO TFR/FP" href="#" class="nav-link">
+                        <i class="nav-icon fas fa-credit-card"></i>
+                        <p>
+                            Liquidazione TFR/FP
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="@Url.Action("EstrattoContoAzienda", "Amministrativo")" class="nav-link">
+                                <i class="fas fa-city nav-icon"></i>
+                                <p>EC Azienda</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("EstrattoContoIscritto", "Amministrativo")" class="nav-link">
+                                <i class="fas fa-user-edit nav-icon"></i>
+                                <p>EC Iscritto</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-id-badge"></i><p>Generazione CU</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-id-badge"></i><p>Generazione EC</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class=" nav-icon fas fa-ambulance"></i> <p>Gestione Infortuni</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-euro-sign"></i><p>Gestione Prestiti per Liquidazione</p>
+                    </a>
+                </li>
+                <li class="nav-item parentElement">
+                    <a href='#' class="nav-link primary">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>
+                            Configurazioni
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href='@Url.Action("ScadenzaDipa", "Amministrativo")' class="nav-link">
+                                <i class="fas fa-calendar-week"></i>
+                                <p>Scadenza Dipa</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @*<li class="nav-item">
+
+                        <a href='#' class="nav-link primary">
+
+                            <i class="nav-icon fas fa-key"></i>
+                            <p>Modifica password</p>
+                        </a>
+
+                    </li>*@
+                @*@if (Session["TipoUtenza"].ToString() == "E")
+                    {
+                        <li class="nav-item">
+                            <a href='@Url.Action("Index", "UtenteEnpaia")' class="nav-link primary">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>Seleziona azienda</p>
+                            </a>
+                        </li>
+                    }*@
+                <li class="nav-item">
+                    <a href='@Url.Action("LogOut", "Login")' class="nav-link primary" id="logoutLink">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+                <!-- /MENU CORRETTO -->
+                @*<li class="nav-item">
+                        <a href='#' class="nav-link primary">
+                            <i class="nav-icon fas fa-wallet"></i><p>Riscossioni</p>
+                        </a>
+                    </li>*@
+
+                @*<li class="nav-item">
+                        <a href="#" id="btnMostraTFR2" class="nav-link">
+                            <i class="fas fa-file-contract nav-icon"></i>
+                            <p>TFR<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href='#'
+                                   href="@Url.Action("Scadenzario", "Amministrativo")"
+                                   class="nav-link">
+                                    <i class="nav-icon fas fa-calendar-times"></i>
+                                    <p>Scadenzario</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-search-plus"></i>
+                                    <p>
+                                        Ricerche
+                                        <i class="fas fa-angle-left right"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-id-card-alt nav-icon"></i>
+                                            <p>Certificazioni Uniche</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="fas fa-money-check-alt nav-icon"></i>
+                                            <p>Prospetti pagamento</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <i class="nav-icon fas fa-credit-card"></i>
+                                            <p>Estratti conto</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-paste nav-icon"></i>
+                                    <p>Lista liquidazioni TFR</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                                    <p>Lista di pagamento</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-clipboard-list nav-icon"></i>
+                                    <p>Elenco di pagamento</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    <i class="fas fa-money-check-alt nav-icon"></i>
+                                    <p>Var.ni inquadramento</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="fas fa-money-check-alt nav-icon"></i>
+                                    <p>Prescritti</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a title="Liquidazione VIRTUALE (senza requisiti)" href="" class="nav-link">
+                                    <i class="fas fa-coins nav-icon"></i>
+                                    <p>Simulazione</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link">
+                                    <i class="fas fa-chart-bar nav-icon"></i>
+                                    <p>Retrodatazione TFR</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "Home")" id="btnMostraTFR" class="nav-link">
+                                    <i class="fas fa-chart-pie nav-icon"></i>
+                                    <p>Statistiche</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>*@
+                <!--<li class="nav-item">
+                <a href="#" id="btnMostraFondo2" class="nav-link">
+                    <i class="fas fa-coins nav-icon"></i>
+                    <p>
+                        Fondo di previdenza
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#"-->
+                @*href='@Url.Action("ScadenzarioFondo", "Amministrativo")'*@
+                <!--class="nav-link primary">
+                                <i class="nav-icon fas fa-calendar-times"></i>
+                                <p>
+                                    Scadenzario
+                                </p>
+                            </a>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-search-plus"></i>
+                                <p>
+                                    Ricerche
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="fas fa-id-card-alt nav-icon"></i>
+                                        <p>Certificazioni Uniche</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="fas fa-money-check-alt nav-icon"></i>
+                                        <p>Prospetti pagamento</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="nav-icon fas fa-credit-card"></i>
+                                        <p>Estratti conto</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="nav-icon fas fa-book"></i>
+                                        <p>Storico elenchi di pagamento</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-paste"></i>
+                                <p>Lista liquidazioni</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                                <p>Lista di pagamento</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-clipboard-list"></i>
+                                <p>Elenco di pagamento</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-edit"></i>
+                                <p>Prescritti</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-comment-slash"></i>
+                                <p>Silenti</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-coins"></i>
+                                <p>Simulazione</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Home")" id="btnMostraFondo" class="nav-link">
+                                <i class="fas fa-chart-pie nav-icon"></i>
+                                <p>Statistiche</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>-->
+                <!--<li class="nav-item">
+                <a href="#" id="btnMostraInfortuni2" class="nav-link">
+                    <i class="nav-icon fas fa-ambulance"></i>
+                    <p>Infortuni</p>
+                    <i class="fas fa-angle-left right"></i>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#"-->
+                @*href="@Url.Action("Scadenzario_Infortuni", "Amministrativo")"*@
+                <!--class="nav-link">
+                                <i class="nav-icon fas fa-calendar-times"></i>
+                                <p>Scadenzario</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-paste nav-icon"></i>
+                                <p>Lista liquidazioni</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                                <p>Lista di pagamento</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-clipboard-list nav-icon"></i>
+                                <p>Elenco di pagamento</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-chart-bar nav-icon"></i>
+                                <p>Report Statistici</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">
+                                <i class="fas fa-cogs nav-icon"></i>
+                                <p>Parametri</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "Home")" id="btnMostraInfortuni" class="nav-link">
+                                <i class="fas fa-chart-pie nav-icon"></i>
+                                <p>Statistiche</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>-->
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+

@@ -1,0 +1,236 @@
+﻿@model TFI.OCM.Amministrativo.DelegheOCM
+@{
+    ViewBag.Title = "SearchDelega";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<style>
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table thead th {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 10px;
+    }
+
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Aziende</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("SearchDelega", "Amministrativo", FormMethod.Post))
+        {
+            <div class="input-group">
+                <div class=col-lg-4>
+                    <label>Posizione Azienda:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="PosAz" name="PosAz" asp-for="PosAz" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Partita IVA:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="Partitaiva" name="Partitaiva" asp-for="Partitaiva" placeholder="" autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Tipo Associazione/studio:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="tipass" name="tipass" asp-for="tipass" placeholder=" " autocomplete="off" autofocus style="width: 300px; margin-right: 20px;">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-2 offset-lg-4">
+                        <label>&nbsp;</label>
+                        <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@if (Model != null)
+{
+    if (Model.delegheatt.Count > 0 || Model.deleghecanc.Count > 0)
+    {
+
+        <div class="card">
+            <div class="card-body" style="height:300px; overflow:scroll;">
+                <div class="form-group justify-content-end">
+                    <div class="input-group justify-content-end">
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="Filtro" id="Tutti" checked>
+                            <label class="form-check-label" for="Tutti" id="Tutti">
+                                Tutte
+                            </label>
+                        </div>
+                        &emsp;
+
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="Filtro" id="Attivo">
+                            <label class="form-check-label" for="Attivo" id="Attivo">
+                                Attive
+                            </label>
+                        </div>
+                        &emsp;
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="Filtro" id="Cessato">
+                            <label class="form-check-label" for="Cessato" id="Cessato">
+                                Cancellate
+                            </label>
+                        </div>
+                        &emsp;
+                        <div class="icheck-success d-inline">
+                            <input type="radio" name="Filtro" id="Nonatt">
+                            <label class="form-check-label" for="Nonatt" id="Nonatt">
+                                Da Attivare
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table id="tb_Del" class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr class="header" style="background:#0c773c;color:white">
+                                <th>Ragione Sociale</th>
+                                <th>Ass. Nazionale</th>
+                                <th>Ass. Territoriale</th>
+                                <th>Data Inizio</th>
+                                <th>Data Fine</th>
+                                <th>Stato</th>
+                                <th>Dettaglio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var i in Model.delegheatt)
+                            {
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td>@i.ragsoc</td>
+                                    <td>@i.assnaz</td>
+                                    <td>@i.asster</td>
+                                    <td>@i.datini.Substring(0, 10)</td>
+                                    <td></td>
+                                    <td>@i.attivo</td>
+                                    <td><a href="@Url.Action("DettaglioDeleghe","Amministrativo", new { datini = i.datini.Substring(0,10), asster = i.asster, codter = i.codter, assnaz = i.assnaz.Trim(), codnaz = i.codnaz, stato = i.stato, codpos = i.codpos, ragsoc = i.ragsoc })"><i class="far fa-edit fa-lg"></i></a></td>
+                                </tr>
+                            }
+                            @foreach (var i in Model.deleghecanc)
+                            {
+                                <tr style="vertical-align:middle;text-align:center">
+                                    <td>@i.ragsoc</td>
+                                    <td>@i.assnaz</td>
+                                    <td>@i.asster</td>
+                                    <td>@i.datini.Substring(0, 10)</td>
+                                    <td>@i.datfin</td>
+                                    <td>@i.cancellato</td>
+                                    <td><a onclick="Delega()"><i class="far fa-edit fa-lg"></i></a></td>
+                                </tr>
+                            }
+                            @if (Model.deleghenonatt.Count > 0)
+                            {
+                                foreach (var i in Model.deleghenonatt)
+                                {
+                                    <tr style="vertical-align:middle;text-align:center">
+                                        <td>@i.ragsoc</td>
+                                        <td>@i.assnaz</td>
+                                        <td>@i.asster</td>
+                                        <td>@i.datini.Substring(0, 10)</td>
+                                        <td></td>
+                                        <td>@i.daAttivare</td>
+                                        <td><a onclick="Delega1()"><i class="far fa-edit fa-lg"></i></a></td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+<script>
+    $(document).change(function () {
+        if (document.getElementById('Tutti').checked == true) {
+            $('tr').show();
+        }
+
+        else if (document.getElementById('Attivo').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Attiva"))').hide();
+        }
+
+        else if (document.getElementById('Cessato').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Cancellata"))').hide();
+        }
+
+        else if (document.getElementById('Nonatt').checked == true) {
+            $('tr').show();
+            $('tr:not(:has(th)):not(:contains("Non Confermate"))').hide();
+        }
+
+    });
+
+</script>
+
+
+
+

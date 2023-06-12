@@ -1,0 +1,325 @@
+﻿
+@model TFI.OCM.AziendaConsulente.RapportiLavoro
+@{
+    var sosp = Model.sosp;
+}
+
+@{
+    ViewBag.Title = "Sospensioni";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+    .btn:hover {
+        background-color: #0c773c
+    }
+    .modal-header {
+        background-color: #0c773c;
+    }
+
+    .modal-title {
+        text-align: center;
+        width: 100%;
+        color: white
+    }
+
+    
+</style>
+
+<div id="elencoSospensioni" class="content">
+    <div class="card">
+        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+            Elenco sospensioni
+        </div>
+        <div class="card-body">
+            @if (Model != null)
+            {
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label> Matricola</label>
+                            <input type="text" id="matricola" class="form-control" value="@sosp.matricola" disabled>
+                            <input type="text" id="prorap" class="form-control" value="@sosp.prorap" hidden>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label> Cognome e nome</label>
+                            <input type="text" id="nominativo" class="form-control" value="@sosp.nominativo" disabled>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-12" style="height:300px; overflow:scroll;">
+                        <table id="dtRDL" class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr class="header">
+                                    <th> Dal</th>
+                                    <th> Al</th>
+                                    <th> Sospensione</th>
+                                    <th> Modifica</th>
+                                    <th> Elimina</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var itm in Model.sospensioni)
+                                {
+
+                                    using (Html.BeginForm("EliminaSospensioni", "AziendaConsulente", new { dataDa = @itm.dataDa, dataAl = @itm.dataAl, motsosp = @itm.sospensione, prosos = @itm.prosos, matricola = sosp.matricola, prorap = sosp.prorap, nominativo = sosp.nominativo }, FormMethod.Post, new { id = itm.prosos + itm.codsos + "Form" }))
+                                    {
+
+                                        <tr>
+                                            <td id="dt1"> @itm.dataDa</td>
+                                            <td id="dt2"> @itm.dataAl</td>
+                                            <td id="txt1"> @itm.sospensione</td>
+                                            <td hidden> @itm.prosos</td>
+                                            <td hidden> @itm.codsos</td>
+                                            <td> <a class="far fa-edit fa-lg" data-toggle="modal" data-target="#modal-mod" id="openmodal"></a></td>
+                                            <td> <button type="submit" onclick="confirmDelete(this)" class="far fa-trash-alt fa-lg" style="border:none" id="@(itm.prosos+itm.codsos)"></button>  </td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            <!-- /.card-body -->
+            <div class="row">
+                <div class="col-sm-3"> <button type="button" onclick="window.location.href='@Url.Action("RapportiLavoro","AziendaConsulente")'" class="btn btn-outline-success hover btn-lg">Indietro</button> </div>
+                <div class="col-sm-3 ml-auto text-right">
+                    <input type="button" id="btnnuovasosp" class="btn btn-outline-success hover btn-lg" value="Nuova Sospensione" data-toggle="modal" data-target="#modal-default">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal modifica*@
+@using (Html.BeginForm("SalvaSospensioni", "AziendaConsulente", new { matricola = sosp.matricola, prorap = sosp.prorap, nominativo = sosp.nominativo,prosos=sosp.prosos }, FormMethod.Post, new { id = "ModificasospForm" }))
+{
+    <div class="modal fade show" id="modal-mod" style="display:none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" >
+                <div class="modal-header" >
+                    <h4 class="modal-title">Modifica Sospensione</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Data Inizio:</label>
+                            <input type="date" value="" id="dataDa" name="dataDa" asp-for="dataDa" style="display: inline" class="form-control" placeholder="" required>&emsp;
+                        </div>
+                        <input type="text" value="" id="prosos" name="prosos" asp-for="prosos" hidden>
+                        <div class="col-sm-6">
+                            <label>Data Fine:</label>
+                            <input type="date" value="" id="dataAl" name="dataAl" asp-for="dataAl" style="display: inline " class="form-control" placeholder="" required>&emsp;
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Sospensione:</label>
+                                <select class="form-control" id="motsosp" name="motsosp" asp-for="motsosp" required>
+                                    <option selected id="codsos" name="codsos" asp-for="codsos"></option>
+                                    @foreach (var i in Model.listSosps)
+                                    {
+                                        <option value="@i.codsos">@i.densos</option>
+                                        @*<option hidden>@i.codsos</option>*@
+                                    }
+                                </select>
+                            </div>
+                            <div id="error-message-modifica" style="display:none">
+                                <label id="error-modifica" style="color:red"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                    <input type="submit" onclick="checkIntersezioneSospensione(this)" value="Modifica" id="Modificasosp" name="Modificasosp" asp-for="Modificasosp" class="btn  btn-outline-success hover">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*modale nuova*@
+@using (Html.BeginForm("SalvaSospensioni", "AziendaConsulente", new { matricola = sosp.matricola, prorap = sosp.prorap, nominativo = sosp.nominativo }, FormMethod.Post, new { id = "NuovasospForm" }))
+{
+    <div class="modal fade show" id="modal-default" style="display:none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" >
+                <div class="modal-header" >
+                        <h4 class="modal-title" >Nuova Sospensione</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Data Inizio:</label>
+                            <input type="date" value="" id="dataDaNuovo" name="dataDa" asp-for="dataDa" style="display: inline" class="form-control" placeholder="" required>&emsp;
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Data Fine:</label>
+                            <input type="date" value="" id="dataAlNuovo" name="dataAl" asp-for="dataAl" style="display: inline " class="form-control" placeholder="" required>&emsp;
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Sospensione:</label>
+                                <select class="form-control" id="motsospNuovo" name="motsosp" asp-for="motsosp" required>
+                                    <option selected id="densos" name="densos" asp-for="densos"></option>
+                                    @foreach (var i in Model.listSosps)
+                                    {
+                                        <option value="@i.codsos">@i.densos</option>
+                                        @*<option hidden>@i.codsos</option>*@
+                                    }
+                                </select>
+                            </div>
+                            <div id="error-message" style="display:none">
+                                <label id="error" style="color:red"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                    <input type="button" onclick="checkIntersezioneSospensione(this)" value="Salva" id="Nuovasosp" name="Nuovasosp" asp-for="Nuovasosp" class="btn  btn-outline-success hover">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+
+    $('.modal-content input, .modal-content select').change(function() {
+        $("#error").empty();
+        $("#error-message").hide();
+        $("#error-modifica").empty();
+        $("#error-message-modifica").hide();
+    });
+
+    $("#modal-default").on("hidden.bs.modal", function () {
+        $("#error").empty();
+        $("#error-message").hide();
+        $("#error-modifica").empty();
+        $("#error-message-modifica").hide();
+        $("#dataDaNuovo").val('');
+        $("#dataAlNuovo").val('');
+        $("#motsospNuovo").val('');
+    });
+    $("#modal-mod").on("hidden.bs.modal", function () {
+        $("#error").empty();
+        $("#error-message").hide();
+        $("#error-modifica").empty();
+        $("#error-message-modifica").hide();
+        $("#dataDaNuovo").val('');
+        $("#dataAlNuovo").val('');
+        $("#motsospNuovo").val('');
+    });
+
+    function confirmDelete(button) {
+        event.preventDefault();
+        var idForm = button.id + 'Form';
+        var hasConfirmed = confirm('sicuro di volere eliminare questa sospensione?');
+        if (hasConfirmed)
+            $('#'+idForm).submit();
+    };
+
+    $("tr td #openmodal").on('click', function () {
+        var dataDa = $(this).closest('tr').children()[0].textContent;
+        var dataAl = $(this).closest('tr').children()[1].textContent;
+        var descrizione = $(this).closest('tr').children()[2].textContent;
+        var prosos = $(this).closest('tr').children()[3].textContent;
+        var codsos = $(this).closest('tr').children()[4].textContent;
+        $("#error").empty();
+        $("#error-message").hide();
+        $("#error-modifica").empty();
+        $("#error-message-modifica").hide();
+        var d = dataDa.trim().split("/").reverse().join("-");
+        var a = dataAl.trim().split("/").reverse().join("-");
+        $("#dataDa").val(d);
+        $("#dataAl").val(a);
+        $("#prosos").val(prosos);
+        var sospensione = '<option value="' + codsos.trim() + '" selected>' + descrizione + '</option>';
+        $("#motsosp").append(sospensione);
+    });
+
+    function checkIntersezioneSospensione(form) {
+        event.preventDefault();
+        var prorap = $('#prorap').val();
+        var matricola = $('#matricola').val();
+        var prosos = $('#prosos').val();
+        var nominativo = $('#nominativo').val();
+        if (form.id == "Nuovasosp") {
+            var dataDa = $("#dataDaNuovo").val();
+            var dataAl = $("#dataAlNuovo").val();
+            var motsosp = $("#motsospNuovo").val();
+        }
+        if (form.id == "Modificasosp") {
+            var dataDa = $("#dataDa").val();
+            var dataAl = $("#dataAl").val();
+            var motsosp = $("#motsosp").val();
+        }
+        if (dataDa == "" || dataAl == "" || motsosp == "") {
+            alert("Compila correttamente i campi");
+            return;
+        }
+        if (new Date(dataDa) > new Date(dataAl) || new Date(dataDa) > new Date()) {
+            alert("Data inizio non può essere maggiore della data di fine o maggiore della data di oggi");
+            return;
+        }
+        $.ajax({
+            type: "GET"
+            , url: "CheckUnioneSospensioniIntersecanti?dataDa=" + dataDa + "&dataAl=" + dataAl + "&prorap=" + prorap + "&matricola=" + matricola + "&motsosp=" + motsosp + "&prosos=" + prosos + "&nominativo=" + nominativo
+            , success: function (result) {
+                if (result == "True") {
+                    if (confirm("Unire la sospensione?"))
+                        $("#" + form.id + "Form").submit();
+                } else {
+                    // $("#" + form.id + "Form").submit();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'JSON',
+                        url: '@Url.Action("SalvaSospensioniAjax", "AziendaConsulente")',
+                        data: { dataDa: dataDa, dataAl: dataAl, matricola: matricola, prorap: prorap, prosos: prosos, motsosp: motsosp, nominativo: nominativo },
+                        success:
+                            function (response) {
+                                if (response.isError == true) {
+                                    $("#error").text(response.messaggio);
+                                    $("#error-message").show();
+                                    $("#error-modifica").text(response.messaggio);
+                                    $("#error-message-modifica").show();
+                                }
+                                else {
+                                    var uri = '@Url.Action("Sospensioni", "AziendaConsulente", new { matricola = "__matricola", nome = "__nome", cognome = "__cognome", prorap = "__prorap" })'
+                                    window.location.href = uri.replace("__matricola", matricola).replace("__prorap", prorap).replace("__cognome", response.cognome).replace("__nome", response.nome).replace(/&amp;/g, '&');
+                                }
+                            },
+
+                    });
+                }
+            }
+        });
+    }
+
+</script>

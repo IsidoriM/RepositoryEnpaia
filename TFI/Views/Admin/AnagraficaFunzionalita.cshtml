@@ -1,0 +1,253 @@
+﻿@model IEnumerable<TFI.OCM.Admin>
+@{
+    ViewBag.Title = "AnagraficaFunzionalita";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table thead th {
+        background: #0c773c;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+@using (Html.BeginForm("AnagraficaFunzionalita", "Admin", FormMethod.Get))
+{
+
+    <div class="card" style="background-color:white" id="tabRicerca">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Anagrafica Funzionalità</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="input-group">
+                <div class="form-group" col-lg="6">
+                    <label>Ricerca Nome Funzionalità:</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="selezioneNomeFunz" name="selezioneNomeFunz" placeholder="NOME FUNZIONALITA'" autocomplete="off" autofocus style="width: 600px; margin-right: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" col-lg="6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-block btn-outline-success" style="width:100px">Cerca</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="background-color:white" id="btnNuovo">
+        <div style="margin:auto">
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="button" onclick="nuovoGruppo()" class="btn btn-block btn-outline-success" style="width:500px">Nuova Funzionalità</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function nuovoGruppo() {
+
+            document.getElementById("tabRicerca").style.display = "none";
+            document.getElementById("btnNuovo").style.display = "none";
+            document.getElementById("tabNuovoGruppo").style.display = "inline";
+            document.getElementById("tabUtenti").style.display = "none";
+
+
+        }
+    </script>
+}
+@if (Model != null)
+{
+
+    <section class="content" id="btnNuovo">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" id="tabUtenti">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Numero Funzionalità</th>
+                                        <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle">Nome Funzionalità</th>
+                                        <th style="background:#0c773c;color:white;width:25%;text-align:center;vertical-align:middle"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btnNuovo">
+
+
+
+                                    @foreach (var GetTabella in Model)
+                                    {
+                                        using (Html.BeginForm("AnagraficaFunzionalita", "Admin", FormMethod.Get))
+                                        {
+                                            <tr>
+                                                <td style="text-align:center">
+                                                    @Html.Label(GetTabella.codFun)
+                                                </td>
+                                                <td style="text-align:center">
+
+                                                    @Html.Label(@GetTabella.denFun, new { style = "class=label", @id = "oldFun" })
+                                                    @Html.Hidden("oldFun", @GetTabella.denFun)
+                                                    @Html.TextBox("newFun", String.Empty, new { style = "display:none; text-align: center; class=text; type=text; width: 100%;", @placeholder = @GetTabella.denFun, @id = "newFun" })
+
+                                                </td>
+                                                <td style="text-align:center">
+
+                                                    <button class="Edit btn btn-outline-success" type="button" style="width: 30%; ">Modifica</button>
+
+                                                    <button type="submit" id="btnConf" class="Conferma btn  btn-outline-success" style="display: none; width: 30%; float: left; margin-left: 15%;">Conferma</button>
+
+                                                    <button class="Cancel btn btn-outline-success" type="button" style="display: none; width: 30%;">Annulla</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script type="text/javascript">
+
+        //Bottone Modifica
+
+        $(".Edit").click(function () {
+            var btnConferma = $(this).next();
+            var btnAnulla = $(this).next().next();
+            btnConferma.css("display", "inline");
+            btnAnulla.css("display", "inline");
+            $(this).css("display", "none");
+
+            var currentTD = $(this).parent();
+            var precTD = currentTD.prev();
+            var label = precTD.children("#oldFun");
+            var textbox = precTD.children("#newFun");
+            label.css("display", "none");
+            textbox.css("display", "inline");
+
+        });
+
+        //Bottone Annulla
+
+        $(".Cancel").click(function () {
+
+            var btnConferma = $(this).prev();
+            var btnModifica = $(this).prev().prev();
+            btnConferma.css("display", "none");
+            btnModifica.css("display", "inline");
+            $(this).css("display", "none");
+
+            var currentTD = $(this).parent();
+            var precTD = currentTD.prev();
+            var label = precTD.children("#oldFun");
+            var textbox = precTD.children("#newFun");
+            label.css("display", "inline");
+            textbox.css("display", "none");
+        });
+
+        $(".Conferma").click(function () {
+
+            if (confirm('Confermare?')) {
+                this.submit();
+            }
+            return false;
+        });
+
+        $(document).ready(function () {
+            $('#tabUtenti').after('<div id="nav"></div>');
+            var rowsShown = 20;
+            var rowsTotal = $('#tabUtenti tbody tr').length;
+            var numPages = rowsTotal / rowsShown;
+            for (i = 0; i < numPages; i++) {
+                var pageNum = i + 1;
+                $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
+            }
+            $('#tabUtenti tbody tr').hide();
+            $('#tabUtenti tbody tr').slice(0, rowsShown).show();
+            $('#nav a:first').addClass('active');
+            $('#nav a').bind('click', function () {
+
+
+
+                $('#nav a').removeClass('active');
+                $(this).addClass('active');
+                var currPage = $(this).attr('rel');
+                var startItem = currPage * rowsShown;
+                var endItem = startItem + rowsShown;
+                $('#tabUtenti tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                    css('display', 'table-row').animate({ opacity: 1 }, 300);
+            });
+        });
+    </script>
+}
+
+
+@using (Html.BeginForm("AnagraficaFunzionalita", "Admin", FormMethod.Get))
+{
+<div class="card" style="background-color: white; display: none;" id="tabNuovoGruppo">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Anagrafica Nuova Funzionalità</h3>
+    </div>
+
+    <div class="card-body" style="background-color:white">
+        <div class="input-group">
+            <div class="form-group" col-lg="6">
+                <label>Inserisci Nome Funzionalità:</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="nuovaFunzionalita" name="nuovaFunzionalita" placeholder="NOME FUNZIONALITA'" autocomplete="off" autofocus style="width: 600px; margin-right: 20px;">
+                </div>
+            </div>
+            <div class="form-group" col-lg="6">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="Inserisci btn btn-block btn-outline-success" style="width:100px">Inserisci</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col-sm-2">
+            <button type="button" style="float:right" onclick="history.go(-1)" class="btn btn-block btn-outline-success btn-lg">Indietro</button>
+        </div>
+    </div>
+</div>
+    <script>
+        $(".Inserisci").click(function () {
+
+            if (confirm('Confermare?')) {
+                this.submit();
+            }
+            return false;
+        });
+    </script>
+}
+
+
+

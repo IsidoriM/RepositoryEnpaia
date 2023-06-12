@@ -1,0 +1,84 @@
+﻿@model IEnumerable<TFI.OCM.AziendaConsulente.Modulistica>
+@{
+    ViewBag.Title = "Modulistica";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: 10%;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+<title>Modulistica</title>
+
+<section class="content">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-default">
+                        <div style="background-color: #0c773c" class="card-header">
+                            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Elenco dei File e dei Documenti disponibili per il download</h3>
+                        </div>
+                        <div class="card-body" style="height:500px; overflow:scroll;">
+                            <table id="example2" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Oggetto</th>
+                                        <th>Descrizione</th>
+                                        <th>File</th>
+                                        <th>Scarica</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var list in Model)
+                                    {
+                                        <tr>
+                                            <td style="text-align:center">@list.Oggetto</td>
+                                            <td>
+                                                @list.Descrizione
+                                            </td>
+                                            <td style="text-align:center">@list.File</td>
+                                            <td style="text-align:center">
+                                                <a href="@list.NomeFile" class="linkModuli" alert="@list.NomeFile"><img src="~/Images/Download.jpg" /></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section JS{
+
+    <script>
+
+        $(".linkModuli").click(function () {
+
+            var path = $(this).attr("alert");
+
+            if (path == "#") {
+                alert("File non disponibile");
+            }
+
+        });
+
+    </script>
+}

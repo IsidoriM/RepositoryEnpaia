@@ -1,0 +1,767 @@
+﻿@{
+    ViewBag.Title = "Anticipazione TFR";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    var visibilitàBottone =
+        !String.IsNullOrEmpty(HttpContext.Current.Items["TipoDocumento"] as string) &&
+        !String.IsNullOrEmpty(HttpContext.Current.Items["NumeroDocumento"] as string) &&
+        !String.IsNullOrEmpty(HttpContext.Current.Items["ScadenzaDocumento"] as string);
+    visibilitàBottone = true;
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<style>
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .table th {
+        text-align: right;
+        vertical-align: middle;
+    }
+
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table label:not(.form-check-label):not(.custom-file-label) {
+        font-weight: 100;
+    }
+
+    .table tr {
+        height: 60px;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    .table-bordered {
+        font-size: 20px;
+    }
+
+    #example2 th {
+        padding: 0 5px;
+    }
+</style>
+<!-- #region Tabella_Richiesta_Anticipazione_TFR -->
+@*<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div style="background-color:#0c773c;color:white;text-align:center;font-size:25px" class="card-header">Lista Richieste Anticipazioni TFR </div>
+                    <div class="card-body">*@
+@*@{ List<TFI.OCM.Iscritto.IscrittoRicTFROCM.RichiestaLiquidazione> listaRichiestaLiquidazione = ViewBag.ListaRicLiqAnt as List<TFI.OCM.Iscritto.IscrittoRicTFROCM.RichiestaLiquidazione>;}
+
+    @if (ViewBag.ListaRicLiqAnt != null)
+    {
+
+        if (((List<TFI.OCM.Iscritto.IscrittoRicTFROCM.RichiestaLiquidazione>)ViewBag.ListaRicLiqAnt).Count >= 1)
+        {*@
+@*<table id="example2" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th style="background:#0c773c;color:white;width:55%;text-align:center;vertical-align:middle">Ragione Sociale</th>
+            <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Data richiesta</th>
+            <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Importo</th>
+            <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Stato</th>
+
+
+        </tr>
+    </thead>
+    <tbody>*@
+@*@foreach (var i in ViewBag.ListaRicLiqAnt)
+    {
+        if (i.TIPLIQ == 3)
+        {*@
+@*<tr>
+    <td style="text-align:center;vertical-align:middle">*@
+@*@if (i.CODPOS == 0)
+    {*@
+@*<text> </text>
+    }*@
+@*else
+    {
+        @(i.CODPOS + " - " )
+    }*@
+@*@if (!String.IsNullOrEmpty(i.RAGSOC))
+    {
+        @i.RAGSOC
+    }*@
+@*</td>
+                            <td style="text-align:center">@i.DTRIC.ToString().Substring(0, 10)</td>
+                            <td style="text-align:center">@(i.IMPTFR == 0 ? "Dato non disponibile" : i.IMPTFR)</td>
+                            <td style="text-align:center">@(i.TIPLIQ != 3 ? "Dato non disponibile" : "Richiesta Attiva")</td>
+
+
+                        </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    }*@
+@*else
+        {
+            <p style="text-align:center"> Richieste Richieste Anticipazioni TFR non trovate</p>
+        }
+    }
+    else
+    {
+        <p style="text-align:center"> Richieste Richieste Anticipazioni TFR non trovate</p>
+    }*@
+<!--</div>-->
+<!-- /.card-body -->
+<!--</div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<!-- #endregion -->
+
+<div class="card">
+    <div style="background-color:#0c773c;color:white;text-align:center;font-weight:600;font-size:20px" class="card-header">Anticipazioni TFR Iscritto</div>
+    <div class="card-body">
+
+        <!--
+                <div class="row">
+                <div class="col-sm-4">
+
+                    <table id="tblRDL" class="table table-bordered" style="font-size:20px">
+
+                        <tr>
+                            <td style="font-weight: bold;">Matricola</td>
+                            <td><label>@HttpContext.Current.Items["Matricola"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Cognome</th>
+                            <td><label>@HttpContext.Current.Items["Cognome"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Nome</td>
+                            <td><label>@HttpContext.Current.Items["Nome"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Codice Fiscale</th>
+                            <td>
+                                <label>@HttpContext.Current.Items["CodiceFis"]</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Sesso</th>
+                            <td><label>@HttpContext.Current.Items["Sesso"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Indirizzo</th>
+                            <td><label>@HttpContext.Current.Items["Indirizzo"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Comune</th>
+                            <td><label>@HttpContext.Current.Items["Comune2"]</label></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <table id="tblRDL1" class="table table-bordered " style="font-size:20px">
+                        <tr>
+                            <td style="font-weight: bold;">Data di nascita</th>
+                            <td><label>@HttpContext.Current.Items["Datadinascita"]</label></td>
+                        </tr>
+
+                        <tr>
+                            <td style="font-weight: bold;">Comune di nascita</th>
+                            <td><label>Roma</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Provincia di nascita</th>
+                            <td><label>RM</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Stato Est. Nascita</th>
+                            <td><label>@HttpContext.Current.Items["SEN"]</label></td>
+                        </tr>
+
+                        <tr>
+                            <td style="font-weight: bold;">CAP</th>
+                            <td><label>@HttpContext.Current.Items["Cap"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Provincia</th>
+                            <td><label>@HttpContext.Current.Items["Provincia2"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Stato Estero</th>
+                            <td><label>Italia</label></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <table id="tblRDL2" class="table table-bordered " style="font-size:20px">
+                        <tr>
+                            <td style="font-weight: bold;">Località</th>
+                            <td><label>Roma</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Telefono</th>
+                            <td><label>@HttpContext.Current.Items["TEL1"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Telefono2</th>
+                            <td><label>@HttpContext.Current.Items["TEL2"]</label></td>
+
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Cellulare</th>
+                            <td><label>@HttpContext.Current.Items["Cell"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Fax</th>
+                            <td><label>@HttpContext.Current.Items["FAX"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Email</th>
+                            <td><label>@HttpContext.Current.Items["Email"]</label></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">PEC</th>
+                            <td><label>@HttpContext.Current.Items["EmailCert"]</label></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+                 <hr />
+            <hr />
+        -->
+
+
+
+
+        @if (ViewBag.Visibility != true)
+        {
+        <form method="post">
+            <input type="hidden" name="codfis" value="@HttpContext.Current.Items["CodiceFis"]" />
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Motivazione della richiesta:</label>
+                        <select class="form-control" id="MotRic" name="MotRic" required>
+                            <option value="" selected placeholder="Selezionare una motivazione">Selezionare una motivazione</option>
+                            @foreach (var std in HttpContext.Current.Items["Motivazione"] as Dictionary<string, string>)
+                            {
+                                <option value="@std.Key">@std.Value</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Rapporto di lavoro al quale si riferisce la richiesta:</label>
+                        <select class="form-control" id="RAL" name="RAL">
+                            @if (HttpContext.Current.Items["Posizione"].ToString() != "Nessun rapporto di lavoro disponibile")
+                            {
+                                foreach (var std in HttpContext.Current.Items["Posizione"] as List<string>)
+                                {
+                                    int position = std.IndexOf(" -");
+                                    int last = std.Length;
+                                    int p = std.LastIndexOf("<");
+                                    int a = p - position - 1;
+                                    <option value="@std.ToString()" selected>@std.ToString().Substring(position + 1, a)</option>
+                                }
+                            }
+                            else
+                            {
+                                <option asp-for="NoRDL" id="NoRDL" value="NoRDL" name="NoRDL" selected>@HttpContext.Current.Items["Posizione"]</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <center><p style="font-size:20px"><strong>Modalità di Pagamento TFR (Bonifico) </strong></p></center>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>IBAN</label>
+                        <input type="text" id="IBAN" name="IBAN" value="@ViewBag.IBAN" class="form-control" placeholder="Inserire IBAN" required pattern="^(AL|al)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(AD|ad)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{12}$|^(AT|at)[0-9]{2}[0-9]{16}$|^(AZ|az)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{20}$|^(BH|bh)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{14}$|^(BY|by)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{4}[a-zA-Z0-9]{16}$|^(BE|be)[0-9]{2}[0-9]{12}$|^(BA|ba)[0-9]{2}[0-9]{16}$|^(BR|br)[0-9]{2}[0-9]{23}[a-zA-Z][a-zA-Z0-9]$|^(BG|bg)[0-9]{2}[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{8}$|^(CR|cr)[0-9]{2}[0-9]{18}$|^(HR|hr)[0-9]{2}[0-9]{17}$|^(CY|cy)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(CZ|cz)[0-9]{2}[0-9]{20}$|^(DK|dk)[0-9]{2}[0-9]{14}$|^(DO|do)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(TL|tl)[0-9]{2}[0-9]{19}$|^(EG|eg)[0-9]{2}[0-9]{25}$|^(SV|sv)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(EE|ee)[0-9]{2}[0-9]{16}$|^(FO|fo)[0-9]{2}[0-9]{14}$|^(FI|fi)[0-9]{2}[0-9]{14}$|^(FR|fr)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(GE|ge)[0-9]{2}[a-zA-Z0-9]{2}[0-9]{16}$|^(DE|de)[0-9]{2}[0-9]{18}$|^(GI|gi)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{15}$|^(GR|gr)[0-9]{2}[0-9]{7}[a-zA-Z0-9]{16}$|^(GL|gl)[0-9]{2}[0-9]{14}$|^(GT|gt)[0-9]{2}[a-zA-Z0-9]{24}$|^(HU|hu)[0-9]{2}[0-9]{24}$|^(IS|is)[0-9]{2}[0-9]{22}$|^(IQ|iq)[0-9]{2}[a-zA-Z]{4}[0-9]{15}$|^(IE|ie)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{14}$|^(IL|il)[0-9]{2}[0-9]{19}$|^(IT|it)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(JO|jo)[0-9]{2}[a-zA-Z]{4}[0-9]{22}$|^(KZ|kz)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(XK|xk)[0-9]{2}[0-9]{16}$|^(KW|kw)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{22}$|^(LV|lv)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{13}$|^(LB|lb)[0-9]{2}[0-9]{4}[a-zA-Z0-9]{20}$|^(LY|ly)[0-9]{2}[0-9]{21}$|^(LI|li)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(LT|lt)[0-9]{2}[0-9]{16}$|^(LU|lu)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(MK|mk)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{10}[0-9]{2}$|^(MT|mt)[0-9]{2}[a-zA-Z]{4}[0-9]{5}[a-zA-Z0-9]{18}$|^(MR|mr)[0-9]{2}[0-9]{23}$|^(MU|mu)[0-9]{2}[a-zA-Z]{4}[0-9]{19}[a-zA-Z]{3}$|^(MC|mc)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(MD|md)[0-9]{2}[a-zA-Z0-9]{20}$|^(ME|me)[0-9]{2}[0-9]{18}$|^(NL|nl)[0-9]{2}[a-zA-Z]{4}[0-9]{10}$|^(NO|no)[0-9]{2}[0-9]{11}$|^(PK|pk)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$|^(PS|ps)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{21}$|^(PL|pl)[0-9]{2}[0-9]{24}$|^(PT|pt)[0-9]{2}[0-9]{21}$|^(QA|qa)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{21}$|^(RO|ro)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{16}$|^(LC|lc)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{24}$|^(SM|sm)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(ST|st)[0-9]{2}[0-9]{21}$|^(SA|sa)[0-9]{2}[0-9]{2}[a-zA-Z0-9]{18}$|^(RS|rs)[0-9]{2}[0-9]{18}$|^(SC|sc)[0-9]{2}[a-zA-Z]{4}[0-9]{20}[a-zA-Z]{3}$|^(SK|sk)[0-9]{2}[0-9]{20}$|^(SI|si)[0-9]{2}[0-9]{15}$|^(ES|es)[0-9]{2}[0-9]{20}$|^(SD|sd)[0-9]{2}[0-9]{14}$|^(SE|se)[0-9]{2}[0-9]{20}$|^(CH|ch)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(TN|tn)[0-9]{2}[0-9]{20}$|^(TR|tr)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{17}$|^(UA|ua)[0-9]{2}[0-9]{6}[a-zA-Z0-9]{19}$|^(AE|ae)[0-9]{2}[0-9]{19}$|^(GB|gb)[0-9]{2}[a-zA-Z]{4}[0-9]{14}$|^(VA|va)[0-9]{2}[0-9]{18}$|^(VG|vg)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$" title="inserire un iban valido">
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>BIC/SWIFT</label>
+                        <input type="text" id="BIC" name="BIC" class="form-control" placeholder="Inserire BIC/SWIFT">
+                        <p>(Solo per bonifici esteri)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <div class="icheck-success d-inline">
+                    <input type="radio" name="flexRadioTipo" id="flexRadioImporto" value="S" required>
+                    <label style="font-size:15px" class="form-check-label" for="flexRadioImporto">
+                        Importo
+                    </label>
+                </div>&emsp;
+                <div class="icheck-success d-inline">
+                    <input type="radio" name="flexRadioTipo" id="flexRadio70" value="N">
+                    <label style="font-size:15px" class="form-check-label" for="flexRadio70">
+                        Applicazione del 70 %
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Importo</label>
+                        <input type="text" id="Importo" name="Importo" class="form-control" placeholder="Inserire l'importo">
+                    </div>
+                </div>
+            </div>
+            <p style="font-size:15px">Il dipendente dichiara: </p>
+
+            <div class="form-group clearfix" id="divRadio">
+                <div class="icheck-success d-inline">
+                    <input type="radio" name="flexRadioDefault" id="flexRadioDefault1" asp-for="flexRadioDefault1" required>
+                    <label style="font-size:15px" class="form-check-label" for="flexRadioDefault1">
+                        di aver fruito
+                    </label>
+                </div>&emsp;
+                <div class="icheck-success d-inline">
+                    <input type="radio" name="flexRadioDefault" id="flexRadioDefault2" asp-for="flexRadioDefault2">
+                    <label style="font-size:15px" class="form-check-label" for="flexRadioDefault2">
+                        di non aver fruito
+                    </label>
+                </div>
+            </div>
+            <p style="font-size:15px">
+                nel corso del corrente anno della detrazione di imposta prevista dal DM 20 Marzo 2008 a favore dei percettori di Trattamento di Fine Rapporto con data cessazione del rapporto di lavoro successiva al 30 Marzo 2008.
+            </p>
+            <select class="form-control" id="divCheck" name="checkFruizione" asp-for="divCheck" style="visibility:hidden; height:0; width:0"></select>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <h4> Documento di riconoscimento</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 form-group">
+                    <label class="control-label">Tipo Documento</label>
+                    @*<input class="form-control documento" name="tipoDocumento" type="text" placeholder="Inserire il tipo del documento" required value="@HttpContext.Current.Items["TipoDocumento"]" />*@
+                    <select class="form-control documento" name="tipoDocumento" required>
+                        <option value="">Inserire il tipo del documento</option>
+                        @foreach (var td in ViewBag.TipoDocumenti)
+                        {
+                            <option value=@td>@td</option>
+                        }
+                        <!-- <option value="Carta_Identità" @(HttpContext.Current.Items["TipoDocumento"].ToString() == "Carta_Identità" ? "selected" : "")> Carta d'Identità</option>
+                <option value="Patente" @(HttpContext.Current.Items["TipoDocumento"].ToString() == "Patente" ? "selected" : "")> Patente</option>
+                <option value="Passaporto" @(HttpContext.Current.Items["TipoDocumento"].ToString() == "Passaporto" ? "selected" : "")> Passaporto</option>-->
+                    </select>
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Numero Documento</label>
+                    <input class="form-control documento" name="numeroDocumento" type="text" placeholder="Inserire il numero del documento" required value="@HttpContext.Current.Items["NumeroDocumento"]" />
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Data Scadenza Documento</label>
+                    <input class="form-control documento" name="scadenzaDocumento" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" required value="@HttpContext.Current.Items["ScadenzaDocumento"]" />
+                </div>
+            </div>
+            @{
+                bool isUploaded = ViewBag.IsDocumentUploaded;
+            }
+            @*<div class="row @(visibilitàBottone?"d-none":"")">*@
+            <div class="row @(isUploaded ? "d-none" : "")">
+                <div class="col-4 form-group">
+                    <label class="control-label">Fronte Documento</label>
+                    <input class="form-control-file documento-file" name="fronteFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Retro Documento</label>
+                    <input class="form-control-file documento-file" name="retroFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                </div>
+                @*<div class="col-4 form-group">
+                <input type="submit" class="btn btn-block btn-outline-success btn-lg" value="Carica Documento" />
+            </div>*@
+            </div>
+
+            <hr />
+
+            <div class="row" id="DocAll" style="display: none">
+                <div class="col-12">
+                    <h4> Documentazione da allegare</h4>
+                </div>
+            </div>
+
+            <div id="DocumentazioneDaAllegare" class="row"></div>
+
+            @if (ViewBag.Visibility == true)
+            {
+                if ((HttpContext.Current.Items["ErrorMessage"]) != null || HttpContext.Current.Items["SuccessMessage"] != null)
+                {
+                    <div class="row justify-content-end">
+                        <div class="col-sm-2 justify-content-end">
+                            <button type="submit" id="btnInviaRichiesta" onclick="InviaRichiesta()" class="btn btn-block btn-outline-success btn-lg @(visibilitàBottone ? "" : "d-none")" style="visibility:hidden">Invia richiesta</button>
+                        </div>
+                    </div>
+                }
+            }
+
+            else
+            {
+                <div class="row justify-content-end">
+                    <div class="col-sm-2 justify-content-end">
+                        <button type="submit" id="btnInviaRichiesta" onclick="InviaRichiesta()" class="btn btn-block btn-outline-success btn-lg @(visibilitàBottone ? "" : "d-none")">Invia richiesta</button>
+                    </div>
+                </div>
+            }
+        </form>
+        }
+    </div>
+</div>
+
+<script>
+    /* $(function () {
+         //Date range picker
+         $('#reservation').daterangepicker();
+     })*/
+    $('[id$=divRadio]').change(function () {
+        var node = document.getElementById('divCheck');
+        if (document.getElementById("flexRadioDefault1").checked == true) {
+            node.innerHTML = '<option id="check" name="CheckFruizione" asp-for="check" value="S"></option>';
+        } else if (document.getElementById("flexRadioDefault2").checked == true) {
+            node.innerHTML = '<option id="check" name="CheckFruizione" asp-for="check" value="N"></option>';
+        }
+    });
+    $('#flexRadioImporto').change(function () {
+        if ($('#flexRadioImporto').is(':checked')) {
+            $('#Importo').prop('required', true);
+            $('#Importo').prop('disabled', false);
+        }
+    })
+
+    $('#flexRadio70').change(function () {
+        if ($('#flexRadio70').is(':checked')) {
+            $('#Importo').prop('required', false);
+            $('#Importo').prop('disabled', true);
+        }
+    })
+
+    $(document).ready(function () {
+        if (($('#IBAN')[0].defaultValue[0] + $('#IBAN')[0].defaultValue[1]) != "IT") {
+            document.getElementById("BIC").setAttribute("required", true);
+        } else {
+            document.getElementById("BIC").removeAttribute("required");
+        }
+    });
+
+    $('#IBAN').change(function () {
+        if ((this.value[0] + this.value[1]) != "IT") {
+            document.getElementById("BIC").setAttribute("required", true);
+        } else {
+            document.getElementById("BIC").removeAttribute("required");
+        }
+    })
+
+    $('#IBAN').on("blur",
+        () => {
+            var validityIban = CheckIban();
+            if (!validityIban) {
+                document.getElementById("IBAN").setCustomValidity("Iban non valido");
+            } else
+                document.getElementById("IBAN").setCustomValidity("");
+        });
+
+    function CheckIban() {
+        var ibanValue = $("#IBAN").val().replace(" ", "").toUpperCase();
+        if (!ibanValue.match(/^(AL|al)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(AD|ad)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{12}$|^(AT|at)[0-9]{2}[0-9]{16}$|^(AZ|az)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{20}$|^(BH|bh)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{14}$|^(BY|by)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{4}[a-zA-Z0-9]{16}$|^(BE|be)[0-9]{2}[0-9]{12}$|^(BA|ba)[0-9]{2}[0-9]{16}$|^(BR|br)[0-9]{2}[0-9]{23}[a-zA-Z][a-zA-Z0-9]$|^(BG|bg)[0-9]{2}[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{8}$|^(CR|cr)[0-9]{2}[0-9]{18}$|^(HR|hr)[0-9]{2}[0-9]{17}$|^(CY|cy)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(CZ|cz)[0-9]{2}[0-9]{20}$|^(DK|dk)[0-9]{2}[0-9]{14}$|^(DO|do)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(TL|tl)[0-9]{2}[0-9]{19}$|^(EG|eg)[0-9]{2}[0-9]{25}$|^(SV|sv)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(EE|ee)[0-9]{2}[0-9]{16}$|^(FO|fo)[0-9]{2}[0-9]{14}$|^(FI|fi)[0-9]{2}[0-9]{14}$|^(FR|fr)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(GE|ge)[0-9]{2}[a-zA-Z0-9]{2}[0-9]{16}$|^(DE|de)[0-9]{2}[0-9]{18}$|^(GI|gi)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{15}$|^(GR|gr)[0-9]{2}[0-9]{7}[a-zA-Z0-9]{16}$|^(GL|gl)[0-9]{2}[0-9]{14}$|^(GT|gt)[0-9]{2}[a-zA-Z0-9]{24}$|^(HU|hu)[0-9]{2}[0-9]{24}$|^(IS|is)[0-9]{2}[0-9]{22}$|^(IQ|iq)[0-9]{2}[a-zA-Z]{4}[0-9]{15}$|^(IE|ie)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{14}$|^(IL|il)[0-9]{2}[0-9]{19}$|^(IT|it)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(JO|jo)[0-9]{2}[a-zA-Z]{4}[0-9]{22}$|^(KZ|kz)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(XK|xk)[0-9]{2}[0-9]{16}$|^(KW|kw)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{22}$|^(LV|lv)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{13}$|^(LB|lb)[0-9]{2}[0-9]{4}[a-zA-Z0-9]{20}$|^(LY|ly)[0-9]{2}[0-9]{21}$|^(LI|li)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(LT|lt)[0-9]{2}[0-9]{16}$|^(LU|lu)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(MK|mk)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{10}[0-9]{2}$|^(MT|mt)[0-9]{2}[a-zA-Z]{4}[0-9]{5}[a-zA-Z0-9]{18}$|^(MR|mr)[0-9]{2}[0-9]{23}$|^(MU|mu)[0-9]{2}[a-zA-Z]{4}[0-9]{19}[a-zA-Z]{3}$|^(MC|mc)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(MD|md)[0-9]{2}[a-zA-Z0-9]{20}$|^(ME|me)[0-9]{2}[0-9]{18}$|^(NL|nl)[0-9]{2}[a-zA-Z]{4}[0-9]{10}$|^(NO|no)[0-9]{2}[0-9]{11}$|^(PK|pk)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$|^(PS|ps)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{21}$|^(PL|pl)[0-9]{2}[0-9]{24}$|^(PT|pt)[0-9]{2}[0-9]{21}$|^(QA|qa)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{21}$|^(RO|ro)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{16}$|^(LC|lc)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{24}$|^(SM|sm)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(ST|st)[0-9]{2}[0-9]{21}$|^(SA|sa)[0-9]{2}[0-9]{2}[a-zA-Z0-9]{18}$|^(RS|rs)[0-9]{2}[0-9]{18}$|^(SC|sc)[0-9]{2}[a-zA-Z]{4}[0-9]{20}[a-zA-Z]{3}$|^(SK|sk)[0-9]{2}[0-9]{20}$|^(SI|si)[0-9]{2}[0-9]{15}$|^(ES|es)[0-9]{2}[0-9]{20}$|^(SD|sd)[0-9]{2}[0-9]{14}$|^(SE|se)[0-9]{2}[0-9]{20}$|^(CH|ch)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(TN|tn)[0-9]{2}[0-9]{20}$|^(TR|tr)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{17}$|^(UA|ua)[0-9]{2}[0-9]{6}[a-zA-Z0-9]{19}$|^(AE|ae)[0-9]{2}[0-9]{19}$|^(GB|gb)[0-9]{2}[a-zA-Z]{4}[0-9]{14}$|^(VA|va)[0-9]{2}[0-9]{18}$|^(VG|vg)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$/))
+            return false;
+        var ibanToCheck = ibanValue.substring(4) + ibanValue.substring(0, 4);
+        var num = 0;
+        for (var i = 0; i < ibanToCheck.length; i++) {
+            num = !ibanToCheck.charAt(i).match(/[A-Z]/) ? (10 * num + (ibanToCheck.charAt(i).charCodeAt(0) - 48)) % 97 : (100 * num + (ibanToCheck.charAt(i).charCodeAt(0) - 55)) % 97;
+        }
+        return num === 1;
+    }
+
+    $('#MotRic').change(function () {
+        $('#DocAll').show();
+        $('#DocumentazioneDaAllegare').empty();
+        switch (parseInt($('#MotRic').val())) {
+            case 1:
+                //  ACQUISTO PRIMA CASA
+                var attoNotarile = document.createElement('div');
+                attoNotarile.setAttribute('id', 'attoNotarile');
+                attoNotarile.className = "col-4 form-group";
+                attoNotarile.innerHTML = "<label class='control-label'>Atto Notarile</label>";
+                attoNotarile.innerHTML = attoNotarile.innerHTML + "<input class='form-control-file documento-file' name='attoNotarileFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                $('#DocumentazioneDaAllegare').append(attoNotarile);
+                break;
+            case 2:
+                // SPESE MEDICHE
+                var speseMedichePreventivo = document.createElement('div');
+                speseMedichePreventivo.setAttribute('id', 'speseMedichePreventivo');
+                speseMedichePreventivo.className = "col-4 form-group";
+                var lblPreventivo = "<label class='control-label'>Preventivo</label>";
+                var filePreventivo = "<input class='form-control-file documento-file' name='preventivoFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                speseMedichePreventivo.innerHTML = lblPreventivo + filePreventivo;
+                $('#DocumentazioneDaAllegare').append(speseMedichePreventivo);
+
+                var speseMedicheFattura = document.createElement('div');
+                speseMedicheFattura.setAttribute('id', 'speseMedicheFattura');
+                speseMedicheFattura.className = "col-4 form-group";
+                var lblFattura = "<label class='control-label'>Fattura</label>";
+                var fileFattura = "<input class='form-control-file documento-file' name='fatturaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                speseMedicheFattura.innerHTML = lblFattura + fileFattura;
+                $('#DocumentazioneDaAllegare').append(speseMedicheFattura);
+
+                break;
+            case 3:
+                // ESTINZIONE MUTUO
+                var contrattoMutuo = document.createElement('div');
+                contrattoMutuo.setAttribute('id', 'contrattoMutuo');
+                contrattoMutuo.className = "col-4 form-group";
+                var lblContrattoMutuo = "<label class='control-label'>Contratto Mutuo</label>";
+                var filecontrattoMutuo = "<input class='form-control-file documento-file' name='contrattoMutuoFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                contrattoMutuo.innerHTML = lblContrattoMutuo + filecontrattoMutuo;
+                $('#DocumentazioneDaAllegare').append(contrattoMutuo);
+
+                var dichiarazionePrimaCasa = document.createElement('div');
+                dichiarazionePrimaCasa.setAttribute('id', 'dichiarazionePrimaCasa');
+                dichiarazionePrimaCasa.className = "col-4 form-group";
+                var lblDichiarazionePrimaCasa = "<label class='control-label'>Dichiarazione Prima Casa</label>";
+                var fileDichiarazionePrimaCasa = "<input class='form-control-file documento-file' name='dichiarazionePrimaCasaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                dichiarazionePrimaCasa.innerHTML = lblDichiarazionePrimaCasa + fileDichiarazionePrimaCasa;
+                $('#DocumentazioneDaAllegare').append(dichiarazionePrimaCasa);
+
+                var certificatoCatastale = document.createElement('div');
+                certificatoCatastale.setAttribute('id', 'certificatoCatastale');
+                certificatoCatastale.className = "col-4 form-group";
+                var lblCertificatoCatastale = "<label class='control-label'>Certificato Catastale</label>";
+                var fileCertificatoCatastale = "<input class='form-control-file documento-file' name='certificatoCatastaleFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                certificatoCatastale.innerHTML = lblCertificatoCatastale + fileCertificatoCatastale;
+                $('#DocumentazioneDaAllegare').append(certificatoCatastale);
+
+
+                var attestatoDebitoResiduo = document.createElement('div');
+                attestatoDebitoResiduo.setAttribute('id', 'attestatoDebitoResiduo');
+                attestatoDebitoResiduo.className = "col-4 form-group";
+                var lblAttestatoDebitoResiduo = "<label class='control-label'>Attestato Debito Residuo</label>";
+                var fileAttestatoDebitoResiduo = "<input class='form-control-file documento-file' name='attestatoDebitoResiduoFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                attestatoDebitoResiduo.innerHTML = lblAttestatoDebitoResiduo + fileAttestatoDebitoResiduo;
+                $('#DocumentazioneDaAllegare').append(attestatoDebitoResiduo);
+
+                var dichiarazioneAvvenutoPagamento = document.createElement('div');
+                dichiarazioneAvvenutoPagamento.setAttribute('id', 'dichiarazioneAvvenutoPagamento');
+                dichiarazioneAvvenutoPagamento.className = "col-4 form-group";
+                var lblDichiarazioneAvvenutoPagamento = "<label class='control-label'>Dichiarazione Avvenuto Pagamento</label>";
+                var fileDichiarazioneAvvenutoPagamento = "<input class='form-control-file documento-file' name='dichiarazioneAvvenutoPagamentoFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                dichiarazioneAvvenutoPagamento.innerHTML = lblDichiarazioneAvvenutoPagamento + fileDichiarazioneAvvenutoPagamento;
+                $('#DocumentazioneDaAllegare').append(dichiarazioneAvvenutoPagamento);
+
+                break;
+            case 4:
+                // CONGEDI PARENTALI
+                var dichiarazioneAstensioneFacoltativa = document.createElement('div');
+                dichiarazioneAstensioneFacoltativa.setAttribute('id', 'dichiarazioneAstensioneVolontaria');
+                dichiarazioneAstensioneFacoltativa.className = "col-4 form-group";
+                var lblDichiarazioneAstensioneFacoltativa = "<label class='control-label'>Dichiarazione Astensione Facoltativa</label>";
+                var fileDichiarazioneAstensioneFacoltativa = "<input class='form-control-file documento-file' name='dichiarazioneAstensioneFacoltativaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                dichiarazioneAstensioneFacoltativa.innerHTML = lblDichiarazioneAstensioneFacoltativa + fileDichiarazioneAstensioneFacoltativa;
+                $('#DocumentazioneDaAllegare').append(dichiarazioneAstensioneFacoltativa);
+
+                break;
+            case 5:
+                // FORMAZIONE
+                var istanzaCongedoFormazione = document.createElement('div');
+                istanzaCongedoFormazione.setAttribute('id', 'istanzaCongedoFormazione');
+                istanzaCongedoFormazione.className = "col-4 form-group";
+                var lblIstanzaCongedoFormazione = "<label class='control-label'>Istanza Congedo Formazione</label>";
+                var fileIstanzaCongedoFormazione = "<input class='form-control-file documento-file' name='istanzaCongedoFormazioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                istanzaCongedoFormazione.innerHTML = lblIstanzaCongedoFormazione + fileIstanzaCongedoFormazione;
+                $('#DocumentazioneDaAllegare').append(istanzaCongedoFormazione);
+
+                var certificatoIscrizione = document.createElement('div');
+                certificatoIscrizione.setAttribute('id', 'certificatoIscrizione');
+                certificatoIscrizione.className = "col-4 form-group";
+                var lblCertificatoIscrizione = "<label class='control-label'>Certificato d'Iscrizione</label>";
+                var fileCertificatoIscrizione = "<input class='form-control-file documento-file' name='certificatoIscrizioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                certificatoIscrizione.innerHTML = lblCertificatoIscrizione + fileCertificatoIscrizione;
+                $('#DocumentazioneDaAllegare').append(certificatoIscrizione);
+
+                var fatturaIscrizione = document.createElement('div');
+                fatturaIscrizione.setAttribute('id', 'fatturaIscrizione');
+                fatturaIscrizione.className = "col-4 form-group";
+                var lblFatturaIscrizione = "<label class='control-label'>Fattura/Ricevuta Iscrizione</label>";
+                var fileFatturaIscrizione = "<input class='form-control-file documento-file' name='fatturaIscrizioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                fatturaIscrizione.innerHTML = lblFatturaIscrizione + fileFatturaIscrizione;
+                $('#DocumentazioneDaAllegare').append(fatturaIscrizione);
+
+                break;
+            case 6:
+                // COSTRUZIONE PRIMA CASA
+                var certificatoProprietaSuolo = document.createElement('div');
+                certificatoProprietaSuolo.setAttribute('id', 'certificatoProprietaSuolo');
+                certificatoProprietaSuolo.className = "col-4 form-group";
+                var lblCertificatoProprietaSuolo = "<label class='control-label'>Certificazione Proprietà Suolo</label>";
+                var fileCertificatoProprietaSuolo = "<input class='form-control-file documento-file' name='certificatoProprietaSuoloFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                certificatoProprietaSuolo.innerHTML = lblCertificatoProprietaSuolo + fileCertificatoProprietaSuolo;
+                $('#DocumentazioneDaAllegare').append(certificatoProprietaSuolo);
+
+                var concessioneEdilizia = document.createElement('div');
+                concessioneEdilizia.setAttribute('id', 'concessioneEdilizia');
+                concessioneEdilizia.className = "col-4 form-group";
+                var lblConcessioneEdilizia = "<label class='control-label'>Concessione Edilizia</label>";
+                var fileConcessioneEdilizia = "<input class='form-control-file documento-file' name='concessioneEdiliziaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                concessioneEdilizia.innerHTML = lblConcessioneEdilizia + fileConcessioneEdilizia;
+                $('#DocumentazioneDaAllegare').append(concessioneEdilizia);
+
+                var preventivoCostruzione = document.createElement('div');
+                preventivoCostruzione.setAttribute('id', 'preventivoCostruzione');
+                preventivoCostruzione.className = "col-4 form-group";
+                var lblPreventivoCostruzione = "<label class='control-label'>Preventivo</label>";
+                var filePreventivoCostruzione = "<input class='form-control-file documento-file' name='preventivoCostruzioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                preventivoCostruzione.innerHTML = lblPreventivoCostruzione + filePreventivoCostruzione;
+                $('#DocumentazioneDaAllegare').append(preventivoCostruzione);
+
+                var statoAvanzamentoLavori = document.createElement('div');
+                statoAvanzamentoLavori.setAttribute('id', 'statoAvanzamentoLavori');
+                statoAvanzamentoLavori.className = "col-4 form-group";
+                var lblStatoAvanzamentoLavori = "<label class='control-label'>Stato Avanzamento Lavori</label>";
+                var fileStatoAvanzamentoLavori = "<input class='form-control-file documento-file' name='statoAvanzamentoLavoriFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                statoAvanzamentoLavori.innerHTML = lblStatoAvanzamentoLavori + fileStatoAvanzamentoLavori;
+                $('#DocumentazioneDaAllegare').append(statoAvanzamentoLavori);
+
+                var fatturaCostruzione = document.createElement('div');
+                fatturaCostruzione.setAttribute('id', 'fatturaCostruzione');
+                fatturaCostruzione.className = "col-4 form-group";
+                var lblFatturaCostruzione = "<label class='control-label'>Fattura</label>";
+                var fileFatturaCostruzione = "<input class='form-control-file documento-file' name='fatturaCostruzioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                fatturaCostruzione.innerHTML = lblFatturaCostruzione + fileFatturaCostruzione;
+                $('#DocumentazioneDaAllegare').append(fatturaCostruzione);
+                break;
+            case 7:
+                //ACQUISTO PRIMA CASA IN COOPERATIVA
+                var attoNotarilePubblico = document.createElement('div');
+                attoNotarilePubblico.setAttribute('id', 'attoNotarilePubblico');
+                attoNotarilePubblico.className = "col-4 form-group";
+                var lblAttoNotarilePubblico = "<label class='control-label'>Atto Notarile Pubblico</label>";
+                var fileAttoNotarilePubblico = "<input class='form-control-file documento-file' name='attoNotarilePubblicoFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                attoNotarilePubblico.innerHTML = lblAttoNotarilePubblico + fileAttoNotarilePubblico;
+                $('#DocumentazioneDaAllegare').append(attoNotarilePubblico);
+
+                var dichiarazionePresidenteCooperativa = document.createElement('div');
+                dichiarazionePresidenteCooperativa.setAttribute('id', 'dichiarazionePresidenteCooperativa');
+                dichiarazionePresidenteCooperativa.className = "col-4 form-group";
+                var lblDichiarazionePresidenteCooperativa = "<label class='control-label'>Dichiarazione Presidente Cooperativa</label>";
+                var fileDichiarazionePresidenteCooperativa = "<input class='form-control-file documento-file' name='dichiarazionePresidenteCooperativaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                dichiarazionePresidenteCooperativa.innerHTML = lblDichiarazionePresidenteCooperativa + fileDichiarazionePresidenteCooperativa;
+                $('#DocumentazioneDaAllegare').append(dichiarazionePresidenteCooperativa);
+
+                var attoAssegnazioneProvvisoria = document.createElement('div');
+                attoAssegnazioneProvvisoria.setAttribute('id', 'attoAssegnazioneProvvisoria');
+                attoAssegnazioneProvvisoria.className = "col-4 form-group";
+                var lblAttoAssegnazioneProvvisoria = "<label class='control-label'>Atto Assegnazione Provvisoria</label>";
+                var fileAttoAssegnazioneProvvisoria = "<input class='form-control-file documento-file' name='attoAssegnazioneProvvisoriaFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                attoAssegnazioneProvvisoria.innerHTML = lblAttoAssegnazioneProvvisoria + fileAttoAssegnazioneProvvisoria;
+                $('#DocumentazioneDaAllegare').append(attoAssegnazioneProvvisoria);
+
+                var attoNotarileAssegnazione = document.createElement('div');
+                attoNotarileAssegnazione.setAttribute('id', 'attoNotarileAssegnazione');
+                attoNotarileAssegnazione.className = "col-4 form-group";
+                var lblAttoNotarileAssegnazione = "<label class='control-label'>Atto Notarile Assegnazione</label>";
+                var fileAttoNotarileAssegnazione = "<input class='form-control-file documento-file' name='attoNotarileAssegnazioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                attoNotarileAssegnazione.innerHTML = lblAttoNotarileAssegnazione + fileAttoNotarileAssegnazione;
+                $('#DocumentazioneDaAllegare').append(attoNotarileAssegnazione);
+
+                var dichiarazioneDirettoreLavori = document.createElement('div');
+                dichiarazioneDirettoreLavori.setAttribute('id', 'dichiarazioneDirettoreLavori');
+                dichiarazioneDirettoreLavori.className = "col-4 form-group";
+                var lblDichiarazioneDirettoreLavori = "<label class='control-label'>Dichiarazione Direttore Lavori SAL</label>";
+                var fileDichiarazioneDirettoreLavori = "<input class='form-control-file documento-file' name='dichiarazioneDirettoreLavoriFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                dichiarazioneDirettoreLavori.innerHTML = lblDichiarazioneDirettoreLavori + fileDichiarazioneDirettoreLavori;
+                $('#DocumentazioneDaAllegare').append(dichiarazioneDirettoreLavori);
+
+                break;
+            case 8:
+                // RISTRUTTURAZIONE PRIMA CASA
+                var certificatoProprietaImmobile = document.createElement('div');
+                certificatoProprietaImmobile.setAttribute('id', 'certificatoProprietaImmobile');
+                certificatoProprietaImmobile.className = "col-4 form-group";
+                var lblCertificatoProprietaImmobile = "<label class='control-label'>Certificato Proprietà</label>";
+                var fileCertificatoProprietaImmobile = "<input class='form-control-file documento-file' name='certificatoProprietaImmobileFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                certificatoProprietaImmobile.innerHTML = lblCertificatoProprietaImmobile + fileCertificatoProprietaImmobile;
+                $('#DocumentazioneDaAllegare').append(certificatoProprietaImmobile);
+
+                var relazioneDirettoreLavori = document.createElement('div');
+                relazioneDirettoreLavori.setAttribute('id', 'relazioneDirettoreLavori');
+                relazioneDirettoreLavori.className = "col-4 form-group";
+                var lblRelazioneDirettoreLavori = "<label class='control-label'>Relazione Direttore Lavori</label>";
+                var fileRelazioneDirettoreLavori = "<input class='form-control-file documento-file' name='relazioneDirettoreLavoriFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                relazioneDirettoreLavori.innerHTML = lblRelazioneDirettoreLavori + fileRelazioneDirettoreLavori;
+                $('#DocumentazioneDaAllegare').append(relazioneDirettoreLavori);
+
+                var concessioneEdiliziaRistrutturazione = document.createElement('div');
+                concessioneEdiliziaRistrutturazione.setAttribute('id', 'concessioneEdiliziaRistrutturazione');
+                concessioneEdiliziaRistrutturazione.className = "col-4 form-group";
+                var lblConcessioneEdiliziaRistrutturazione = "<label class='control-label'>Concessione Edilizia Ristrutturazione</label>";
+                var fileConcessioneEdiliziaRistrutturazione = "<input class='form-control-file documento-file' name='concessioneEdiliziaRistrutturazioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                concessioneEdiliziaRistrutturazione.innerHTML = lblConcessioneEdiliziaRistrutturazione + fileConcessioneEdiliziaRistrutturazione;
+                $('#DocumentazioneDaAllegare').append(concessioneEdiliziaRistrutturazione);
+
+                var preventivoRistrutturazione = document.createElement('div');
+                preventivoRistrutturazione.setAttribute('id', 'preventivoRistrutturazione');
+                preventivoRistrutturazione.className = "col-4 form-group";
+                var lblPreventivoRistrutturazione = "<label class='control-label'>Preventivo Ristrutturazione</label>";
+                var filePreventivoRistrutturazione = "<input class='form-control-file documento-file' name='preventivoRistrutturazioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                preventivoRistrutturazione.innerHTML = lblPreventivoRistrutturazione + filePreventivoRistrutturazione;
+                $('#DocumentazioneDaAllegare').append(preventivoRistrutturazione);
+
+                var fatturaRistrutturazione = document.createElement('div');
+                fatturaRistrutturazione.setAttribute('id', 'fatturaRistrutturazione');
+                fatturaRistrutturazione.className = "col-4 form-group";
+                var lblFatturaRistrutturazione = "<label class='control-label'>Fattura Ristrutturazione</label>";
+                var fileFatturaRistrutturazione = "<input class='form-control-file documento-file' name='FatturaRistrutturazioneFile' type='file' accept='.pdf, .jpeg, .jpg, .png' required />";
+                fatturaRistrutturazione.innerHTML = lblFatturaRistrutturazione + fileFatturaRistrutturazione;
+                $('#DocumentazioneDaAllegare').append(fatturaRistrutturazione);
+
+                break;
+            default:
+                $('#DocAll').hide();
+                $('#DocumentazioneDaAllegare').empty();
+
+                break;
+        }
+    });
+
+</script>

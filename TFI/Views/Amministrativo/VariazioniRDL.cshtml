@@ -1,0 +1,1258 @@
+﻿@model TFI.OCM.Amministrativo.GestioneRapportiLavoroIscrittiOCM
+@{
+    ViewBag.Title = "VariazioniRDL";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@{ var isc = Model.iscritti;}
+@{ var DaCont = Model.datiContrattuali;}
+@{ var DaRet = Model.datiRetributivi; }
+@{ var AltriDati = Model.altriDati;}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<style>
+    .a.nav-link.active {
+        color: black;
+    }
+
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+@using (Html.BeginForm("VariazioniRDL", "Amministrativo", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Variazione dati RDL : @isc.nominativo
+                    </div>
+                    <div class="card-body" style="padding:initial">
+                        <div class="card">
+                            <div class="row col-12 ">
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+
+                                        <label>Matricola</label>
+
+                                        <input type="text" class="form-control" asp-for="mat" name="mat" id="mat" value="@isc.mat" readonly>
+                                        <input type="text" class="form-control" asp-for="CODPOS" name="CODPOS" id="CODPOS" value="@isc.CODPOS" hidden>
+                                        <input type="text" class="form-control" asp-for="PRORAP" name="PRORAP" id="PRORAP" value="@isc.PRORAP" hidden>
+                                        <input type="text" class="form-control" asp-for="datnas" name="datnas" id="datnas" value="@isc.datnas" hidden>
+                                        <input type="text" class="form-control" asp-for="AbbPre" name="AbbPre" id="AbbPre" value="@DaCont.AbbPre" hidden>
+                                        <input type="text" class="form-control" asp-for="TIPSPE" name="TIPSPE" id="TIPSPE" value="@DaCont.TIPSPE" hidden>
+                                        <input type="text" class="form-control" asp-for="CODLOC" name="CODLOC" id="CODLOC" value="@DaCont.CODLOC" hidden>
+                                        <input type="text" class="form-control" asp-for="PROLOC" name="PROLOC" id="PROLOC" value="@DaCont.PROLOC" hidden>
+                                        <input type="text" id="denconnew" name="denconnew" asp-for="denconnew" value="@Model.datiContrattuali.contratto" hidden>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label>Data Iscrizione</label>
+                                        <input type="date" class="form-control" asp-for="datisc" name="datisc" id="datisc" value="@DaCont.datisc" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card card-primary card-tabs">
+                                        <div class="card-header p-0 pt-1" style="background-color:#0c773c">
+                                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                                <li class="nav-item col-sm-4">
+                                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Contrattuali</a>
+                                                </li>
+                                                <li class="nav-item col-sm-4">
+                                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Dati Retributivi</a>
+                                                </li>
+                                                @*<li class="nav-item col-sm-3">
+                                                        <a class="nav-link" id="custom-tabs-one-messages-tab" data-toggle="pill" href="#custom-tabs-one-messages" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">Altri Dati</a>
+                                                    </li>*@
+                                                <li class="nav-item col-sm-4">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-settings" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Azienda utilizzatrice</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data ultima Variazione</label>
+                                                                <input type="date" id="DataUltimaVar" name="DataUltimaVar" asp-for="DataUltimaVar" class="form-control" value="@DaCont.DataUltimaVar">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data Nuova Variazione</label>
+                                                                <input type="date" id="DataNuovaVariazione" name="DataNuovaVariazione" asp-for="DataNuovaVariazione" class="form-control" value="@DaCont.DataNuovaVariazione" required>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Tipo rapporto</label>
+                                                                <select class="form-control" name="tiprap" asp-for="tiprap" id="tiprap">
+                                                                    <option selected disabled value="@Model.datiContrattuali.tiprapCod">@Model.datiContrattuali.tiprap</option>
+                                                                    <option value="@Model.datiContrattuali.tiprapCod" selected hidden>@Model.datiContrattuali.tiprap</option>
+                                                                    @foreach (var i in Model.listTipRap)
+                                                                    {
+                                                                        <option value="@i.tiprap">@i.dentiprap</option>
+                                                                    }
+                                                                </select>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            &nbsp;<div class="form-group" style="display:none" id="data_termine">
+                                                                <label> Data Termine</label>
+                                                                <input type="date" id="datScadenzaTermine" name="datScadenzaTermine" class="form-control" />
+                                                            </div>&nbsp;&nbsp;
+                                                            <div class="form-group" style="display:none" id="part_time">
+                                                                <label>% Part-Time</label>
+                                                                <input type="number" id="perPar" name="perPar" class="form-control" />
+                                                            </div>&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group" style="display:none" id="durataperiodo">
+                                                                <label>Durata Periodo</label>
+                                                                <select class="form-control">
+                                                                    <option>24</option>
+                                                                    <option>36</option>
+                                                                    <option>48</option>
+                                                                </select>
+                                                            </div>&nbsp;&nbsp;
+                                                            <div class="form-group" style="display:none" id="durataperiodo2">
+                                                                <label>Durata Periodo</label>
+                                                                <select class="form-control">
+                                                                    <option>15</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;<div class="form-group" style="display:none" id="da_al">
+                                                                    <label>Da</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoDal1" name="PrimoImpiegoDal1" class="form-control" />
+                                                                    <label>Da</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoDal2" name="PrimoImpiegoDal2" class="form-control" />
+                                                                    <label>Da</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoDal3" name="PrimoImpiegoDal3" class="form-control" />
+                                                                </div>&nbsp;&nbsp;
+                                                            </div>&nbsp;&nbsp;
+                                                            <div class="row">
+                                                                &nbsp;&nbsp;<div class="form-group" style="display:none" id="da_al2">
+                                                                    <label>Al</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoAl1" name="PrimoImpiegoAl1" class="form-control" />
+                                                                    <label>Al</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoAl2" name="PrimoImpiegoAl2" class="form-control" />
+                                                                    <label>Al</label>&nbsp;&nbsp;
+                                                                    <input type="date" id="PrimoImpiegoAl3" name="PrimoImpiegoAl3" class="form-control" />
+                                                                </div>&nbsp;&nbsp;
+                                                            </div>&nbsp;&nbsp;
+                                                            <div class="row">
+                                                                &nbsp;&nbsp;<div class="form-group" style="display:none" id="da_al3">
+                                                                    <label>%</label>&nbsp;&nbsp;
+                                                                    <input type="number" id="FrazPrimoImpiego1" name="FrazPrimoImpiego1" class="form-control" />
+                                                                    <label>%</label>&nbsp;&nbsp;
+                                                                    <input type="number" id="FrazPrimoImpiego2" name="FrazPrimoImpiego2" class="form-control" />
+                                                                    <label>%</label>&nbsp;&nbsp;
+                                                                    <input type="number" id="FrazPrimoImpiego3" name="FrazPrimoImpiego3" class="form-control" />
+                                                                </div>&nbsp;&nbsp;
+                                                            </div>&nbsp;&nbsp;
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-group" style="display:none" id="mesi" name="mesi">
+                                                                <label>Gennaio</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Febbraio</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Marzo</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Aprile</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Maggio</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Giugno</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Luglio</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Agosto</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Settembre</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Ottobre</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Novembre</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                                <label>Dicembre</label>
+                                                                <input type="checkbox" />&nbsp;&nbsp;
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group" style="display:none" id="data_termine">
+                                                            <label>Dal</label>
+                                                            <input type="date" id="datScadenzaTermineDa" name="datScadenzaTermineDa" class="form-control" value="@DaCont.datScadenzaTermineDa" />
+                                                            <label>Al</label>
+                                                            <input type="date" id="datScadenzaTermineAl" name="datScadenzaTermineAl" class="form-control" value="@DaCont.datScadenzaTermineAl" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="form-group" style="display:none" id="data_termine">
+                                                            <label> Data Scadenza Termine</label>
+                                                            <input type="date" id="datScadenzaTermine" name="datScadenzaTermine" class="form-control" value="@DaCont.datScadenzaTermine" />
+                                                            <label> Data Scadenza Fascia</label>
+                                                            <input type="date" id="datScaFas" name="datScaFas" class="form-control" value="@DaCont.datScaFas" />
+                                                        </div>
+                                                        <div cclass="form-group" style="display:none" id="part_time">
+                                                            <label>% Part-Time</label>
+                                                            <input type="number" id="PercPT" name="PercPT" class="form-control" />
+                                                        </div>
+                                                        <div cclass="form-group" style="display:none" id="percentuale">
+                                                            <label>% Impiego</label>
+                                                            <input type="number" id="percPeri" name="percPeri" class="form-control" />
+                                                        </div>
+
+                                                        <div class="form-group" style="display:none" id="mesi" name="mesi">
+                                                            <label>Gennaio</label>
+                                                            <input type="checkbox" />
+                                                            <label>Febbraio</label>
+                                                            <input type="checkbox" />
+                                                            <label>Marzo</label>
+                                                            <input type="checkbox" />
+                                                            <label>Aprile</label>
+                                                            <input type="checkbox" />
+                                                            <label>Maggio</label>
+                                                            <input type="checkbox" />
+                                                            <label>Giugno</label>
+                                                            <input type="checkbox" />
+                                                            <label>Luglio</label>
+                                                            <input type="checkbox" />
+                                                            <label>Agosto</label>
+                                                            <input type="checkbox" />
+                                                            <label>Settembre</label>
+                                                            <input type="checkbox" />
+                                                            <label>Ottobre</label>
+                                                            <input type="checkbox" />
+                                                            <label>Novembre</label>
+                                                            <input type="checkbox" />
+                                                            <label>Dicembre</label>
+                                                            <input type="checkbox" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Contratto</label>
+                                                                <select class="form-control" id="contratto" asp-for="contratto" name="contratto">
+                                                                    <option selected disabled value="@Model.datiContrattuali.CODCON"> @Model.datiContrattuali.contratto</option>
+
+                                                                    @foreach (var item in Model.listContratti)
+                                                                    {
+                                                                        <option value="@item.CODCON  @item.CODLOC"> @item.DENCON</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <input type="text" asp-for="CODCON" name="CODCON" id="CODCON" value="@Model.datiContrattuali.CODCON" hidden>
+                                                            <input type="text" class="form-control" asp-for="PROCON" name="PROCON" id="PROCON" value="@Model.datiContrattuali.PROCON" hidden>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Livello</label>
+                                                                <select class="form-control" id="livello" name="livello" disabled>
+                                                                    <option selected value="@Model.datiContrattuali.CODLIV"> @Model.datiContrattuali.livello</option>
+                                                                </select>
+                                                                <input type="text" class="form-control" asp-for="CODLIV" name="CODLIV" id="CODLIV" hidden>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Qualifica</label>
+                                                                <select class="form-control" id="qualifica" name="qualifica" disabled>
+                                                                    <option selected value="@Model.datiContrattuali.CODQUA"> @Model.datiContrattuali.qualifica</option>
+
+                                                                </select>
+                                                                <input type="text" class="form-control" asp-for="CODQUA" name="CODQUA" id="CODQUA" hidden>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Numero mensilità</label>
+                                                                <input type="number" class="form-control" id="mensilita" name="mensilita" asp-for="mensilita" placeholder="Inserire mensilità" min="0" max="99" pattern="\d*" value="@DaCont.mensilita">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Mese corrispondente 14°</label>
+                                                                <input type="number" class="form-control" id="mens14" name="mens14" asp-for="mens14" placeholder="Inserire mese 14°" min="0" max="99" pattern="\d*" value="@DaCont.mens14">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>15°</label>
+                                                                <input type="text" class="form-control" id="mens15" name="mens15" asp-for="mens15" placeholder="Inserire mese 15°" value="@DaCont.mens15" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>16°</label>
+                                                                <input type="text" class="form-control" id="mens16" name="mens16" asp-for="mens16" placeholder="Inserire mese 16°" value="@DaCont.mens16" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Aliquota contributiva</label>
+                                                                <select type="text" id="aliqCont" name="aliqCont" asp-for="aliqCont" class="form-control" disabled>
+                                                                    <option selected value="@Model.datiContrattuali.CODGRUASS"> @Model.datiContrattuali.aliqCont</option>
+
+                                                                </select>
+                                                                <input type="text" class="form-control" asp-for="CODGRUASS" name="CODGRUASS" id="CODGRUASS" hidden>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Valore aliquota</label>
+                                                                <input type="text" id="TOTALIQ" name="TOTALIQ" asp-for="TOTALIQ" class="form-control" value="@Model.datiRetributivi.TOTALIQ" readonly />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-1"></div>
+                                                        <div class="col-sm-4">
+                                                            <div class="row" id="rowtable" name="rowtable">
+                                                                <table id="table" class="table table-hover " style="margin:auto">
+                                                                    <thead>
+                                                                        <tr class="header" style="background:#0c773c;color:white">
+                                                                            <th>Forma Assicurativa</th>
+                                                                            <th>Aliquota</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="tableBody">
+
+                                                                        @foreach (var a in Model.ListAliq)
+                                                                        {
+                                                                            <tr>
+                                                                                <td><label>@a.DENFORASS</label></td>
+                                                                                <td><label>@a.ALIQUOTA</label></td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group" style="text-align:center">
+                                                                <div class="icheck-success d-inline">
+                                                                    <label>
+                                                                        Assistenza contrattuale
+                                                                    </label>
+                                                                    <input type="checkbox" id="asscontr" name="asscontr" asp-for="asscontr" class="form-control" style="width:6%; margin:auto" value="@DaCont.asscontr">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2"  style="text-align:center">
+                                                            <div class="icheck-success d-inline">
+                                                                <label>
+                                                                    Abbonamento rivista
+                                                                </label>
+                                                                <input type="checkbox" id="abbRivista" name="abbRivista" asp-for="abbRivista" class="form-control" style="width:6%; margin:auto">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3"  style="text-align:center">
+                                                            <div class="icheck-success d-inline">
+                                                                <label>
+                                                                    Fondo Sanitario
+                                                                </label>
+                                                                <input type="checkbox" id="fondoSanitario" name="fondoSanitario" asp-for="fondoSanitario" class="form-control" style="width:6%; margin:auto">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2"  >
+                                                            <div class="icheck-success d-inline">
+                                                                <label>
+                                                                    Fap
+                                                                </label>
+                                                                <input type="checkbox" id="FAP" name="FAP" asp-for="FAP" class="form-control" style="width:6%;margin-left:20%">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2" >
+                                                            <div class="icheck-success d-inline">
+                                                                <label>
+                                                                    PA
+                                                                </label>
+                                                                <input type="checkbox" id="PA" name="PA" asp-for="PA" class="form-control" style="width:6%;margin-left:20%">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Emolumenti contrattuali (€)</label>
+                                                                <input type="text" class="form-control" id="emolumenti" asp-for="emolumenti" name="emolumenti" value="@DaRet.emolumenti" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Retribuzione dichiarata (€)</label>
+                                                                <input class="form-control" id="RetDichiarata" asp-for="RetDichiarata" name="RetDichiarata" value="@DaRet.RetDichiarata">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Scatti di anzianità</label>
+                                                                <input type="number" class="form-control" id="scattiAnz" asp-for="scattiAnz" name="scattiAnz" min="0" value="@DaRet.scattiAnz">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Ultimo</label>
+                                                                <input type="date" class="form-control" id="dataUltSc" asp-for="dataUltSc" name="dataUltSc" value="@DaRet.datUltSc">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Prossimo</label>
+                                                                <input type="date" class="form-control" id="datProsSc" asp-for="datProsSc" name="datProsSc" value="@DaRet.datProsSc">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Importo €</label>
+                                                                <input type="text" class="form-control" id="importoSc" asp-for="importoSc" name="importoSc" value="@DaRet.importoSc">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class=" row">
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Emolumenti extracontrattuali per n° mensilità:</label>
+                                                                <br />
+                                                                <label>12€</label>
+                                                                <input type="text" class="form-control" id="S12" asp-for="S12" name="S12" placeholder="Inserire la 12° mensilità" value="@DaRet.S12">
+                                                                <label>13€</label>
+                                                                <input type="text" class="form-control" id="S13" asp-for="S13" name="S13" placeholder="Inserire la 13° mensilità" value="@DaRet.S13">
+                                                                <label>14€</label>
+                                                                <input type="text" class="form-control" id="S14" asp-for="S14" name="S14" placeholder="Inserire la 14° mensilità" value="@DaRet.S14">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label style="height:17px"></label>
+                                                                <br />
+                                                                <label>15€</label>
+                                                                <input type="text" class="form-control" id="S15" asp-for="S15" name="S15" placeholder="Inserire la 15° mensilità" value="@DaRet.S15" readonly>
+                                                                <label>16€</label>
+                                                                <input type="text" class="form-control" id="S16" asp-for="S16" name="S16" placeholder="Inserire la 16° mensilità" value="@DaRet.S16" readonly>
+                                                                <label>Totale €</label>
+                                                                <input type="text" class="form-control" id="totaleS" asp-for="totaleS" name="totaleS" placeholder="Totale" value="@DaRet.totaleS" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                                @*Tolta come richiesto da SAL 10/02/2022*@
+                                                @*<div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                                        <div class="row">
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Assunzione</label>
+                                                                    <input type="date" class="form-control" id="datAssunzione" asp-for="datAssunzione" name="datAssunzione" value="@AltriDati.datAssunzione" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Denuncia</label>
+                                                                    <input type="date" class="form-control" id="datDenuncia" asp-for="datDenuncia" name="datDenuncia" value="@AltriDati.datDenuncia" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Protocollo</label>
+                                                                    <input type="number" class="form-control" id="numProtocollo" asp-for="numProtocollo" name="numProtocollo" maxlength="8" value="@AltriDati.numProtocollo" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="form-group">
+                                                                    <label>Data Protocollo</label>
+                                                                    <input type="date" class="form-control" id="datProtocollo" asp-for="datProtocollo" name="datProtocollo" value="@AltriDati.datProtocollo" required>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                <div class="tab-pane fade" id="custom-tabs-one-settings" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Posizione</label>
+                                                                <input type="text" class="form-control" id="codposAz" asp-for="codposAz" name="codposAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Ragione sociale</label>
+                                                                <input type="text" class="form-control" id="ragsocAz" asp-for="ragsocAz" name="ragsocAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Codice fiscale</label>
+                                                                <input type="text" class="form-control" id="codfisAz" asp-for="codfisAz" name="codfisAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Partita IVA</label>
+                                                                <input type="text" class="form-control" id="parivaAz" asp-for="parivaAz" name="parivaAz">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo di Residenza</label>
+                                                                <input class="form-control" id="dugAz" asp-for="dugAz" name="dugAz">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>&nbsp;</label>
+                                                                <input type="text" class="form-control" id="indirizzoAz" asp-for="indirizzoAz" name="indirizzoAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input type="text" class="form-control" id="civicoAz" asp-for="civicoAz" name="civicoAz">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <input type="text" class="form-control" id="comuneAz" asp-for="comuneAz" name="comuneAz">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>CAP</label>
+                                                                <input type="text" class="form-control" id="capAz" asp-for="capAz" name="capAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input type="text" class="form-control" id="provAz" asp-for="provAz" name="provAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <input type="text" class="form-control" id="localitaAz" asp-for="localitaAz" name="localitaAz">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="text" class="form-control" id="emailAz" asp-for="emailAz" name="emailAz">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Pec</label>
+                                                                <input type="text" class="form-control" id="pecAz" asp-for="pecAz" name="pecAz">
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Telefono</label>
+                                                                <input type="text" class="form-control" id="telefonoAz" asp-for="telefonoAz" name="telefonoAz">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row justify-content-between">
+                                <div class="col-sm-2">
+                                    @Html.ActionLink("Indietro", "GestioneRapportiLavoroIscritti", "Amministrativo", routeValues: null, htmlAttributes: new { id = "IndietroLink", @class = "Indietro btn btn-block btn-outline-success btn-lg" })
+                                </div>
+                                <div class="col-sm-2" style="float: right">
+                                    <input type="submit" value="Salva" id="salva" name="salva" class="Indietro btn btn-block btn-outline-success btn-lg">
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+<script>
+    $("#codposAz").on('change', function () {
+
+        var codposAz = $('#codposAz').val();
+
+            $.ajax({
+
+                  url:'@Url.Action("CercaAzienda", "Amministrativo")',
+                     data: { 'codposAz': codposAz },
+                  success: function (data)
+                  {
+
+                      $("#ragsocAz").val(data.ragsocAz);
+                      $("#codfisAz").val(data.codfisAz);
+                      $("#parivaAz").val(data.parivaAz);
+                      $("#localitaAz").val(data.localitaAz);
+                      $("#dugAz").val(data.dugAz);
+                      $("#indirizzoAz").val(data.indirizzoAz);
+                      $("#civicoAz").val(data.civicoAz);
+                      $("#provAz").val(data.provAz);
+                      $("#capAz").val(data.capAz);
+                      $("#telefonoAz").val(data.telefonoAz);
+                      $("#comuneAz").val(data.comuneAz);
+                      $("#comuneAz").html(data.comuneCodAz);
+
+                    },
+                     error: function ()
+                     {
+                         alert('Per questa posizione non é stata trovata nessuna azienda');
+                     },
+                 complete: function ()
+                     {
+
+
+                     },
+              })
+        });
+
+    $("#tiprap").on('change', function () {
+        var $option = $(this).find('option:selected');
+        var a = $option.val();
+
+        if (a == 1) {
+            $("#data_termine").show();
+            $("#part_time").hide();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 2) {
+            $("#data_termine").show();
+            $("#part_time").hide();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 3) {
+            $("#part_time").show();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 4) {
+            $("#part_time").show();
+            $("#data_termine").show();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+        if (a == 5) {
+            $("#part_time").hide();
+            $("#data_termine").show();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 6) {
+            $("#part_time").hide();
+            $("#data_termine").hide();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").show();
+        }
+
+        if (a == 7) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#part_time").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").show();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 8) {
+            $("#part_time").show();
+            $("#data_termine").hide();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").show();
+        }
+
+        if (a == 9) {
+            $("#data_termine").show();
+            $("#mesi").hide();
+            $("#part_time").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 10) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#part_time").show();
+            $("#percentuale").hide();
+            $("#durataperiodo").show();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 11) {
+            $("#part_time").show();
+            $("#mesi").show();
+            $("#data_termine").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 12) {
+            $("#data_termine").show();
+            $("#part_time").hide();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 13) {
+            $("#data_termine").show();
+            $("#part_time").show();
+            $("#mesi").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 16) {
+            $("#mesi").show();
+            $("#data_termine").show();
+            $("#part_time").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 17) {
+            $("#mesi").show();
+            $("#data_termine").hide();
+            $("#part_time").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 1 || a == 14) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#part_time").hide();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 20 || a == 21) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#part_time").show();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 15) {
+            $("#mesi").hide();
+            $("#data_termine").show();
+            $("#part_time").show();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").hide();
+            $("#da_al2").hide();
+            $("#da_al3").hide();
+            $("#durataperiodo2").hide();
+        }
+
+        if (a == 18 || a == 19) {
+            $("#mesi").hide();
+            $("#data_termine").hide();
+            $("#part_time").show();
+            $("#percentuale").hide();
+            $("#durataperiodo").hide();
+            $("#da_al").show();
+            $("#da_al2").show();
+            $("#da_al3").show();
+            $("#durataperiodo2").hide();
+        }
+
+    });
+    $(document).ready(function () {
+        var contrattoattuale = $("#contratto").text();
+        var codcontr = $("#contratto").val();
+        var codliv = $("#livello").val();
+        var codqua = $("#qualifica").val();
+        var CODGRUASS = $("#aliqCont").val();
+        $("#CODLIV").val(codliv);
+        $("#CODQUA").val(codqua);
+        $("#CODGRUASS").val(CODGRUASS);
+        $("#denconnew").val(contrattoattuale);
+    });
+
+  $('#contratto').on('change', function () {
+        var $option = $(this).find('option:selected');
+      var dencon = $option.text();
+      var a = $option.val();
+      var codcon = a.split(' ');
+      var livello = $('#livello').val();
+      $('#livello').removeAttr('disabled');
+      $("#aliqCont").removeAttr('disabled');
+      $("#qualifica").removeAttr('disabled');
+
+     $.ajax({
+
+       url:'@Url.Action("DdlLivello", "Amministrativo")',
+         data: { 'codcon': codcon[0],'dencon':dencon },
+         success: function (datal)
+         {
+
+              var s = '<option value="-1" selected disabled></option>';
+             for (var i = 0; i < datal.length; i++) {
+                 s += '<option value="' + datal[i].codliv + '">' + datal[i].denliv + '</option>';
+
+              }
+             $("#denconnew").val(dencon);
+             $("#livello").html(s);
+             $("#CODCON").val(a);
+             $("#table").hide();
+
+
+
+
+
+
+         },
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+             Mensilita(dencon);
+             Aliquote(dencon, codcon[0]);
+         },
+     })
+  });
+    
+
+     function Aliquote(dencon, codcon) {
+         var datanas = $('#datnas').val();
+         var codpos = $('#CODPOS').val();
+
+             $.ajax({
+
+                 url: '@Url.Action("DdlAliquota", "Amministrativo")',
+                 data: { 'datnas': datanas, 'codcon': codcon, 'dencon': dencon, 'codpos': codpos },
+                 success: function (datas) {
+                     var s = '<option value="-1" selected disabled></option>';
+                    /* s += '<option id="denconnew" value="' + dencon + '" hidden></option>';*/
+                     for (var i = 0; i < datas.length; i++)
+                     {
+                         s += '<option value="' + datas[i].CODGRUASS + '">' + datas[i].DENGRUASS + '</option>';
+
+                     }
+                     $("#aliqCont").html(s);
+                     $("#TOTALIQ").val("");
+
+                 },
+                 error: function () {
+                     alert('Errore Caricamento Aliquote');
+                 },
+                 complete: function () {
+
+                 },
+
+             });
+    }
+
+    function Mensilita(dencon) {
+
+             $.ajax({
+
+                 url: '@Url.Action("Mensilita", "Amministrativo")',
+                 data: {  'dencon': dencon },
+                 success: function (datam) {
+                     s = '<option selected value="' + datam.qualifica + '">' + datam.qualifica + '</option>';
+                     $("#qualifica").html(s);
+                     $("#mensilita").val(datam.mensilita);
+                     $("#mens14").val(datam.m14);
+                     $("#mens15").val(datam.m15);
+                     $("#mens16").val(datam.m16);
+                     $("#TIPSPE").val(datam.tipspe);
+                     $("#CODLOC").val(datam.codloc);
+                 },
+                 error: function () {
+
+                 },
+                 complete: function () {
+
+                 },
+
+             });
+    }
+
+    $("#aliqCont").on('change', function () {
+
+        var $option = $(this).find('option:selected');
+        var CODGRUASS = $option.val();
+        var dencon = $('#denconnew').val();
+        var dataNas = $('#datnas').val();
+        var datIsc = $('#DataUltimaVar').val();
+        var datMod = $('#DataNuovaVariazione').val();
+        var fap = $('#FAP').is('checked');
+
+
+     $.ajax({
+
+         url: '@Url.Action("ValAliquota", "Amministrativo")',
+         data: { 'CODGRUASS': CODGRUASS, 'dencon': dencon, 'datIsc': datIsc, 'datMod': datMod, 'dataNas': dataNas,'fap':fap },
+
+         success: function (data)
+         {
+             $("#TOTALIQ").val(data.aliquota);
+             $("#CODGRUASS").val(CODGRUASS);
+             var CODQUACON = data.CODQUACON
+             AliquotaSomma(CODGRUASS, CODQUACON);
+
+},
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+         },
+     })
+    });
+
+     function AliquotaSomma(CODGRUASS, CODQUACON) {
+        var CODGRUASS = CODGRUASS
+        var FAP = $('#FAP').is('checked');
+        var STRDATA = $('#datnas').val();
+        var CODQUACON = CODQUACON;
+     $.ajax({
+
+       url:'@Url.Action("DdlAliquotaSomma", "Amministrativo")',
+         data: { 'CODQUACON': CODQUACON, 'CODGRUASS': CODGRUASS, 'STRDATA': STRDATA, 'FAP': FAP},
+         success: function (datal)
+         {
+
+              var s = "";
+             for (var i = 0; i < datal.length; i++) {
+                 s += '<tr><td><label>' + datal[i].DENGRUASS + '</label></td><td><label>' + datal[i].ALIQUOTA + '</label></td> </tr>';
+             }
+             $("#table").show();
+             $("#tableBody").html(s);
+
+},
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+         },
+     })
+    };
+        $("#livello").on('change', function () {
+        var $option = $(this).find('option:selected');
+        var codliv = $option.val();
+        var dencon = $('#denconnew').val();
+            var datMod = $('#DataUltimaVar').val();
+        $.ajax({
+
+         url: '@Url.Action("Emolumenti", "Amministrativo")',
+            data: { 'codliv': codliv, 'dencon': dencon,  'datMod': datMod},
+
+         success: function (data)
+         {
+             $("#emolumenti").val(data);
+             $('#CODLIV').val(codliv);
+},
+         error: function ()
+         {
+           alert('Inserire data modifica!');
+         },
+         complete: function ()
+         {
+         },
+     })
+    });
+
+    $("#scattiAnz").on('change', function () {
+
+
+        var codliv = $("#livello").val();
+        var datIsc = $('#DataUltimaVar').val();
+        var datMod = $('#DataNuovaVariazione').val();
+        var numScatti = $('#scattiAnz').val();
+        var dencon = $('#denconnew').val();
+        var prorap = $('#PRORAP').val();
+        var tiprap = $('#tiprap').val();
+        var perPar = $('#perPar').val();
+
+     $.ajax({
+
+         url: '@Url.Action("SelLivello", "Amministrativo")',
+         data: { 'numScatti': numScatti, 'dencon': dencon, 'codliv': codliv, 'datMod': datMod, 'datIsc': datIsc, 'prorap': prorap, 'tiprap': tiprap, 'perPar': perPar},
+
+         success: function (data)
+         {
+             $("#importoSc").val(data);
+             var a = (parseFloat($('#emolumenti').val().replace(".", "").replace(",", ".") || 0.00).toFixed(2));
+             var b = (parseFloat($('#RetDichiarata').val().replace(",", ".") || 0.00).toFixed(2));
+             var c = (parseFloat($('#importoSc').val().replace(",", ".") || 0.00).toFixed(2));
+             var d = (parseFloat($('#S12').val().replace(",", ".") || 0.00).toFixed(2));
+             var e = (parseFloat($('#S13').val().replace(",", ".") || 0.00).toFixed(2));
+             var f = (parseFloat($('#S14').val().replace(",", ".") || 0.00).toFixed(2));
+             var g = (parseFloat($('#S15').val().replace(",", ".") || 0.00).toFixed(2));
+             var h = (parseFloat($('#S16').val().replace(",", ".") || 0.00).toFixed(2));
+
+             var sum = 0;
+             sum = parseFloat(a) + parseFloat(b) + parseFloat(c) + parseFloat(d) + parseFloat(e) + parseFloat(f) + parseFloat(g) + parseFloat(h);
+             var totale = sum.toFixed(2).toString().replace(".", ",")
+             $("#totaleS").val(totale);
+},
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+         },
+     })
+    });
+
+
+
+
+    //CONTROLLO INPUT SOLO NUMERI SEGUITI DA VIRGOLA CON 2 DECIMALI
+    function setInputFilter(textbox, inputFilter) {
+        ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+            textbox.addEventListener(event, function () {
+                if (inputFilter(this.value)) {
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                } else {
+                    this.value = "";
+                }
+            });
+        });
+    }
+    setInputFilter(document.getElementById("importoSc"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("S12"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("S13"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("S14"), function (value) {
+        return /^-?\d*[,]?\d{0,2}$/.test(value);
+    });
+    setInputFilter(document.getElementById("scattiAnz"), function (value) {
+        return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 99);
+    });
+
+
+    $(document).on('change', function () {
+
+        var a = (parseFloat($('#emolumenti').val().replace(".", "").replace(",", ".") || 0.00).toFixed(2));
+        var b = (parseFloat($('#RetDichiarata').val().replace(",", ".") || 0.00).toFixed(2));
+        var c = (parseFloat($('#importoSc').val().replace(",", ".") || 0.00).toFixed(2));
+        var d = (parseFloat($('#S12').val().replace(",", ".") || 0.00).toFixed(2));
+        var e = (parseFloat($('#S13').val().replace(",", ".") || 0.00).toFixed(2));
+        var f = (parseFloat($('#S14').val().replace(",", ".") || 0.00).toFixed(2));
+        var g = (parseFloat($('#S15').val().replace(",", ".") || 0.00).toFixed(2));
+        var h = (parseFloat($('#S16').val().replace(",", ".") || 0.00).toFixed(2));
+
+        var sum = 0;
+        sum = parseFloat(a) + parseFloat(b) + parseFloat(c) + parseFloat(d) + parseFloat(e) + parseFloat(f) + parseFloat(g) + parseFloat(h);
+        var totale = sum.toFixed(2).toString().replace(".", ",")
+        $("#totaleS").val(totale);
+    });
+    $("#DataNuovaVariazione").on('change', function () {
+        var dataNV = $("#DataNuovaVariazione").val();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        var doggi = yyyy + '-' + mm + '-' + dd;
+
+        if (new Date(dataNV) > new Date(doggi)) {
+            $("#DataNuovaVariazione").val('');
+            alert('La Data Nuova Variazione non può essere maggiore della data odierna');
+            return false;
+
+        }
+
+    });
+    $("#datProtocollo").on('change', function () {
+        var dataP = $("#datProtocollo").val();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        var doggi = yyyy + '-' + mm + '-' + dd;
+        var dataD = $("#datDenuncia").val();
+        if (new Date(dataP) > new Date(doggi)) {
+            $("#datProtocollo").val(null);
+            alert('La Data del Protocollo non può essere maggiore della data odierna');
+        }
+
+
+
+    });
+    $("#datDenuncia").on('change', function () {
+        var dataD = $("#datDenuncia").val();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        var doggi = yyyy + '-' + mm + '-' + dd;
+        var dataP = $("#datProtocollo").val();
+        if (new Date(dataD) > new Date(doggi)) {
+            $("#datDenuncia").val('');
+            alert('La Data della Denuncia non può essere maggiore della data odierna');
+        }
+        if (new Date(dataP) < new Date(dataD)) {
+            $("#datDenuncia").val('');
+            alert('La Data della Denuncia non può essere maggiore della data del Protocollo');
+            return false;
+
+        }
+
+    });
+
+</script>

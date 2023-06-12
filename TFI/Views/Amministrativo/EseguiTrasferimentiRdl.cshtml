@@ -1,0 +1,304 @@
+﻿@model TFI.OCM.Amministrativo.TrasferimentiRdlOCM
+@{
+    ViewBag.Title = "Trasferimento Rapporto di Lavoro";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+@{
+    var con = Model;
+}
+@using (Html.BeginForm("EseguiTrasferimentiRdl", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Trasferimento Rapporto di Lavoro</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-4">
+                        <label>Azienda di origine</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="CodPos" name="CodPos" value="@con.datitrasferimento.CodPos" readonly>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-4">
+                        <label>&nbsp;</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="RagSocOr" name="RagSocOr" value="@con.datitrasferimento.RagSoc" readonly>
+                        </div>
+                    </div>
+                    <div class=col-lg-4>
+                        <label>Data decorrenza </label>
+                        <div class="input-group">
+                            <input class="form-control" type="date" id="DatDec" name="DatDec" asp-for="DatDec" value="@con.datitrasferimento.DatDec" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Azienda di destinazione</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="CodPosNew" name="CodPosNew">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <label>&nbsp;</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" id="RagSocNew" name="RagSocNew" readonly>
+                    </div>
+                </div>
+                <div class=col-lg-4>
+                    <label>Data denuncia di trasferimento </label>
+                    <div class="input-group">
+                        <input class="form-control" type="date" id="DatDen" name="DatDen" asp-for="DatDen">
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between" style="margin-top:2%">
+                <div class="col-sm-2">
+                    <button name="agg" id="agg" asp-for="agg" type="button" class="btn btn-block btn-outline-success float-end" value="agg">Aggiungi Azienda</button>
+                </div>
+                <div class="col-sm-2">
+                    <button name="Elimina" id="Elimina" asp-for="Elimina" type="button" class="btn btn-block btn-outline-success float-end" value="Elimina">Elimina Azienda</button>
+                </div>
+                <div class="col-sm-2">
+                    <button name="salva" id="salva" asp-for="salva" type="button" class="btn btn-block btn-outline-success float-end" value="salva">Salva</button>
+                </div>
+            </div>
+        </div>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div>
+                            <table id="tb_EseguiTrasferimento" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center; ">
+                                <thead>
+                                    <tr class="header">
+
+                                        <th>Matricola</th>
+                                        <th>Nome</th>
+                                        <th>Cognome</th>
+                                        <th>Codice Fiscale</th>
+                                        <th>Data Iscrizione</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.ListaIscrittis)
+                                    {
+                                        <tr style="vertical-align:middle;text-align:center">
+
+
+                                            <td class="Matricola">@i.Matricola</td>
+                                            <td class="Nome">@i.Nome</td>
+                                            <td class="Cognome">@i.Cognome</td>
+                                            <td class="CodFis">@i.CodFis</td>
+                                            <td class="DatIsc">@i.DatIsc.Substring(0, 10)</td>
+                                            <td hidden class="ProRap">@i.ProRap</td>
+                                            <td hidden class="DatDec">@i.DatDec</td>
+                                            <td hidden class="RagSoc">@i.RagSoc</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <div class="card" style="background-color:white">
+        <div class="card-body" id="tb_cardTab">
+            <div class="row">
+                <table id="tb_Del" class="table table-bordered table-hover table-striped" style="margin-bottom: 5%;padding:1%; text-align: center;display:none;vertical-align:central">
+                    <thead>
+                        <tr class="header" style="background:#0c773c;color:white">
+                            <th style="background: #0c773c; color: white; width: 20%;height:10% ;text-align: center; vertical-align: central">Codice Posizione</th>
+                            <th style="background: #0c773c; color: white; width: 20%; height: 10%; text-align: center; vertical-align: central">Ragione Sociale</th>
+                            <th style="background: #0c773c; color: white; width: 20%; height: 10%; text-align: center; vertical-align: central">Data Denuncia</th>
+                            <th style="background: #0c773c; color: white; width: 20%; height: 10%; text-align: center; vertical-align: central">Percentuale</th>
+                            @*<th style="background: #0c773c; color: white; width: 5%; height: 10%; text-align: center; vertical-align: central">Elimina</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+
+<script>
+    $("#CodPosNew").on('change', function () {
+
+        var codposAz = $('#CodPosNew').val();
+
+            $.ajax({
+
+                  url:'@Url.Action("CercaAzienda", "Amministrativo")',
+                     data: { 'codposAz': codposAz },
+                  success: function (data)
+                  {
+
+                      $("#RagSocNew").val(data.ragsocAz);
+
+
+                    },
+                     error: function ()
+                     {
+                         alert('Per questa posizione non é stata trovata nessuna azienda');
+
+                     },
+                 complete: function ()
+                     {
+
+
+                     },
+              })
+    });
+
+
+    $("#salva").click(function () {
+
+
+        var data = GetDataFromTableRows();
+
+            $.ajax({
+                url: "/Amministrativo/TabAziendaTrasferimenti",
+                dataType: "json",
+                method: "GET",
+                data: { "objList": JSON.stringify(data) },
+                success: function (data) {
+
+                    window.location.href = '/Amministrativo/SalvaTrasferimentiRdl';
+                    @*'@Url.Action("EseguiTrasferimentiRdl", "Amministrativo")';*@
+                }
+            });
+
+
+
+    });
+
+        //CONTROLLO INPUT SOLO NUMERI SEGUITI DA VIRGOLA CON 2 DECIMALI
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+                textbox.addEventListener(event, function () {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        $("#DatDen").on('change', function () {
+            var dataP = $("#DatDen").val();
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
+            var yyyy = today.getFullYear();
+            var doggi = yyyy + '-' + mm + '-' + dd;
+
+            if (new Date(dataP) > new Date(doggi)) {
+                $("#DatDen").val(null);
+                alert('La Data Denuncia non può essere maggiore della data odierna');
+            }
+
+
+
+        });
+
+    $("#agg").click(function () {
+
+        var codpos = $("#CodPosNew").val();
+        var cod = $("#CodPos").val();
+        var ragsoc = $("#RagSocNew").val();
+        var datden = $("#DatDen").val();
+        var pino = GetDataFromTableRows();
+        $.ajax({
+             url:'@Url.Action("Aggiungi_ClickTrasferimentiRdl", "Amministrativo")',
+            dataType: "json",
+            method: "GET",
+            data: { cod: cod, codpos: codpos, datden: datden, "objList": JSON.stringify(pino) },
+            success: function (data) {
+                if (data.controllo == true)
+                {
+
+                    $("#tb_Del").show();
+                    $('#tb_Del').append("<tr class='Tab' id='Tab'><td id='codpos' name='codpos'>" + codpos + "</td><td>" + ragsoc + "</td><td id='datden' name='datden'>" + datden + "</td><td> <input class='col - xs - 1' type='number'min='0' max='100' id='Percen' name='Percen' asp-for='Percen'></tr>");
+                }
+                else
+                {
+                    alert(data.MsgErrore);
+
+                 }
+
+            },
+            error: function () { alert(data.MsgErrore) }
+        });
+
+
+    });
+
+
+
+    $(document).ready(function () {
+        $('#Elimina').click(function () {
+            $("#Tab").remove();
+        })
+    });
+
+
+
+
+
+    function GetDataFromTableRows() {
+
+        var obj;
+        var codpos;
+        var Percen;
+        var datden;
+        var objList = [];
+
+        $("#tb_Del tbody tr").each(function () {
+
+
+            codpos = $(this).find("#codpos").html();
+            Percen = $(this).find("#Percen").val();
+            datden = $(this).find("#datden").html();
+
+                obj = {
+                    codpos: codpos,
+                    Percen: Percen,
+                    datden: datden,
+                }
+
+                objList.push(obj);
+
+
+        });
+
+        return objList;
+    }
+
+</script>

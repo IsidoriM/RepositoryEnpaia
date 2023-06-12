@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "Privacy";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<!--<div class="card card-default">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Dati Matricola</h3>
+    </div>
+    <!-- /.card-header -->
+    <!--<div class="card-body">
+
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Cognome</label>
+                        <input type="text" class="form-control" value="@HttpContext.Current.Items["Cognome"]" disabled>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" class="form-control" value="@HttpContext.Current.Items["Nome"]" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Codice fiscale</label>
+                        <input type="text" class="form-control" value="@HttpContext.Current.Items["CodiceFis"]" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="card card-default">
+        <center><a href="https://www.enpaia.it/privacy-policy/" target="_blank"><p style="font-size:15px;padding-top:15px;width:300px">Visualizza l'informativa sulla privacy</p></a></center>
+    </div>
+    <div class="card card-default">
+        <div style="background-color: #0c773c;" class="card-header">
+            <h3 style="color:whitesmoke;width:100%;font-size:15px;width:100%;font-weight:600;">Esecuzione di obblighi di legge connessi all'espletamento delle funzioni istituzionali della Fondazione Enpaia</h3>
+        </div>
+        <br />
+        <div class="card-body">
+            <div class="form-group clearfix">
+                <center>
+                    <div class="icheck-success d-inline">
+
+                        <input type="radio" name="flexRadioDefault122" id="flexRadioDefault12" checked disabled>
+
+                        <label class="form-check-label" for="flexRadioDefault12">
+                            Accetto
+                        </label>
+                    </div>
+                    <div class="icheck-success d-inline">
+                        <input type="radio" name="flexRadioDefault122" id="flexRadioDefault13" disabled>
+                        <label class="form-check-label" for="flexRadioDefault13">
+                            Non Accetto
+                        </label>
+                    </div>
+
+                </center>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-default">
+        <form id="form_login" method="post">
+            <div style="background-color: #0c773c; " class="card-header">
+                <h3 style="color:whitesmoke;width:100%;font-size:15px; font-weight:600;">Informazione sull'attività svolta e sui servizi esistenti e futuri erogati dalla Fondazione ENPAIA e/o da soggetti terzi che erogano servizi complementari, mediante l'invio tramite mailing postale e cartaceo di materiali e pubblicazioni della Fondazione e/o dei predetti soggetti terzi</h3>
+            </div>
+            <br />
+
+            <div class="card-body">
+                <div class="form-group clearfix">
+                    <center>
+                        <div class="icheck-success d-inline">
+                            @if ((string)HttpContext.Current.Items["Checked2"] == "S")
+                            {
+
+
+                                <input type="radio" name="flexRadioDefault1" value="S" id="flexRadioDefault1" asp-for="flexRadioDefault1" class="form-control" checked required>
+                            }
+                            else
+                            {
+                                <input type="radio" name="flexRadioDefault1" value="S" id="flexRadioDefault1" asp-for="flexRadioDefault1" class="form-control" required>
+                            }
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Accetto
+                            </label>
+                        </div>&emsp;
+                        <div class="icheck-success d-inline">
+                            @if ((string)HttpContext.Current.Items["Checked2"] == "N")
+                            {
+
+                                <input type="radio" name="flexRadioDefault1" value="N" id="flexRadioDefault2" asp-for="flexRadioDefault2" class="form-control" checked required>
+                            }
+                            else
+                            {
+                                <input type="radio" name="flexRadioDefault1" value="N" id="flexRadioDefault2" asp-for="flexRadioDefault1" class="form-control" required>
+                            }
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Non Accetto
+                            </label>
+                        </div>
+
+                    </center>
+                </div>
+            </div>
+
+            <div class="row justify-content-end">
+                <div class="col-sm-2">
+                    <button type="submit" class="  btn btn-block btn-outline-success btn-lg " value="Salva">Salva</button>
+                </div>
+            </div>
+        </form>
+        <br />
+    </div>
+

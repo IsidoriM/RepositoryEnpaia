@@ -1,0 +1,645 @@
+﻿@model TFI.OCM.Amministrativo.DelegheOCM
+
+@{
+    ViewBag.Title = "InserimentoDeleghe";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<style>
+
+    /*the container must be positioned relative:*/
+    .autocomplete {
+        position: relative;
+        display: inline-block;
+    }
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 85%;
+        left: 6px;
+        right: 6px;
+        overflow: scroll;
+        height: 200px;
+        background-color: white;
+    }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+            /*when hovering an item:*/
+            .autocomplete-items div:hover {
+                background-color: #e9e9e9;
+            }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+
+@using (Html.BeginForm("InserimentoDeleghe", "Amministrativo", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+
+                        <h3 style="background:#0c773c;text-align:center;width:100%;color:white">Inserimento Delega</h3>
+                        <div class="card-body">
+                            <div style="text-align:left"><label>Dati Azienda:</label></div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Posizione</label>
+                                        <input class="form-control" id="PosizioneAz" name="PosizioneAz" placeholder="Inserire la posizione" required>
+                                        <input class="form-control" id="strModo" name="strModo" value="NUOVO" hidden>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Codice Utente</label>
+                                        <input type="text" class="form-control" id="CodUteAz" name="CodUteAz">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Ragione Sociale</label>
+                                        <input type="text" class="form-control" id="RagSocAz" name="RagSocAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Partita Iva</label>
+                                        <input class="form-control" id="ParIvaAz" name="ParIvaAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" class="form-control" id="CodFisAz" name="CodFisAz" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Indirizzo</label>
+                                        <input type="text" class="form-control" id="IndAz" name="IndAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Città</label>
+                                        <input type="text" class="form-control" id="CittaAz" name="CittaAz" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <input type="text" class="form-control" id="PrAz" name="PrAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cap</label>
+                                        <input class="form-control" id="CapAz" name="CapAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Stato Estero</label>
+                                        <input type="text" class="form-control" id="StatoEstAz" name="StatoEstAz" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Telefono</label>
+                                        <input type="text" class="form-control" id="TelAz" name="TelAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Fax</label>
+                                        <input type="text" class="form-control" id="FaxAz" name="FaxAz" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" id="EmailAz" name="EmailAz" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="text-align:left"><label>Dati Rappresentante Legale:</label></div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cognome</label>
+                                        <input class="form-control" id="Cognome" name="Cognome" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Nome</label>
+                                        <input type="text" class="form-control" id="Nome" name="Nome" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" class="form-control" id="COdFIs" name="COdFIs" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="text-align:left"><label>Dati Delega:</label></div>
+                            <br />
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Ass./Studio</label>
+                                        <select class="form-control" id="AssStudio" name="AssStudio" placeholder="Inserire la posizione" required>
+                                            @foreach (var std in Model.AssociazioneNaz)
+                                            {
+
+                                                <option value="@std.CODNAZ" selected>@std.RAGSOCASS</option>
+                                            }
+                                        </select>
+                                        <input class="form-control" id="codNaz" name="codNaz" hidden>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Denominazione</label>
+                                        <select type="text" class="form-control" id="Denominazione" name="Denominazione" placeholder="Inserire la denominazione" required>
+                                        </select>
+                                        <input class="form-control" id="codTer" name="codTer" hidden>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Persona Riferimento</label>
+                                        <input type="text" class="form-control" id="PersonaRiferimento" name="PersonaRiferimento" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Ragione Sociale</label>
+                                        <input type="text" class="form-control" id="RagSocDe" name="RagSocDe" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Ragione Sociale Breve</label>
+                                        <input type="text" class="form-control" id="RagSocBrDe" name="RagSocBrDe" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Partita Iva</label>
+                                        <input class="form-control" id="ParIvaDe" name="ParIvaDe" placeholder="Inserire la partita iva">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" class="form-control" id="CodFisDe" name="CodFisDe" placeholder="Inserire il codice fiscale">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Indirizzo</label>
+                                        <select type="text" class="form-control" id="ViaDe" name="ViaDe">
+                                            @foreach (var std in Model.ListaIndirizzi)
+                                            {
+
+                                                <option value="@std.CODDUG" selected>@std.DENDUG</option>
+                                            }
+                                        </select>
+                                        <input class="form-control" id="CODDUG" name="CODDUG" hidden>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>&nbsp</label>
+                                        <input type="text" class="form-control" id="IndDe" name="IndDe">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Numero Civico</label>
+                                        <input class="form-control" id="NumCivDe" name="NumCivDe">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Comune</label>
+                                        <input type="text" class="form-control" id="ComuneDe" name="ComuneDe" required>
+                                        <input type="text" class="form-control" id="CODCOM" name="CODCOM" hidden>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <input type="text" class="form-control" id="PrDe" name="PrDe" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cap</label>
+                                        <input class="form-control" id="CapDe" name="CapDe" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Località</label>
+                                        <input type="text" class="form-control" id="LocalitaDe" name="LocalitaDe" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Telefono</label>
+                                        <input type="text" class="form-control" id="TelDe" name="TelDe">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cellulare</label>
+                                        <input type="text" class="form-control" id="CelDe" name="CelDe">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Fax</label>
+                                        <input type="text" class="form-control" id="FaxDe" name="FaxDe">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" id="EmailDe" name="EmailDe">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Email Certificata</label>
+                                        <input type="text" class="form-control" id="EmailCertDe" name="EmailCertDe">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group offset-lg-3">
+                            <div class="col-lg-3">
+                                <label>&nbsp;</label>
+                                <button name="" id="" asp-for="" type="button" class="btn btn-block btn-outline-success float-end" onclick="window.location.href='@Url.Action("SearchDelega", "Amministrativo")'">Indietro</button>
+                            </div>
+                            <div class="col-lg-3 offset-lg-4">
+                                <div>
+                                    <label>&nbsp;</label>
+                                    <input name="salva" id="salva" asp-for="salva" type="submit" value="Salva" class="btn btn-block btn-outline-success float-end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+}
+<script>
+    $('#PosizioneAz').on('change', function () {
+
+        var posizione = $('#PosizioneAz').val();
+        var strModo = $('#strModo').val();
+
+     $.ajax({
+
+       url:'@Url.Action("DatiAzienda", "Amministrativo")',
+         data: { 'posizione': posizione, 'strModo': strModo},
+         success: function (data)
+         {
+             $("#CodUteAz").val(data.codUte);
+             $("#RagSocAz").val(data.ragSoc);
+             $("#ParIvaAz").val(data.pariva);
+             $("#CodFisAz").val(data.codfis);
+             $("#IndAz").val(data.ind);
+             $("#CittaAz").val(data.citta);
+             $("#PrAz").val(data.prov);
+             $("#CapAz").val(data.cap);
+             $("#StatoEstAz").val(data.statE);
+             $("#TelAz").val(data.tel);
+             $("#FaxAz").val(data.fax);
+             $("#EmailAz").val(data.email);
+             $("#Cognome").val(data.cognome);
+             $("#Nome").val(data.nome);
+             $("#COdFIs").val(data.codfisrap);
+
+
+         },
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+
+
+         },
+     })
+    });
+
+
+    $('#AssStudio').on('change', function () {
+
+        var $option = $(this).find('option:selected');
+        var codNaz = $option.val();
+
+
+     $.ajax({
+
+       url:'@Url.Action("Denominazione", "Amministrativo")',
+         data: { 'codNaz': codNaz},
+         success: function (data)
+         {
+
+
+             var s = '<option value="" selected disabled></option>';
+
+             for (var i = 0; i < data.length; i++) {
+                 s += '<option id="dencon" value="' + data[i].CODTER + '">' + data[i].RAGSOCASS + '</option>';
+
+             }
+             $("#Denominazione").html(s);
+             $("#codNaz").val(codNaz);
+         },
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+
+
+         },
+     })
+    });
+
+    $('#Denominazione').on('change', function () {
+
+        var $option = $(this).find('option:selected');
+        var codTer = $option.val();
+        var codNaz = $("#codNaz").val();
+        var strModo = $("#strModo").val();
+
+
+     $.ajax({
+
+       url:'@Url.Action("DatiAss", "Amministrativo")',
+         data: { 'codTer': codTer, 'codNaz': codNaz, 'strModo': strModo},
+         success: function (data)
+         {
+             $("#codTer").val(codTer);
+             $("#RagSocDe").val(data.ragSoc);
+             $("#RagSocBrDe").val(data.ragSocBr);
+             $("#ParIvaDe").val(data.pariva);
+             $("#CodFisDe").val(data.codfis);
+             $("#IndDe").val(data.ind);
+             $("#LocalitaDe").val(data.citta);
+             $("#PrDe").val(data.prov);
+             $("#CapDe").val(data.cap);
+             $("#ComuneDe").val(data.comune);
+             $("#CODCOM").val(data.CodCom);
+             $("#TelDe").val(data.tel);
+             $("#FaxDe").val(data.fax);
+             $("#EmailDe").val(data.email);
+             $("#CelDe").val(data.cell);
+             $("#EmailCertDe").val(data.emailcert);
+
+
+         },
+         error: function ()
+         {
+           alert('Errore');
+         },
+         complete: function ()
+         {
+
+
+         },
+     })
+    });
+
+    $('#ParIvaDe').on('change', function () {
+
+        var parIva = $("#ParIvaDe").val();
+        var codfis = $("#CodFisDe").val();
+        caricaIva(parIva, codfis);
+        debugger;
+    });
+        $('#CodFisDe').on('change', function () {
+
+        var parIva = $("#ParIvaDe").val();
+        var codfis = $("#CodFisDe").val();
+        caricaIva(parIva, codfis);
+
+    });
+
+    function caricaIva(parIva, codfis) {
+        $.ajax({
+
+            url: '@Url.Action("CaricaIva", "Amministrativo")',
+            data: { 'parIva': parIva, 'codfis': codfis },
+            success: function (data) {
+                $("#codTer").val(codTer);
+                $("#RagSocDe").val(data.ragSoc);
+                $("#RagSocBrDe").val(data.ragSocBr);
+                $("#ParIvaDe").val(data.pariva);
+                $("#CodFisDe").val(data.codfis);
+                $("#IndDe").val(data.ind);
+                $("#ViaDe").val(data.ViaDe);
+                $("#NumCivDe").val(data.NumCivDe);
+                $("#LocalitaDe").val(data.citta);
+                $("#PrDe").val(data.prov);
+                $("#CapDe").val(data.cap);
+                $("#ComuneDe").val(data.comune);
+                $("#CODCOM").val(data.CodCom);
+                $("#TelDe").val(data.tel);
+                $("#FaxDe").val(data.fax);
+                $("#EmailDe").val(data.email);
+                $("#CelDe").val(data.cell);
+                $("#EmailCertDe").val(data.emailcert);
+
+
+            },
+            error: function () {
+                alert('Errore');
+            },
+            complete: function () {
+
+
+            },
+        })
+    };
+
+
+</script>
+<script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+
+    /*An array containing all the country names in the world:*/
+    var stringArray = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaComuni"]));
+    var stringArray2 = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaStati"]));
+    @*var stringArray3 = @Html.Raw(Json.Encode(HttpContext.Current.Items["ListaTipoInd"]));*@
+
+
+
+    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    autocomplete(document.getElementById("CittaAz"), stringArray);
+    autocomplete(document.getElementById("LocalitaDe"), stringArray);
+    autocomplete(document.getElementById("ComuneDe"), stringArray);
+    autocomplete(document.getElementById("StatoEstAz"), stringArray2);
+
+
+</script>

@@ -1,0 +1,200 @@
+﻿<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: #0c773c">
+    <!-- Brand Logo -->
+    <div style="background-color:white; background-image: url(@Url.Content("~/Images/Logo-Fondazione-Enpaia.png")); background-size:cover; background-position: 0; height: 140px"></div>
+    <!-- Sidebar -->
+    <div class="sidebar" style="overflow-y: auto; height: calc(100% - 140px)">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="~/Images/user.png" class="img-circle elevation-2" alt="User Image" />
+            </div>
+            @if (Session["TipoUtenza"].ToString() == "C")
+            {
+                <div class="info">
+                    <a href="#" name="Utente" style="white-space: pre-wrap;" title="@ViewBag.NomeUtente">@Session["NomeUtente"]</a>
+                </div>
+            }
+            else
+            {
+                <div class="info">
+                    <a href="#" name="Utente" style="white-space: pre-wrap;" title="@ViewBag.NomeUtente">@Session["Posizione"]-@Session["NomeUtente"]</a>
+                </div>
+            }
+        </div>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                with font-awesome or any other icon font library -->
+                @if (Session["TipoUtenza"].ToString() != "C")
+                {
+                    <li class="nav-item">
+                        <a href='@Url.Action("Delega", "AziendaConsulente")' class="nav-link primary">
+                            <i class="nav-icon fas fa-id-badge"></i><p>Gestione Deleghe</p>
+                        </a>
+                    </li>
+                }
+
+                @if (Session["aziendaConDelegheAttive"] != null)
+                {
+                    if (!(bool)Session["aziendaConDelegheAttive"])
+                    {
+                        <li class="nav-item">
+                            <a href='@Url.Action("DatiAzienda", "AziendaConsulente")' class="nav-link ">
+                                <i class="fas fa-paste nav-icon"></i>
+                                <p>Dati Azienda</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item parentElement">
+                            <a href='#' class="nav-link primary">
+                                <i class="fas fa-file-contract nav-icon"></i>
+                                <p>Gestione RDL</p>
+                                <i class="fas fa-angle-left right"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("RapportiLavoro", "AziendaConsulente")' class="nav-link">
+                                        <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                                        <p>Rapporti di Lavoro</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href='@Url.Action("CessazioniRdl", "AziendaConsulente")' class="nav-link">
+                                        <i class="fas fa-money-check-alt nav-icon"></i>
+                                        <p>Cessazione RDL</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item parentElement">
+                            <a href='#' class="nav-link primary">
+                                <i class="fas fa-file-contract nav-icon"></i>
+                                <p>Denunce</p>
+                                <i class="fas fa-angle-left right"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="@Url.Action("DenunciaMensile_Index", "AziendaConsulente")" class="nav-link">
+                                        <i class="fas fa-clipboard-list nav-icon"></i>
+                                        <p>Denunce Mensili</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="@Url.Action("RicercaArretrati", "AziendaConsulente")" class="nav-link">
+                                        <i class="fas fa-search nav-icon"></i>
+                                        <p>Arretrati</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item parentElement">
+                            <a href='#' class="nav-link primary">
+                                <i class="fas fa-file-contract nav-icon"></i>
+                                <p>TFR</p>
+                                <i class="fas fa-angle-left right"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="@Url.Action("EstrattoContoAzienda", "AziendaConsulente")" class="nav-link">
+                                        <i class="nav-icon fas fa-money-bill-alt"></i>
+                                        <p>Estratti conto</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a title="" href='@Url.Action("ProspettiLiquidaTFR", "AziendaConsulente")' class="nav-link">
+                                        <i class="fas fa-coins nav-icon"></i>
+                                        <p>Prospetti di Liquidazione</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item parentElement">
+                            <a href='#' class="nav-link primary">
+                                <i class="fas fa-file-contract nav-icon"></i>
+                                <p>Gestione Infortuni</p>
+                                <i class="fas fa-angle-left right"></i>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Nuovo", "Infortuni")' class="nav-link">
+                                        <i class="fas fa-file-invoice-dollar nav-icon"></i>
+                                        <p>Nuovo Infortunio</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href='@Url.Action("Infortuni","Infortuni")' class="nav-link">
+                                        <i class="fas fa-money-check-alt nav-icon"></i>
+                                        <p>Visualizza Infortuni</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+
+                    <li class="nav-item">
+                        <a href='@Url.Action("Convenzioni", "Convenzioni")' class="nav-link ">
+                            <i class="nav-icon fas fa-donate"></i>
+                            <p>Convenzioni</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href='@Url.Action("ConvenzioniBPM", "Convenzioni")' class="nav-link ">
+                            <i class="nav-icon fas fa-donate"></i>
+                            <p>Convenzioni BPM</p>
+                        </a>
+                    </li>
+                    if (!(bool)Session["aziendaConDelegheAttive"])
+                    {
+                        @*<li class="nav-item">
+                                <a href="" class="nav-link ">
+                                    <i class="nav-icon fas fa-ambulance"></i>
+                                    <p>Infortuni</p>
+                                </a>
+                            </li>*@
+
+                        <li class="nav-item">
+                            <a href='@Url.Action("Modulistica", "AziendaConsulente")' class="nav-link ">
+                                <i class="fas fa-calendar-minus nav-icon"></i>
+                                <p>Modulistica</p>
+                            </a>
+                        </li>
+                        if (Session["TipoUtenza"].ToString() == "C")
+                        {
+                            <li class="nav-item">
+                                <a href='@Url.Action("Index", "Consulente")' class="nav-link primary">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <p>Seleziona Azienda</p>
+                                </a>
+                            </li>
+                        }
+                    }
+                }
+                @if (Session["TipoUtenza"].ToString() != "C")
+                {
+                    <li class="nav-item">
+                        <a href='@Url.Action("ModificaPWD", "AziendaConsulente")' class="nav-link">
+                            <i class="nav-icon fas fa-unlock-alt"></i>
+                            <p>Modifica password</p>
+                        </a>
+                    </li>
+                }
+                <li class="nav-item">
+                    <a href='@Url.Action("LogOut", "Login", new { tipoUtenza = "ext"})' class="nav-link primary" id="logoutLink">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+
+    </div>
+    <!-- /.sidebar -->
+</aside>

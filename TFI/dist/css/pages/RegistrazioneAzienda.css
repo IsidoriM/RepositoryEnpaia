@@ -1,0 +1,43 @@
+.contenitoreTabs {
+    border-right: #dee2e6 1px solid;
+    border-left: #dee2e6 1px solid;
+}
+
+.formRegistrazioneAzienda {
+    padding: 1em;
+    border-right: #dee2e6 1px solid;
+    border-left: #dee2e6 1px solid;
+    border-bottom: #dee2e6 1px solid;
+}
+
+.tabSelected {
+    color: #1f2d3d !important;
+    pointer-events: none;
+}
+
+a.tabNotSelected {
+    color: #1f2d3d;
+}
+
+.tabNotSelected {
+    color: #097132;
+    pointer-events: none;
+}
+
+.buttonDiCopia, .buttonDiCopia:hover, .buttonDiCopia:active {
+    background-color: #097132 !important;
+    border-color: #097132 !important;
+}
+.validation-summary-valid{
+    display: none;
+}
+.validation-summary-errors{
+    color: red;
+}
+.validation-summary-errors ul{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    list-style: circle;
+    max-height: 27rem;
+}

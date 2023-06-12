@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "Genera Notifiche";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    List<SelectListItem> listaMesi = ViewBag.listaMesi as List<SelectListItem>;
+
+    string codPosAutorizz = ViewBag.codPos != null ? ViewBag.codPos.ToString() : String.Empty;
+    string codPosReadonly = ViewBag.codPos != null ? "Y" : "N";
+}
+
+
+<div class="card">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        <h3>Calcolo Notifiche di Ufficio</h3>
+    </div>
+    <div class="card-body">
+        <div id="generaNotifiche_filtro">
+            @using (Html.BeginForm())
+            {
+                <div class="row">
+                    <div class="col-4">
+                        @Html.Label("Da Codice Posizione", new { @class = "codPos_label" })
+                        @Html.TextBox("codPos_da", codPosAutorizz, new { id = "codPos_da", @class = "form-control" })
+                        <input type="hidden" id="hidden_codPos_da_Readonly" value="@codPosReadonly" />
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBox("ragSoc_da", null, new { id = "ragSoc_da", @class = "form-control", @readonly = true })
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        @Html.Label("A Codice Posizione", new { @class = "codPos_label" })
+                        @Html.TextBox("codPos_a", codPosAutorizz, new { id = "codPos_a", @class = "form-control" })
+                    </div>
+                    <div class="col-6">
+                        @Html.TextBox("ragSoc_a", null, new { id = "ragSoc_a", @class = "form-control", @readonly = true })
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        @Html.Label("Anno", new { @class = "lbl" })
+                        @Html.TextBox("anno", null, new { id = "anno", @class = "form-control", maxlength = "4", required = true })
+                    </div>
+                    <div class="col-3">
+                        @Html.Label("Mese dal", new { @class = "lbl" })
+                        <select name="mese_da" class="form-control" id="mese_da">
+                            @foreach (SelectListItem item in listaMesi)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <div id="hd_meseDa" style="display:none">@ViewBag.hd_meseDa</div>
+                    </div>
+                    <div class="col-3">
+                        @Html.Label("Mese al", new { @class = "lbl" })
+                        <select name="mese_a" class="form-control" id="mese_a">
+                            @foreach (SelectListItem item in listaMesi)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <div id="hd_meseA" style="display:none">@ViewBag.hd_meseA</div>
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn_official" id="btn_cerca">Cerca</button>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (Model != null)
+        {<div class="card">
+                <div class="card-body">
+                    <div id="radioButtons">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4">
+                                        @Html.Label("Seleziona tutte")
+                                        @Html.RadioButton("seleziona", "TUTTE", true, new { @class = "rb_seleziona" })
+                                    </div>
+                                    <div class="col-4">
+                                        @Html.Label("Deseleziona tutte")
+                                        @Html.RadioButton("seleziona", "NESSUNA", false, new { @class = "rb_seleziona" })
+                                    </div>
+                                    <div class="col-4">
+                                        @*@Html.Label("Seleziona da/ a")
+                                            @Html.RadioButton("seleziona", "ALCUNE", false)*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="col-4">
+                                        @Html.Label("Omissione")
+                                        @Html.RadioButton("causale", "rbEvasione", true, new { @class = "rb_causale" })
+                                    </div>
+                                    <div class="col-4">
+                                        @Html.Label("Ritardo")
+                                        @Html.RadioButton("causale", "rbRitardo", false, new { @class = "rb_causale" })
+                                    </div>
+                                    <div class="col-4">
+                                        @Html.Label("Escludi sanzione")
+                                        @Html.RadioButton("causale", "rbEscludi", false, new { @class = "rb_causale" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <p id="p_occorrenze" style="display:inline-block">Occorrenze trovate:&ensp;</p>
+                                <p id="numOccorrenze" style="display:inline-block">@ViewBag.numOccorrenze</p>
+                                <div style="display:none" id="dataSistema">@ViewBag.dataSistema</div>
+                                <div style="display:none" id="dataRiferimento"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="height: 400px; overflow:scroll">
+                        <div id="generaNotifiche_tabella">
+                            <div class="row" style="margin-left:0; margin-right:0;">
+                                <div class="col-12" id="cont_tabella">
+                                    <table class="table table-striped" id="tabellaNotifiche">
+                                        <thead>
+                                            <tr>
+                                                <th>Codice Posizione</th>
+                                                <th>Ragione Sociale</th>
+                                                <th>Anno</th>
+                                                <th>Mese</th>
+                                                <th>Seleziona</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (TFI.OCM.Amministrativo.NotificheUfficioOCM notifica in Model)
+                                            {
+                                                <tr>
+                                                    <td>@notifica.CodPos</td>
+                                                    <td>@notifica.RagSoc</td>
+                                                    <td>@notifica.Anno</td>
+                                                    <td>@notifica.Mese</td>
+                                                    <td>@Html.CheckBox("ckb_seleziona", true, new { @class = "ckb_seleziona" })</td>
+                                                    <td hidden class="hd_codPos">@notifica.CodPos</td>
+                                                    <td hidden class="hd_anno">@notifica.Anno</td>
+                                                    <td hidden class="hd_numMese">@notifica.NumMese</td>
+                                                    <td hidden class="hd_tipIsc">@notifica.TipIsc</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="generaNotifiche_buttons">
+                        <div class="col-2">
+                            <button type="button" class="btn_official" id="btnExport">Esporta su Excel</button>
+                        </div>
+                        <div class="col-2">
+                            @Html.ActionLink("Pulisci", "GeneraNotifiche", "Amministrativo", new { @class = "btn_official" })
+                        </div>
+                        <div class="col-4">
+                            <button type="button" class="btn_official" id="btn_calcolo">Calcolo Notifiche</button>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn_official" id="btn_stampa">Stampa Video</button>
+                        </div>
+                        <div class="col-2">
+                            @Html.ActionLink("Chiudi", "Index", "Amministrativo", new { @class = "btn_official" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewBag.downloadLink)
+        {
+            <div class="row" id="downloadExcel">
+                <div class="col-12" style="text-align:center">
+                    <a>@Html.ActionLink("Download Excel", "DownloadFileExcel", "Amministrativo", new { @class = "btn_official" , style = "width :15%; margin-left:42.5%; min-width:0"})</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+
+    @Scripts.Render("~/dist/js/pages/GeneraNotifiche.js")
+}

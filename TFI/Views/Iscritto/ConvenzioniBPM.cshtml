@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "ConvenzioniBPM";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    .intestazione-bpm {
+        font-family: Tahoma;
+        font-size: 10pt;
+        color: #006666;
+    }
+
+    .download-bpm-cta {
+        width: 24px;
+        height: 27px;
+        font-size: 18px;
+    }
+</style>
+
+<div class="card d-flex flex-column justify-content-center align-items-center">
+    <div class="card-header" style="background-color: #0c773c; width: 100%">
+        <h3 class="card-title w-100" style="color:white;text-align:center;font-size:25px">Convenzioni BPM</h3>
+    </div>
+    <div class="intestazione-bpm mt-1 col-7" style="max-width: 850px;">
+        <img alt="" class="w-100 h-100" src="\Images\ConvenzioniBPM\Banner 4you_Orizzontale_1024x576.jpg" />
+    </div>
+    <div class="intestazione-bpm mt-2">
+        <p class="mb-4">
+            <a class="btn btn-outline-success font-weight-bold" style="font-size: medium" href="https://www.bancobpm4you.it" target="_blank">@("Clicca qui per registrarti ed accedere al servizio 4YOU".ToUpper())</a>
+        </p>
+        <p>
+            <img alt="" class="download-bpm-cta" src="~/Images/pdf-icon-png-adobe-acrobat.png" />&nbsp;&nbsp;<a href="~/ConvenzioniBPM/PRESENTAZIONE SERVIZIO 4YOU_settembre 2022.pdf" target="_blank"> Presentazione servizio 4YOU</a>
+        </p>
+        <p>
+            <img alt="" class="download-bpm-cta" src="~/Images/pdf-icon-png-adobe-acrobat.png" />&nbsp;&nbsp;<a href="~/ConvenzioniBPM/Sito 4YOU, Registrazione ed Accesso_settembre_2022_Iscritti Enpaia.pdf" target="_blank"> Scarica la guida per la registrazione e l'accesso al servizio 4YOU</a>
+        </p>
+    </div>
+</div>

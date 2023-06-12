@@ -1,0 +1,72 @@
+﻿@using System.Globalization
+@model List<OCM.TFI.OCM.Iscritto.RetribuzioneAnnuale>
+@{
+    ViewBag.Title = "Retribuzione Annuale";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+
+    var it = new CultureInfo("it-IT");
+}
+
+<title>Enpaia | Retribuzione Annuale</title>
+
+@if (Model.Count == 0)
+{
+    <p>Non sono presenti documenti da visualizzare</p>
+}
+else
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body" style="overflow:scroll;">
+                            <table id="tblRetribuzioneAnnuale" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle;font-size:17px">Posizione</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle; font-size: 17px">Anno</th>
+                                        @*<th hidden style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle">Matricola</th>
+                                            <th hidden style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle">Progressivo_Rdl</th>*@
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle; font-size: 17px">Retribuzione Imponibile</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle; font-size: 17px">Retribuzione Occasionale</th>
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle; font-size: 17px">Retribuzione Figurativa</th>
+                                        @*<th style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle">Contributo</th>
+                                            <th style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle">Assistenza_Contrattuale</th>
+                                            <th style="background:#0c773c;color:white;width:10%;text-align:center;vertical-align:middle">Abbonamento_Pa</th>*@
+                                        <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle; font-size: 17px">Dettaglio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var retAnn in Model)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retAnn.Posizione</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retAnn.Anno</td>
+                                            @*<td hidden style="text-align:center;vertical-align:middle;font-size:20px"> @retAnn.Matricola</td>*@
+                                            @*<td hidden style="text-align:center;vertical-align:middle;font-size:20px"> @retAnn.Progressivo_Rdl</td>*@
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retAnn.Retribuzione.ToString("C", it)</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retAnn.Occasionale.ToString("C", it)</td>
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px"> @retAnn.Figurativa.ToString("C", it)</td>
+                                            @*<td style="text-align:center;vertical-align:middle;font-size:20px"> @retAnn.Contributo</td>*@
+                                            @*<td style="text-align:center;vertical-align:middle;font-size:20px"> @retAnn.Assistenza_Contrattuale</td>
+                                                <td style="text-align:center;vertical-align:middle;font-size:20px"> @retAnn.Abbonamento_Pa</td>*@
+                                            <td style="text-align: center; vertical-align: middle; font-size: 16px">
+
+                                                <a href="@Url.Action("RetribuzioniMensile","Iscritto",new {posizione=retAnn.Posizione, matricola = retAnn.Matricola, progressivo = retAnn.Progressivo_Rdl, anno =  retAnn.Anno })">
+                                                    <i class="fas fa-arrow-right" style="color: #343a40"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}

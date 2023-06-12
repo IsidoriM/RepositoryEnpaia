@@ -1,0 +1,653 @@
+﻿@model TFI.OCM.Amministrativo.GestioneAziendeWebOCM
+@{
+    ViewBag.Title = "DettaglioAzienda";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@{ var a = Model.datiAzienda;
+    var b = Model.documenti;
+    var c = Model.altridati;
+    var e = Model.sedeAmministrativa;
+    var d = Model.sedeLegale;
+    var f = Model.indirizzoCorrispondenza;
+    var g = Model.rapleg;
+}
+
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                @using (Html.BeginForm("DettaglioAziendaWeb", "Amministrativo", FormMethod.Post))
+                {
+                    <div class="card">
+                        <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                            Posizione: @Model.datiAzienda.CodiceAziendaWeb  &emsp; Ragione Sociale @Model.datiAzienda.RagioneSociale
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card card-primary card-tabs">
+                                        <div class="card-header p-0 pt-1" style="background-color:#0c773c;color:white">
+                                            <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Dati Azienda</a>
+                                                </li>
+                                                <li class="nav-item col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Recapiti</a>
+                                                </li>
+                                                <li class="nav-item  col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-rapleg" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Rapp. Legale</a>
+                                                </li>
+                                                <li class="nav-item  col-sm-3">
+                                                    <a class="nav-link" id="custom-tabs-one-settings-tab" data-toggle="pill" href="#custom-tabs-one-doc" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">Documenti</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                                <!--Dati azienda-->
+                                                <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                                    <input type="hidden" name="CodicePosizioneAzienda" value="@Model.datiAzienda.CodicePosizioneAzienda" />
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data apertura</label>
+                                                                <input required type="text" id="DataApertura" name="DataApertura" class="form-control" value="@Model.datiAzienda.DataApertura.Substring(0,10)" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data registrazione</label>
+                                                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                                                    <input required type="date" id="DataRegistrazione" name="DataRegistrazione" class="form-control datetimepicker-input" value="@Model.datiAzienda.DataRegistrazione.Substring(0,10)" data-target="#reservationdate">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Ragione Sociale</label>
+                                                                <input required type="text" id="RagioneSociale" name="RagioneSociale" class="form-control" value="@Model.datiAzienda.RagioneSociale">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group autocomplete">
+                                                                <label>Codice fiscale</label>
+                                                                <input required type="text" id="CodiceFiscale" name="CodiceFiscale" class="form-control" value="@Model.datiAzienda.CodiceFiscale">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group autocomplete">
+                                                                <label>Partita iva</label>
+                                                                <input required type="text" id="PartitaIva" name="PartitaIva" class="form-control" value="@Model.datiAzienda.PartitaIva">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Natura giuridica</label>
+                                                                <select required class="form-control" id="NaturaGiuridica" name="NaturaGiuridica">
+                                                                    <option value="">Seleziona Natura Giuridica</option>
+                                                                    @foreach (var std in Model.natgiu)
+                                                                    {
+                                                                        <option value="@std.NATGIU" @(Model.datiAzienda.CodiceNaturaGiuridica == std.NATGIU ? "selected" : "")>@std.DENNATGIU</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-9">
+                                                            <div class="form-group">
+                                                                <label>Categoria attività</label>
+                                                                <select required class="form-control" id="CategoriaAttivita" name="CategoriaAttivita">
+                                                                    <option value="">Seleziona Categoria Attività</option>
+                                                                    @foreach (var std in Model.GetCategoriaAttivitas)
+                                                                    {
+                                                                        <option value="@std.CATATTCAM" @(Model.altridati.CodiceCategoriaAttivita == std.CATATTCAM ? "selected" : "")>@std.DENCATATT</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-9">
+                                                            <div class="form-group">
+                                                                <label>Tipo di attività</label>
+                                                                <select required class="form-control" id="TipoAttivita" name="TipoAttivita">
+                                                                    <option value="">Seleziona Tipo Attività</option>
+                                                                    @foreach (var std in Model.tipoAttivitas)
+                                                                    {
+                                                                        <option class="d-none" data-cat-att="@std.CATATTCAM" value="@std.CODATTCAM" @(Model.altridati.CodiceTipoAttivita == std.CODATTCAM.Trim() ? "selected" : "")>@std.DENATTCAM</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Tipo di iscrizione</label>
+                                                                <select class="form-control" id="TipoIscrizione" name="TipoIscrizione">
+                                                                    <option value="F" @(Model.altridati.TipoIscrizione == "F" ? "selected" : "")>Facoltativa</option>
+                                                                    <option value="O" @(Model.altridati.TipoIscrizione == "O" ? "selected" : "")>Obbligatoria</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Codice statistico</label>
+                                                                <select class="form-control" id="CodiceStatistico" name="CodiceStatistico" required>
+                                                                    <option value="">Seleziona Codice Statistico</option>
+                                                                    @foreach (var std in Model.CodiceStatisticos)
+                                                                    {
+                                                                        <option value="@std.CODSTACON" @(Model.altridati.CodiceStatistico.Replace(std.CODSTACON, "").Trim() == std.DENCODSTA ? "selected" : "")>@std.DENCODSTA</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <div class="form-group">
+                                                                <label>Note</label>
+                                                                <textarea class="form-control" id="Note" name="Note" rows="4" cols="50">@(Model.datiAzienda.Note != null ? Model.datiAzienda.Note : "")</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                                <!--Sede Legale-->
+                                                <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data decorrenza</label>
+                                                                <input required type="date" id="DataDecorrenza" name="DataDecorrenza" class="form-control" value="@Model.sedeLegale.DataDecorrenza">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Tipo indirizzo</label>
+                                                                <select required class="form-control" id="TipoIndirizzo" name="TipoIndirizzo">
+                                                                    <option value="">Selezionare Tipo Indirizzo</option>
+                                                                    @foreach (var std in Model.vias)
+                                                                    {
+                                                                        <option value="@std.CODDUG" @(Model.sedeLegale.CodiceTipoIndirizzo == std.CODDUG ? "selected" : "")>@std.DENDUG</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo Sede Legale</label>
+                                                                <input required type="text" class="form-control" id="Indirizzo" name="Indirizzo" value="@Model.sedeLegale.Indirizzo">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input required type="text" class="form-control" id="Civico" name="Civico" value="@Model.sedeLegale.Civico">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <select required class="form-control" id="Comune" name="Comune">
+                                                                    <option value="">Selezionare Comune</option>
+                                                                    @foreach (var std in Model.Comunes)
+                                                                    {
+                                                                        <option value="@std.CODCOM" @(Model.sedeLegale.CodiceComune == std.CODCOM ? "selected" : "")>@std.DENCOM</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input required type="text" class="form-control" id="Provincia" name="Provincia" value="@Model.sedeLegale.Provincia">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>CAP</label>
+                                                                <input required type="text" class="form-control" id="CAP" name="CAP" value="@Model.sedeLegale.CAP">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <select class="form-control" id="Localita" name="Localita">
+                                                                    <option value="">Selezionare Località</option>
+                                                                    @foreach (var std in Model.ListaLocalita)
+                                                                    {
+                                                                        <option class="d-none" data-cod-com="@std.CODCOM" value="@std.CODLOC" @(Model.sedeLegale.CodiceLocalita == std.CODLOC ? "selected" : "")>@std.DENLOC</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <div class="form-group">
+                                                                <label>Stato estero</label>
+                                                                <input type="text" id="StatoEstero" name="StatoEstero" class="form-control" value="@Model.sedeLegale.StatoEstero">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono 1</label>
+                                                                <input type="text" class="form-control" id="Telefono1" name="Telefono1" value="@Model.sedeLegale.Telefono1">
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono 2</label>
+                                                                <input type="text" class="form-control" id="Telefono2" name="Telefono2" value="@Model.sedeLegale.Telefono2">
+                                                            </div>
+                                                        </div>-->
+
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Cellulare</label>
+                                                                <input type="text" class="form-control" id="Cellulare" name="Cellulare" value="@Model.sedeLegale.Cellulare">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="text" class="form-control" id="Email" name="Email" value="@Model.sedeLegale.Email">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Email certificata</label>
+                                                                <input type="text" class="form-control" id="EmailCert" name="EmailCert" value="@Model.sedeLegale.EmailCert">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <!--Rappresentante Legale-->
+                                                <div class="tab-pane fade" id="custom-tabs-one-rapleg" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Tipo</label>
+                                                                <select required class="form-control" id="TipoRapp" name="TipoRapp">
+                                                                    <option value="">Seleziona Tipo Rappresentante</option>
+                                                                    @foreach (var std in Model.tipoRapLegs)
+                                                                    {
+                                                                        <option value="@std.CODFUNRAP" @(Model.rapleg.TipoRapp == std.DENFUNRAP ? "selected" : "")>@std.DENFUNRAP</option>
+
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    @*</div>
+                                                    <div class="row">*@
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Data decorrenza incarico</label>
+                                                                <input required type="text" id="DataDecInc" name="DataDecInc" class="form-control" value="@Model.rapleg.DataDecInc.Substring(0,10)">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Cognome</label>
+                                                                <input required type="text" id="Cognome" name="Cognome" class="form-control" value="@Model.rapleg.Cognome">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                                <label>Nome</label>
+                                                                <input required type="text" id="Nome" name="Nome" class="form-control" value="@Model.rapleg.Nome">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Sesso</label>
+                                                                <select required class="form-control" id="Sesso" name="Sesso" disabled>
+                                                                    <option value="M" @(Model.rapleg.Sesso == "M" ? "selected" : "")>M</option>
+                                                                    <option value="F" @(Model.rapleg.Sesso == "F" ? "selected" : "")>F</option>
+                                                                </select>
+                                                                <input type="text" hidden id="Sesso" name="Sesso" class="form-control" value="@Model.rapleg.Sesso">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Codice fiscale</label>
+                                                                <input required type="text" id="CodiceFiscale" name="CodiceFiscale" class="form-control" value="@Model.rapleg.CodiceFiscale">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Data di nascita</label>
+                                                                <input required type="date" id="DataNascita" name="DataNascita" class="form-control" value="@Model.rapleg.DataNascita.Substring(0,10)">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Luogo di nascita</label>
+                                                                <select required class="form-control" id="ComuneNascita" name="CodiceComuneNascita">
+                                                                    <option value="">Selezionare Comune</option>
+                                                                    @foreach (var std in Model.Comunes)
+                                                                    {
+                                                                        <option value="@std.CODCOM" @(Model.rapleg.CodiceComuneNascita == std.CODCOM ? "selected" : "")>@std.DENCOM</option>
+                                                                    }
+                                                                </select>
+                                                                @*<input required type="text" id="ComuneNascita" name="ComuneNascita" class="form-control" value="@Model.rapleg.ComuneNascita">*@
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Provincia di nascita</label>
+                                                                <input required type="text" id="ProvinciaNas" name="ProvinciaNas" class="form-control" value="@Model.rapleg.ProvinciaNas">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Stato estero di nascita</label>
+                                                                <input type="text" id="StatoEstero" name="StatoEstero" value="@Model.indirizzoCorrispondenza.StatoEstero" class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Tipo indirizzo</label>
+                                                                <select required class="form-control" id="TipoVia" name="TipoVia">
+                                                                    <option value="">Seleziona Tipo Indirizzo</option>
+                                                                    @foreach (var std in Model.vias)
+                                                                    {
+                                                                        <option value="@std.CODDUG" @(Model.rapleg.TipoVia == std.DENDUG ? "selected" : "")>@std.DENDUG</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-7">
+                                                            <div class="form-group">
+                                                                <label>Indirizzo</label>
+                                                                <input required type="text" id="Indirizzo" name="Indirizzo" class="form-control" value="@Model.rapleg.Indirizzo">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Civico</label>
+                                                                <input required type="text" id="Civico" name="Civico" class="form-control" value="@Model.rapleg.Civico">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Comune</label>
+                                                                <select required class="form-control" id="Comune" name="Comune">
+                                                                    <option value="">Seleziona Comune</option>
+                                                                    @foreach (var std in Model.Comunes)
+                                                                    {
+                                                                        <option value="@std.CODCOM" @(Model.rapleg.CodiceComuneResidenza == std.CODCOM ? "selected" : "")>@std.DENCOM</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>Provincia</label>
+                                                                <input required type="text" id="Provincia" name="Provincia" class="form-control" value="@Model.rapleg.Provincia">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <div class="form-group">
+                                                                <label>CAP</label>
+                                                                <input required type="text" id="CAP" name="CAP" class="form-control" value="@Model.rapleg.CAP">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label>Località</label>
+                                                                <select class="form-control" id="Localita" name="CodiceLocalita">
+                                                                    <option value="">Selezionare Località</option>
+                                                                    @foreach (var std in Model.ListaLocalita)
+                                                                    {
+                                                                        <option class="d-none" data-cod-com="@std.CODCOM" value="@std.CODLOC" @(Model.rapleg.CodiceLocalita == std.CODLOC ? "selected" : "")>@std.DENLOC</option>
+                                                                    }
+                                                                </select>
+                                                                @*<input required type="text" id="Localita" name="Localita" class="form-control" value="@Model.rapleg.Localita">*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-8">
+                                                            <div class="form-group">
+                                                                <label>Stato estero</label>
+                                                                <input type="text" id="StatoEstero" name="StatoEstero" class="form-control" value="@Model.rapleg.StatoEstero">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono 1</label>
+                                                                <input type="text" id="Telefono1" name="Telefono1" class="form-control" value="@Model.rapleg.Telefono1">
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Telefono 2</label>
+                                                                <input type="text" id="Telefono2" name="Telefono2" class="form-control" value="@Model.rapleg.Telefono2">
+                                                            </div>
+                                                        </div>-->
+                                                        <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                                <label>Cellulare</label>
+                                                                <input type="text" id="Cell" name="Cell" class="form-control" value="@Model.rapleg.Cell">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-3">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Email</label>
+                                                                <input type="text" id="Email" name="Email" class="form-control" value="@Model.rapleg.Email">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                                <label>Email certificata</label>
+                                                                <input type="text" id="EmailCert" name="EmailCert" class="form-control" value="@Model.rapleg.EmailCert">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!--Documenti-->
+                                                <div class="tab-pane fade" id="custom-tabs-one-doc" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                                    <br />
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="=col-sm-3">
+                                                                <div class="form-group ">
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <label style="float:right">Copia certificato iscrizione alla CCIAA</label>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <label style="float:right">Statuto e atto costitutivo</label>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <label style="float:right">Copia documento legale rappresentante</label>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <label style="float:right">Informativa sulla tutela dei dati personali</label>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <label style="float:right">Delega(facoltativo)</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="=col-sm-3">
+                                                                <div class="form-group">
+                                                                    <div class="form-control justify-content-start" style="border:none">
+                                                                        <input type="checkbox" name="CCIAA" id="CCIAA" class="" style="transform: scale(1.6); height: 28px" @(Model.documenti.CCIAA ? "checked" : "")>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <input type="checkbox" name="Statuto" id="Statuto" class="" style="transform: scale(1.6); height: 28px" @(Model.documenti.Statuto ? "checked" : "")>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <input type="checkbox" name="Legalerapp" id="Legalerapp" class="" style="transform: scale(1.6); height: 28px" @(Model.documenti.Legalerapp ? "checked" : "")>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <input type="checkbox" name="privacy" id="privacy" class="" style="transform: scale(1.6); height: 28px" @(Model.documenti.privacy ? "checked" : "")>
+                                                                    </div>
+                                                                    <div class="form-control" style=" border: none">
+                                                                        <input type="checkbox" name="delega" id="delega" class="" style="transform: scale(1.6); height: 28px" @(Model.documenti.delega ? "checked" : "")>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
+                                </div>
+                            </div>
+                            @if (ViewBag.codpos != null)
+                            {
+                                <div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-sm-3 ">
+                                            <button type="submit" class="btn btn-block btn-outline-success btn-lg">Salva</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-sm-3 ">
+                                            <button type="submit" class="btn btn-block btn-outline-success btn-lg">Conferma</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section JS{
+    <script>
+        $(document).ready(function () {
+            $(document).on("change", "#CategoriaAttivita", function (evt) {
+                var select = $(evt.target);
+
+                var current = $(select).find("option:selected").val();
+
+                $.each($("#TipoAttivita").children("option"), function (idx, opt) {
+                    var option = $(opt);
+
+                    if (option.data("cat-att") == current) {
+                        option.removeClass("d-none");
+                    } else if (!option.hasClass("d-none")) {
+                        option.addClass("d-none");
+                    }
+                });
+            });
+
+            $(document).on("change", "#Comune", function (evt) {
+                var select = $(evt.target);
+
+                var current = $(select).find("option:selected").val();
+
+                $.each(select.parents(".tab-pane").find("#Localita").children("option"), function (idx, opt) {
+                    var option = $(opt);
+
+                    if (option.data("cod-com") == current) {
+                        option.removeClass("d-none");
+                    } else if (!option.hasClass("d-none")) {
+                        option.addClass("d-none");
+                    }
+                });
+            });
+
+            $("#CategoriaAttivita").change();
+            $("#Comune").change();
+        })
+    </script>
+}

@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+    @Html.Partial("PartialViewHead")
+    @*@Styles.Render("~/bundles/Content/css")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <style>
+        [class*=sidebar-dark-] .sidebar a {
+            color: whitesmoke;
+        }
+
+        [class*=sidebar-dark-] .nav-sidebar > .nav-item > .nav-treeview a {
+            color: whitesmoke;
+        }
+    </style>
+
+    @RenderSection("showMessage", false)
+
+    <div class="wrapper" style="position:relative">
+        <!-- Image loader -->
+        <div class="pannelloOpaco" id='loader' style="display:none">
+            <img class="loading-image" src='~/Images/loading-image.gif' alt="Loading..." />
+        </div>
+        <!-- Image loader -->
+        <!-- Preloader -->
+        <div @Html.Raw(HttpContext.Current.Items["VisibilityShaker"]) class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="~/Images/Logo-Fondazione-Enpaia.png" alt="Enpaia" style="max-width: 100%; height: 100px !important;">
+        </div>
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="height:34px">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+
+                    <a href='@Url.Action("Index", "Iscritto")' class="nav-link primary">Home</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href='#' class="nav-link primary">Contatti</a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Navbar Search -->
+                <!-- <li class="nav-item">
+                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    <div class="navbar-search-block">
+                        <form class="form-inline">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Cerca" aria-label="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+                   -->
+                <!-- Messages Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <!--<a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge">0</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">-->
+                    @*<a href="#" class="dropdown-item">
+                             Message Start
+                            <div class="media">
+                                <img src="~/Images/utente.png" width="40" height="40" />
+                                <div class="media-body">
+                                    <h3 style="text-align:center" class="dropdown-item-title">
+                                        Mario Rossi
+                                        <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                    </h3>
+                                    <p style="text-align:center" class="text-sm">Chiamami appena puoi...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>4 Ore Fa</p>
+                                </div>
+                            </div>
+                             Message End
+                        </a>
+                        <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item dropdown-footer">Vedi tutti i messaggi</a>
+                            </div>
+                        </li>*@
+                    <!-- Notifications Dropdown Menu -->
+                    <!--<li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge">0</span>
+                        </a>
+                        @*<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                                <span class="dropdown-item dropdown-header">15 Notifiche</span>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item">
+                                    <i class="fas fa-envelope mr-2"></i> 4 nuovi messaggi
+                                    <span class="float-right text-muted text-sm">3 minuti</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item">
+                                    <i class="fas fa-file mr-2"></i> 3 nuove notifiche
+                                    <span class="float-right text-muted text-sm">2 giorni</span>
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item dropdown-footer">Vedi tutte le notifiche</a>
+                            </div>*@
+                    </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+
+        @{
+            Html.RenderPartial(Session["layout"].ToString());
+        }
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header" style="padding-top:0;padding-bottom:0;">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            @if (Session["NomeAzienda"] != null && Session["TipoUtenza"].ToString() == "C")
+                            {
+                                <label>@Convert.ToInt32(Session["Posizione"]) - @Session["NomeAzienda"].ToString()</label>
+                            }
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item">Home</li>
+                                <li class="breadcrumb-item active">@ViewBag.Title</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+
+            <section class="content">
+
+                @RenderBody()
+
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; @DateTime.Now.Year <a href="">Enpaia</a>.</strong>
+            Tutti i diritti riservati.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>TFI Version</b> 1.2.0
+            </div>
+            <div hidden id="sidebarItemIndex"></div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/adminlte/js")
+
+    <script src="/plugins/jquery-ui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/plugins/jquery-ui/jquery-ui.css">
+
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
+    <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    @RenderSection("JS", false)
+    <script>
+
+        $(document).ready(function () {
+
+            $('.toast').toast('show');
+
+            var openMenu_index = GetCookie("openMenuIndex");
+
+            if (openMenu_index != "") {
+                ApriMenuTendina(openMenu_index);
+            }
+
+            $(".parentElement").click(function () {
+                var index = $(this).index(".parentElement");
+
+                document.cookie = "openMenuIndex=" + index + ";path=/";
+
+                $(".parentElement").each(function () {
+                    var currentItem = $(this).index(".parentElement");
+                    if (currentItem != index) {
+                        ChiudiMenuTendina(currentItem);
+                        $(".parentElement").eq(currentItem).removeClass("menu-is-opening menu-open");
+                    }
+                });
+            });
+
+            $("#logoutLink").click(function () {
+                DeleteCookie("openMenuIndex");
+            });
+
+            $(".nav-item").click(function () {
+                if (!$(this).hasClass("parentElement")) {
+                    DeleteCookie("openMenuIndex");
+                }
+            });
+
+        });
+
+
+        function ApriMenuTendina(index) {
+            $(".parentElement").eq(index).find("ul").slideDown();
+            $(".parentElement").eq(index).addClass("menu-is-opening menu-open");
+        }
+
+        function ChiudiMenuTendina(index) {
+            $(".parentElement").eq(index).find("ul").slideUp();
+        }
+
+        /*==============================================*/
+        /*ritorna il valore associato al nome del cookie passato in ingresso*/
+
+        function GetCookie(cookieName) {
+            cookieName = cookieName + "=";
+            var cookieArray = decodeURIComponent(document.cookie).split(';');
+            for (var i in cookieArray) {
+
+                var cookie = cookieArray[i].trim();
+                if (cookie.indexOf(cookieName) == 0) {
+                    return cookie.substring(cookieName.length, cookie.length);
+                }
+            }
+            return "";
+        }
+        /*==============================================*/
+
+        function DeleteCookie(cName) {
+            document.cookie = cName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+        }
+
+
+
+    </script>
+</body>
+</html>

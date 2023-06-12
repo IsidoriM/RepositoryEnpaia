@@ -1,0 +1,35 @@
+@model TFI.Models.Registrazione.RegistrazioneHeaderModel
+
+<div class="card registrazione-bg">
+    <div class="mb-4 d-flex justify-content-center w-100 registrazione-bg">
+        <div class="text-center mr-3">
+            <img class="mt-3 mb-3 registrazione-logo" src="~/Images/Logo-Fondazione-Enpaia.png">
+        </div>
+        <div class="text-sm-center text-md-left">
+            <h2 class="registrazione-title">
+                @Html.Label(Model.Title, new {@class="registrazione-header-label text-white"})
+            </h2>
+        </div>
+    </div>
+</div>
+
+<style>
+    .registrazione-title
+    {
+        margin-top:50px;
+    }
+    .registrazione-bg
+    {
+        background-color: #097132;
+    }
+    .registrazione-header-label
+    {
+        font-family: 'Poppins',sans-serif;
+    }
+    .registrazione-logo
+    {
+        border-radius: 2%;
+        width:123px;
+        background-color:white
+    }
+</style>

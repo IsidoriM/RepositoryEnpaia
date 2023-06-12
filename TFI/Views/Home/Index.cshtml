@@ -1,0 +1,514 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    if (Session["layout"] != null)
+    {
+        @section showMessage{
+            @{Html.RenderPartial("PartialViewShowMessages");}
+        }
+
+        if (Session["layout"].ToString() == "~/Views/Shared/PartialViewAmministrativo.cshtml")
+        {
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div id="rowTFR" class="row" style="display:none">
+                        <div class="col-md-4">
+
+                            <!-- /.card -->
+                            <!-- PIE CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">TFR</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartTFR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- DONUT CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Tipologie Liquidati TFR</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChartTFR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <!-- PIE CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Anticipazioni TFR</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartAntTFR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                    <div id="rowFondo" class="row" style="display:none">
+                        <div class="col-md-6">
+                            <!-- PIE CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Fondo</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartFondo" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+
+
+                        </div>
+                        <!-- /.col (LEFT) -->
+
+                        <div class="col-md-6">
+                            <!-- /.card -->
+                            <!-- DONUT CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Tipologie Liquidati Fondo</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="donutChartFondo" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+
+                        </div>
+                        <!-- /.col (RIGHT) -->
+                    </div>
+                    <!-- /.row -->
+                    <div id="rowInfortuni" class="row" style="display:none">
+                        <div class="col-md-4">
+
+                            <!-- /.card -->
+                            <!-- PIE CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Tipologia infortuni</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartInfortuni" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- DONUT CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Infortuni</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartStatistiche" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <!-- PIE CHART -->
+                            <div class="card card-danger">
+                                <div class="card-header" style="background:#0c773c">
+                                    <h3 class="card-title">Riepilogo importi liquidati</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="pieChartTipologie" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <script>
+                $(function () {
+
+                    var donutData = {
+                        labels: [
+                            'Ordinari',
+                            'Anticipazioni',
+                            'Suppletive',
+                        ],
+                        datasets: [
+                            {
+                                data: [700, 500, 400],
+                                backgroundColor: ['#f56954', '#00a65a', '#f39c12'],
+                            }
+                        ]
+                    }
+
+                    var donutData2 = {
+                        labels: [
+                            'Ordinari',
+                            'Anticipazioni',
+                            'Suppletive',
+                            'Assegni di morte',
+                            'Invalidità',
+                        ],
+                        datasets: [
+                            {
+                                data: [700, 500, 400, 700, 500, 400],
+                                backgroundColor: ['#f56954', '#00a65a', '#f39c12', 'blue', 'grey', 'lime'],
+                            }
+                        ]
+                    }
+
+                    var donutChartCanvas = $('#donutChartTFR').get(0).getContext('2d')
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(donutChartCanvas, {
+                        type: 'doughnut',
+                        data: donutData,
+                        options: donutOptions
+                    })
+
+                    var donutChartCanvas = $('#donutChartFondo').get(0).getContext('2d')
+
+                    var donutOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(donutChartCanvas, {
+                        type: 'doughnut',
+                        data: donutData2,
+                        options: donutOptions
+                    })
+
+                    var pieData = {
+                        labels: [
+                            'Liquidabili',
+                            'Liquidati',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [700, 500],
+                                backgroundColor: ['#f56954', 'blue'],
+                            }
+                        ]
+                    }
+                    var pieData2 = {
+                        labels: [
+                            'Liquidabili',
+                            'Liquidati',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [100, 900],
+                                backgroundColor: ['#3c8dbc', 'darkorchid'],
+                            }
+                        ]
+                    }
+                    var pieData3 = {
+                        labels: [
+                            'Residuo',
+                            'Erogato',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [600, 1300],
+                                backgroundColor: ['#f39c12', 'black'],
+                            }
+                        ]
+                    }
+                    var pieData4 = {
+                        labels: [
+                            'Lavorativi',
+                            'Extra lavorativi',
+                            'In itinere',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [3, 4, 5],
+                                backgroundColor: ['aqua', 'black', 'pink'],
+                            }
+                        ]
+                    }
+                    var pieData5 = {
+                        labels: [
+                            'FKT',
+                            'Protesi',
+                            'Ricovero',
+                            'Giornaliere',
+                            'Permanente',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [300, 400, 500, 600, 700],
+                                backgroundColor: ['#f39c12', 'grey', 'lightgreen', 'yellow', 'purple'],
+                            }
+                        ]
+                    }
+                    var pieData6 = {
+                        labels: [
+                            'Infortuni liquidati',
+                            'Infortuni aperti',
+
+                        ],
+                        datasets: [
+                            {
+                                data: [400, 300,],
+                                backgroundColor: ['red', 'blue'],
+                            }
+                        ]
+                    }
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartTFR').get(0).getContext('2d')
+                    var pieData = pieData;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData,
+                        options: pieOptions
+                    })
+
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartFondo').get(0).getContext('2d')
+                    var pieData = pieData2;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData2,
+                        options: pieOptions
+                    })
+
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartAntTFR').get(0).getContext('2d')
+                    var pieData = pieData3;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData3,
+                        options: pieOptions
+                    })
+
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartInfortuni').get(0).getContext('2d')
+                    var pieData = pieData4;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData4,
+                        options: pieOptions
+                    })
+
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartTipologie').get(0).getContext('2d')
+                    var pieData = pieData5;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData5,
+                        options: pieOptions
+                    })
+
+                    //-------------
+                    //- PIE CHART -
+                    //-------------
+                    // Get context with jQuery - using jQuery's .get() method.
+                    var pieChartCanvas = $('#pieChartStatistiche').get(0).getContext('2d')
+                    var pieData = pieData6;
+                    var pieOptions = {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                    }
+                    //Create pie or douhnut chart
+                    // You can switch between pie and douhnut using the method below.
+                    new Chart(pieChartCanvas, {
+                        type: 'pie',
+                        data: pieData6,
+                        options: pieOptions
+                    })
+                })
+            </script>
+            <script>
+                if (localStorage.getItem('id') == "btnMostraTFR") {
+                    $("#rowTFR").show();
+                    $("#rowFondo").hide();
+                    $("#rowInfortuni").hide();
+
+                }
+                else if (localStorage.getItem('id') == "btnMostraFondo") {
+                    $("#rowTFR").hide();
+                    $("#rowFondo").show();
+                    $("#rowInfortuni").hide();
+                }
+                else if (localStorage.getItem('id') == "btnMostraInfortuni") {
+                    $("#rowTFR").hide();
+                    $("#rowFondo").hide();
+                    $("#rowInfortuni").show();
+                }
+                else {
+                    $("#rowTFR").hide();
+                    $("#rowFondo").hide();
+                    $("#rowInfortuni").hide();
+                }
+            </script>
+            <script>
+                $("#btnMostraTFR2").click(function () {
+
+                    $("#rowTFR").show();
+                    $("#rowFondo").hide();
+                    $("#rowInfortuni").hide();
+                });
+                $("#btnMostraFondo2").click(function () {
+                    $("#rowTFR").hide();
+                    $("#rowFondo").show();
+                    $("#rowInfortuni").hide();
+                });
+                $("#btnMostraInfortuni2").click(function () {
+                    $("#rowTFR").hide();
+                    $("#rowFondo").hide();
+                    $("#rowInfortuni").show();
+                });
+            </script>
+        }
+        @*@ViewBag.NomeUtente*@
+    }
+}
+
+
+
+
+

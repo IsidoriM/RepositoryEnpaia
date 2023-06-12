@@ -1,0 +1,208 @@
+﻿@model List<TFI.OCM.Amministrativo.NotificheUfficioOCM>
+@{
+    ViewBag.Title = "Dettaglio Denunce";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<div class="modal" tabindex="-1" id="confirm_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="cont_messaggio">
+
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-6">
+                        @Html.ActionLink("SI", "StampaDocumento_step2", null, new { @class = "btn btn_official" })
+                    </div>
+                    <div class="col-6">
+                        <button type="submit" class="btn btn_official" data-dismiss="modal">NO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="background-color:white" id="notifiche_dettaglioDenuncia">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Dettaglio Denunce</h3>
+    </div>
+    <div class="card-body">
+        <div hidden id="hd_annDen">@ViewBag.AnnDen</div>
+        <div hidden id="hd_mesDen">@ViewBag.MesDen</div>
+        <div hidden id="hd_proDen">@ViewBag.ProDen</div>
+        <div class="row">
+            <div class="input-group">
+                <div class="col-lg-4">
+                    <label>Posizione</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" readonly id="CodPos" name="CodPos" value="@ViewBag.CodPos">
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <label>Ragione Sociale</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" readonly id="RagSoc" name="RagSoc" value="@ViewBag.RagSoc">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group">
+                <div class=col-lg-6>
+                    <label>Periodo</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" readonly id="Periodo" name="Periodo" asp-for="Periodo" value="@ViewBag.Periodo">
+                    </div>
+                </div>
+                <div class=col-lg-6>
+                    <label>Tipo</label>
+                    <div class="input-group">
+                        <input class="form-control" type="text" readonly id="TipMov" name="TipMov" asp-for="TipMov" value="@ViewBag.Tipmov">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        @if (Model != null)
+        {
+            if (Model.Count > 0)
+            {
+
+                <section class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <label>Occorenze trovate:@ViewBag.Occorrenze</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div>
+                                    <table id="" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center;vertical-align:central; ">
+                                        <thead>
+                                            <tr class="header">
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Posizione</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Matricola</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Nominativo</th>
+                                                <th style="background: #0c773c; color: white; width: 20%; text-align: center; vertical-align: middle">Anno Denuncia</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Mese Denuncia</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Dal</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Al</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">ImpRet</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Impfig</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">ImpOcc</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Aliquota</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">ImpCon</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Data Dec.</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Data Cess.</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Dengruass</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Denliv</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Dentiprap</th>
+                                                <th style="background: #0c773c; color: white; width: 10%; text-align: center; vertical-align: middle">Dettaglio</th>
+                                                <th hidden></th>
+                                                <th hidden></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (TFI.OCM.Amministrativo.NotificheUfficioOCM i in Model)
+                                            {
+                                                <tr style="vertical-align:middle;text-align:center">
+                                                    <td style="text-align:center;vertical-align:middle">@i.CodPos</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Matricola</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Nominativo</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.AnnDen</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.MesDen</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Dal</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Al</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Imprett</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Impfig</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.ImpOcc</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Aliq</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Impcon</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Datdec</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Datces</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Dengruass</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Denliv</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Denqua</td>
+                                                    <td style="text-align:center;vertical-align:middle">@i.Dentiprap</td>
+                                                    <td><a href="@Url.Action("DettaglioImporti","Amministrativo",new {Codpos=i.CodPos,AnnDen=i.AnnDen,MesDen=i.MesDen,ProDen=i.ProDen,ProDendet=i.ProDenDet,Nominativo=i.Nominativo,RagSoc=ViewBag.RagSoc,TipMov=ViewBag.Tipmov,Periodo=ViewBag.Periodo})"><i class="fas fa-search fa-lg"></i></a></td>
+                                                    <td hidden>@i.ProDen</td>
+                                                    <td hidden>@i.ProDenDet</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            }
+        }
+        <div class="row" style="margin-top:20px" id="buttons">
+            <div class="col-3">
+                <button type="button" id="btn_stampa" class="btn_official">Stampa video</button>
+            </div>
+            <div class="col-3">
+                <button type="button" id="btn_stampaDoc" class="btn_official">Stampa Documento</button>
+            </div>
+            <div class="col-3">
+
+            </div>
+            <div class="col-3">
+                <a href='javascript:history.go(-1)' class="btn_official">Chiudi</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#btn_stampa").click(function () {
+            window.print();
+        });
+
+        $("#btn_stampaDoc").click(function () {
+
+            var codPos = $("#CodPos").val();
+            var annDen = $("#hd_annDen").html();
+            var mesDen = $("#hd_mesDen").html();
+            var proDen = $("#hd_proDen").html();
+            var tipoMovimento = $("#TipMov").val();
+
+            $.ajax({
+                url: "/Amministrativo/StampaDocumento_step1",
+                dataType: "text",
+                method: "POST",
+                data: { "codPos": codPos, "annDen": annDen, "mesDen": mesDen, "proDen": proDen, "tipoMovimento": tipoMovimento },
+                success: function (result) {
+                    if (result != "NO") {
+                        if (result == "Movimento non contabilizzato. Impossibile stampare") {
+                            alert("Movimento non contabilizzato. Impossibile stampare");
+                        }
+                        else {
+                            $("#confirm_modal").modal("show");
+                            $("#confirm_modal #cont_messaggio").html("<p>" + result + "</p>");
+                        }
+                    }
+                }
+
+            });
+
+        });
+    });
+</script>
+
+

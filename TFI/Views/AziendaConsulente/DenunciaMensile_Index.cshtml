@@ -1,0 +1,433 @@
+﻿
+@{
+    ViewBag.Title = "Denuncia Mensile";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    var arretrato = TempData["arretratoSospeso"] as TFI.OCM.AziendaConsulente.RicercaArretrato;
+}
+
+@using Newtonsoft.Json
+@model List<TFI.OCM.AziendaConsulente.DenunciaMensileSalvata>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <div class="modal" tabindex="-1" id="denunciaMensile_Upload_Errors">
+        <div class="modal-dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Errori nel caricamento tramite file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="text-center text-white" style="background-color: #0c773c; font-size: 17px">
+                        <tr>
+                            <th>Errore</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var err in ViewBag.ErrorsInFile)
+                        {
+                            <tr>
+                                <td style="font-size: 16px">@Html.Raw(@err)</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="modal" tabindex="-1" id="denunciaMensile_Upload">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="titolo">Caricamento Tracciato Record Denuncia Mensile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("UploadDIPA", "AziendaConsulente", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 cont_data">
+                            @Html.TextBox("anno", null, new { @readonly = "readonly", required = "required", id = "upload_anno" })
+                        </div>
+                        <div class="col-12 cont_data">
+                            <select id="upload_mese" required disabled>
+                                @foreach (SelectListItem mese in ViewBag.listaMesi)
+                                {
+                                    if (mese.Value == "0")
+                                    {
+                                        <option value="">@mese.Text.ToUpper()</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@mese.Value">@mese.Text</option>
+                                    }
+                                }
+                            </select>
+                            <div style="display:none">
+                                @Html.TextBox("mese", "", new { id = "upload_selectedMonth" })
+                            </div>
+                        </div>
+                        <div class="col-12 cont_data">
+                            <div id="cont_file" style="min-height: 65px">
+                                @Html.Label("File")
+                                <input type="file" id="fileUpload" name="fileUpload" required accept=".txt" />
+                                <p id="fileUpload_errorMsg" class="text-red" hidden>* Formato file non valido</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:none">
+                        @{ string proDen = ViewBag.proDen;}
+                        @Html.TextBox("proDen", proDen, new { id = "upload_proDen" })
+                    </div>
+                    <div class="col-12 cont_btn">
+                        <button type="submit" class="btn_official" id="upload_btnConferma">Conferma</button>
+                        <div id="btnConfermaIsVisible" style="display:none">@ViewBag.btnConfermaIsVisible</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="card card-default" id="denunceAnnuali">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            Denuncia Mensile
+        </h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-body col-3" id="cont_sceltaAnno">
+                                    @using (Html.BeginForm("DenunciaMensile_SceltaAnno", "AziendaConsulente", FormMethod.Post, new { @id = "form_sceltaAnno" }))
+                                    {
+                                        @Html.Label("Anno:")
+                                        <select required id="ddl_sceltaAnno" name="anno">
+                                            @foreach (int anno in ViewBag.listaAnni)
+                                            {
+                                                <option value="@anno">@anno</option>
+                                            }
+                                        </select>
+                                    }
+                                </div>
+                                <div class="card-body col-3 d-flex justify-content-end" id="tipo">
+                                    @Html.Label("Tipo:")
+                                    <select required id="filtroTipo" name="anno" style="margin-left: 10px; width: 100px; height: 30px;">
+                                        <option value="Tutte">Tutte</option>
+                                        <option value="Denuncia">Denuncia</option>
+                                        <option value="Notifica di Ufficio">Notifica di Ufficio</option>
+                                    </select>
+                                </div>
+                                <div style="display:none" id="annoSelezionato">@ViewBag.annoSelezionato</div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row">
+
+            @{ bool semaforo = true;}
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    @using (Html.BeginForm("DenunciaMensile_Inserimento", "AziendaConsulente", FormMethod.Post, new { @id = "form_sceltaDipa" }))
+                                    {
+                                        <div id="opaco"></div>
+                                        <table class="table table-bordered table-hover table-striped" id="tb_DenunceAnnuali">
+                                            <thead>
+                                                <tr>
+                                                    <th>Mese</th>
+                                                    <th>Descrizione</th>
+                                                    <th>Scadenza</th>
+                                                    <th>Conferma</th>
+                                                    <th>Stato</th>
+                                                    <th>Dovuto</th>
+                                                    <th>Sanzioni</th>
+                                                    <th>Rettifiche</th>
+                                                    <th>Sanzioni Ret.</th>
+                                                    <th>Totale Contributi</th>
+                                                    <th>&emsp;</th>
+                                                    <th>&emsp;</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (TFI.OCM.AziendaConsulente.DenunciaMensileSalvata denuncia in Model)
+                                                {
+                                                <tr>
+                                                    <td>@denuncia.MesDen</td>
+                                                    <td class="descrizione">@denuncia.TipMov</td>
+                                                    <td>@(denuncia.StaDen == "Rapporti di Lavoro Assenti" ? "-" : denuncia.DatSca)</td>
+                                                    <td>@denuncia.DatApe</td>
+                                                    <td class="staDen">@denuncia.StaDen</td>
+                                                    <td>@denuncia.ImpCon</td>
+                                                    <td>@denuncia.ImpSan</td>
+                                                    <td class="rettifiche">@denuncia.ImpDel</td>
+                                                    <td>@denuncia.ImpSanRet</td>
+                                                    <td>@denuncia.ImpTot</td>
+                                                    @if (denuncia.StaDen == "Rapporti di Lavoro Assenti")
+                                                    {
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                    }
+                                                    else if (denuncia.StaDen != "Denuncia non Presentata")
+                                                    {
+
+                                                        if (denuncia.StaDen == "Non Confermata")
+                                                        {
+                                                            <td>
+                                                                <button type="button" class="btn_inserisci">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" id="btn_eliminaDIPA">
+                                                                    <i class="fas fa-trash-alt"></i>
+                                                                </button>
+                                                            </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td></td>
+                                                            <td>@Html.RadioButton("selezRecord", denuncia.NumMes, false, new { @class = "radioB" })</td>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        if ((ViewBag.numeroDenunceAnnoPrecedente >= 12 && ViewBag.annoSelezionato > ViewBag.PrimoAnnoNonPrescritto) || ViewBag.annoSelezionato == ViewBag.PrimoAnnoNonPrescritto)
+                                                        {
+                                                            if (ViewBag.annoSelezionato < ViewBag.annoDenunciabile)
+                                                            {
+                                                                if (ViewBag.numeroDenunceSospese == 0 && semaforo)
+                                                                {
+                                                                    semaforo = false;
+                                                                    <text>
+                                                                        <td>
+                                                                            <button type="button" class="btn_inserisci">
+                                                                                <i class="fas fa-pencil-alt"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" class="btn_upload">
+                                                                                <i class="fas fa-file-upload nav-icon"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </text>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (denuncia.NumMes <= ViewBag.meseDenunciabile && ViewBag.numeroDenunceSospese == 0 && semaforo)
+                                                                {
+                                                                    semaforo = false;
+                                                                    <text>
+                                                                        <td>
+                                                                            <button type="button" class="btn_inserisci">
+                                                                                <i class="fas fa-pencil-alt"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" class="btn_upload">
+                                                                                <i class="fas fa-file-upload nav-icon"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </text>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                }
+
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <td></td>
+                                                            <td></td>
+                                                        }
+                                                    }
+                                                    <td style="display: none">@denuncia.UteChi</td>
+                                                    <td style="display: none" class="proDen">@denuncia.ProDen</td>
+                                                    <td style="display: none" class="idDipa">@denuncia.IdDipa</td>
+                                                    <td style="display: none" class="numMes">@denuncia.NumMes</td>
+                                                    <td style="display: none">
+                                                        <div class="tipOpe"></div>
+                                                    </td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                        <div style="display: none">
+                                            @Html.TextBox("anno", 0, new { @class = "selectedYear", id = "selectedYear" })
+                                            @Html.TextBox("mese", 0, new { @class = "selectedMonth", id = "selectedMonth" })
+                                            @Html.TextBox("proDen", 0, new { @class = "selectedProg", id = "selectedProg" })
+                                            @Html.TextBox("idDipa", 0, new { @class = "associatedIdDipa", id = "associatedIdDipa" })
+                                            @Html.TextBox("staDen", 0, new { id = "statoDenuncia" })
+                                            @Html.TextBox("tipMov", 0, new { id = "tipMov" })
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        @* @{ *@
+        @*     bool nuovoArretrato = (string)ViewBag.lblArretrato == "Inserimento Denuncia Arretrati"; *@
+        @* } *@
+        <section class="content" style="width:100%">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="statoAttualeDenuncia" style="display:none"></div>
+                        <div id="meseDenunciabile" style="display:none">@ViewBag.meseDenunciabile</div>
+                        <div id="annoDenunciabile" style="display:none">@ViewBag.annoDenunciabile</div>
+                        <div id="annoSelezionato" style="display:none">@ViewBag.annoSelezionato</div>
+                        <div id="numSospesi" style="display:none">@ViewBag.numeroDenunceSospese</div>
+                        <div id="numDenunceAnnoPrecedente" style="display:none">@ViewBag.numeroDenunceAnnoPrecedente</div>
+                        <div id="primoAnnoNonPrescritto" class="d-none">@ViewBag.PrimoAnnoNonPrescritto</div>
+                        <div class="card">
+                            <div class="card-body row" id="cont_buttons">
+                                <div class="col-4">
+                                    @using (Html.BeginForm("VisualizzaDIPA", "AziendaConsulente", FormMethod.Post))
+                                    {
+                                        <text>
+                                            @Html.TextBox("anno", 0, new { style = "display:none", @class = "selectedYear" })
+                                            @Html.TextBox("mese", 0, new { style = "display:none", @class = "selectedMonth" })
+                                            @Html.TextBox("proDen", 0, new { style = "display:none", @class = "selectedProg" })
+                                            @Html.TextBox("idDipa", 0, new { style = "display:none", @class = "associatedIdDipa" })
+                                            <button id="btn_readonlyDIPA" class="btn btn_official" style="display:none" type="submit">
+                                                Visualizza
+                                            </button>
+                                        </text>
+                                    }
+                                    @*<button id="btn_eliminaDIPA" class="btn btn_official" style="display:none">
+                                        Elimina
+                                    </button>*@
+                                </div>
+                                <div class="col-4">
+                                    @using (Html.BeginForm("DenunciaMensile_Rettifiche", "AziendaConsulente", FormMethod.Get))
+                                    {
+                                        <text>
+                                            @Html.TextBox("anno", 0, new { style = "display:none", @class = "selectedYear" })
+                                            @Html.TextBox("mese", 0, new { style = "display:none", @class = "selectedMonth" })
+                                            @Html.TextBox("proDen", 0, new { style = "display:none", @class = "selectedProg" })
+                                            @Html.TextBox("idDipa", 0, new { style = "display:none", @class = "associatedIdDipa" })
+                                            <button id="btn_RettificheDIPA" class="btn btn_official" style="display:none" type="submit">
+                                                Rettifiche
+                                            </button>
+                                        </text>
+                                    }
+                                </div>
+                                <div class="col-4">
+                                    @using (Html.BeginForm("TotaliDIPA", "AziendaConsulente", FormMethod.Get))
+                                    {
+                                        <text>
+                                            @Html.TextBox("anno", 0, new { style = "display:none", @class = "selectedYear" })
+                                            @Html.TextBox("mese", 0, new { style = "display:none", @class = "selectedMonth" })
+                                            @Html.TextBox("proDen", 0, new { style = "display:none", @class = "selectedProg" })
+                                            @Html.TextBox("idDipa", 0, new { style = "display:none", @class = "associatedIdDipa" })
+                                            @Html.TextBox("ret", "S", new { style = "display:none" })
+                                            <button id="btn_totMeseDIPA" class="btn btn_official" style="display:none" type="submit">
+                                                Totale Mese
+                                            </button>
+                                        </text>
+                                    }
+                                    @using (Html.BeginForm("DenunciaMensile_Nuova", "AziendaConsulente", FormMethod.Get, new { id = "ModificaDipa" }))
+                                    {
+                                        <text>
+                                            @Html.TextBox("anno", 0, new { style = "display:none", @class = "selectedYear" })
+                                            @Html.TextBox("mese", 0, new { style = "display:none", @class = "selectedMonth" })
+                                            @Html.TextBox("proDen", 0, new { style = "display:none", @class = "selectedProg" })
+                                            @Html.TextBox("isFirstLoading", true, new { style = "display:none", @class = "isFirstLoading" })
+                                            @*<button type="submit" id="btn_modificaDIPA" class="btn btn_official" style="display:none">
+                                                    Modifica
+                                                </button>*@
+                                        </text>
+                                    }
+                                </div>
+                                @* @if (!nuovoArretrato) *@
+                                @* { *@
+                                @*     <div class="col-4" style="display: none"> *@
+                                @*         <button type="button" class="btn_official btn_arretrato" onclick="window.location.href = '@Url.Action("EliminaArretrato", new { aDen = arretrato.anno, mDen = arretrato.mese, pDen = arretrato.proDen })'" value="elimina">Elimina</button> *@
+                                @*     </div> *@
+                                @*     <div class="col-4"></div> *@
+                                @* } *@
+                                @* @if (nuovoArretrato) *@
+                                @* { *@
+                                @*     <div class="col-12" style="display: none"> *@
+                                @*         <a href="@Url.Action("InsDenunciaArretrati")" class="btn_official btn_arretrato" *@
+                                @*            style="width:20%; margin-left: 40%; min-width:20%;">Seleziona</a> *@
+                                @*     </div> *@
+                                @* } *@
+                                @* @if (!nuovoArretrato) *@
+                                @* { *@
+                                @*     <div class="col-4" style="display: none"> *@
+                                @*         @using (Html.BeginForm("InsDenunciaArretrati", "AziendaConsulente", FormMethod.Post)) *@
+                                @*         { *@
+                                @*             @Html.Hidden("txtAnno", arretrato.anno) *@
+                                @*             <button type="submit" class="btn_official btn_arretrato" value="seleziona">Seleziona</button> *@
+                                @*         } *@
+                                @*     </div> *@
+                                @* } *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@section JS{
+
+    @Scripts.Render("~/dist/js/pages/DenunciaMensile_Index.js")
+}
+
+<script>
+    $('#filtroTipo').change(function () {
+        var filterValue = $(this).val();
+        var list = @Html.Raw(JsonConvert.SerializeObject(Model));
+        if (filterValue !== "Tutte") {
+            list = list.filter(denuncia => denuncia.TipMov === filterValue);
+        }
+        SostituisciRecord(list);
+    });
+</script>
+
+@if (ViewBag.ErrorsInFile != null && ViewBag.ErrorsInFile.Count > 0)
+{
+    <script>$('#denunciaMensile_Upload_Errors').modal('show');</script>
+}

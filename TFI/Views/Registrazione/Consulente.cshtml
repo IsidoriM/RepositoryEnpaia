@@ -1,0 +1,119 @@
+@using TFI.Models.Registrazione
+@model OCM.TFI.OCM.Registrazione.RegistrazioneConsulenteModel
+
+@{
+    ViewBag.Title = "Enpaia | Registrazione Consulente";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@section showMessage{
+    @{ Html.RenderPartial("PartialViewShowMessages"); }
+}
+<div class="container">
+    @Html.Partial("RegistrazioneHeaderPartial", new RegistrazioneHeaderModel{ Title = "Registrazione Consulente"})
+    @using (Html.BeginForm("Consulente", "Registrazione", FormMethod.Post))
+    {
+        <div class="form-row">
+            @Html.LabelFor(model => model.SelectedAssociazione)
+            @Html.ValidationMessageFor(model => model.SelectedAssociazione, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.SelectedAssociazione, (IEnumerable<SelectListItem>)ViewBag.Associazioni, "Seleziona associazione/studio", new { @class = "form-control" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Denominazione)
+            @Html.ValidationMessageFor(model => model.Denominazione, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.Denominazione, new { @class = "form-control", maxlength = "100" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.CodiceFiscale)
+            @Html.ValidationMessageFor(model => model.CodiceFiscale, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.CodiceFiscale, new { @class = "form-control", maxlength = "16" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.PartitaIva)
+            @Html.ValidationMessageFor(model => model.PartitaIva, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.PartitaIva, new { @class = "form-control", maxlength = "11" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.SelectedTipoIndirizzo)
+            @Html.ValidationMessageFor(model => model.SelectedTipoIndirizzo, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.SelectedTipoIndirizzo, (IEnumerable<SelectListItem>)ViewBag.TipiIndirizzo, "Seleziona DUG", new { @class = "form-control" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Indirizzo)
+            @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.Indirizzo, new { @class = "form-control", maxlength = "80" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Civico)
+            @Html.ValidationMessageFor(model => model.Civico, "", new { @class = "text-danger"})
+            @Html.TextBoxFor(model => model.Civico, new { @class = "form-control", maxlength = "10" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Provincia)
+            @Html.ValidationMessageFor(model => model.SelectedProvincia, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.SelectedProvincia, (IEnumerable<SelectListItem>)ViewBag.Province, "Seleziona Provincia", new {@class="form-control"})
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.SelectedComune)
+            @Html.ValidationMessageFor(model => model.SelectedComune, "", new { @class = "text-danger" })
+            @if (string.IsNullOrEmpty(Model.SelectedProvincia))
+            {
+                @Html.DropDownListFor(model => model.SelectedComune, Model.Comuni, new { @class = "form-control", disabled = true })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.SelectedComune, Model.Comuni, "seleziona comune", new { @class = "form-control" })
+            }
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.SelectedLocalita)
+            @Html.ValidationMessageFor(model => model.SelectedLocalita, "", new { @class = "text-danger" })
+            @{
+                if (string.IsNullOrEmpty(Model.SelectedComune))
+                {
+                    @Html.DropDownListFor(model => model.SelectedLocalita, Model.LocalitaSelezionabili, new { @class = "form-control", disabled = true })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.SelectedLocalita, Model.LocalitaSelezionabili, "seleziona localita", new { @class = "form-control" })
+                }
+            }
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.CAP)
+            @Html.ValidationMessageFor(model => model.CAP, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.CAP, new { @class = "form-control", @readonly = true })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Telefono)
+            @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control", maxlength = "9" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Cell)
+            @Html.ValidationMessageFor(model => model.Cell, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.Cell, new { @class = "form-control", maxlength = "10" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.EmailRegistrazione)
+            @Html.ValidationMessageFor(model => model.EmailRegistrazione, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.EmailRegistrazione, new { @class = "form-control", maxlength = "100" })
+        </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.Pec)
+            @Html.ValidationMessageFor(model => model.Pec, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(model => model.Pec, new { @class = "form-control", maxlength = "100" })
+        </div>
+        <div class="form-row d-flex justify-content-between my-3">
+            @Html.ActionLink("Torna indietro", "Accesso", "Login", string.Empty, new { @class = "btn btn-primary" })
+            <button class="btn btn-success ">Conferma</button>
+        </div>
+    }
+</div>
+
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/expressiveval")
+
+<script type="module" src="../../dist/js/pages/RegistrazioneConsulente/RegistrazioneConsulente.js"></script>
+<script type="module" src="../../dist/js/pages/RegistrazioneConsulente/Selectors.js"></script>
+<script src="~/dist/js/Validators/CodiceFiscale.js"></script>

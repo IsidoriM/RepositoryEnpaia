@@ -1,0 +1,70 @@
+﻿
+
+<div class="modal" tabindex="-1" id="otp_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Inserisci OTP (One Time Password)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("CheckOTP", "Login", FormMethod.Post))
+            {
+                <!-- Modal -->
+                <div class="modal-body">
+                    <div>
+                        <p>Inserire qui sotto l'OTP che le è stato inviato per e-mail</p>
+                    </div>
+                    <div>
+                        @Html.TextBox("password", String.Empty, new { @placeholder = "Inserisci OTP", required = "required", @class="numberonly" })
+                        @Html.Hidden("tipoAccesso", ViewData["tipoAccesso"], new { @id = "hd_tipoAccesso_otp" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Verifica OTP</button>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="modalOTPDeleghe">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Inserisci OTP (One Time Password)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            @using (Html.BeginForm("CheckOTPDeleghe", "Login", FormMethod.Post))
+            {
+                <!-- Modal -->
+                <div class="modal-body">
+                    <div>
+                        <p>Inserire qui sotto l'OTP che le è stato inviato</p>
+                    </div>
+                    <div>
+                        @Html.TextBox("otp", String.Empty, new { @placeholder = "Inserisci OTP", required = "required", @class = "numberonly" })
+                        @Html.Hidden("tipoAccesso", ViewData["tipoAccesso"], new { @id= "hd_tipoAccesso_otpDeleghe" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Verifica OTP</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+            $('.toast').toast('show');
+    });
+</script>

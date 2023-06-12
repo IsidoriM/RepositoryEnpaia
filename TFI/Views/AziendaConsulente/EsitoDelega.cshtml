@@ -1,0 +1,110 @@
+﻿@model TFI.OCM.AziendaConsulente.DelegheOCM 
+@{
+    ViewBag.Title = "Enpaia | Esito Delega";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<div class="card">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        Esito Operazione Delega
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="card card-primary card-tabs">
+
+                    <div class="card-body">
+
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <p>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-12 mt-1">
+                                                <h5 class="font-weight-bold">Data Richiesta Delega</h5>
+                                                <p id="datini" name="datini" value="">@Model.datidelega.datini</p>
+                                            </div>
+                                        </div>
+                                        <h5 class="font-weight-bold">AZIENDA</h5>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-6 mt-1">
+                                                <label>Ragione Sociale</label>
+                                                <p id="RagioneSocialePA" name="RagioneSocialePA" asp-for="RagioneSocialePA" value="">@Model.datidelega.RagSocAz</p>
+                                            </div>
+                                            <div class="form-group col-6 mt-1">
+                                                <label>Codice Fiscale</label>
+                                                <p id="CodiceFiscalePA" name="CodiceFiscalePA" asp-for="CodiceFiscalePA">@Model.datidelega.CodFisAz</p>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <h5 class="font-weight-bold">CONSULENTE</h5>
+                                        <div class="row">
+                                            <div class="col-sm-6 mt-1">
+                                                <div class="form-group">
+                                                    <label>Ass./Studio</label>
+                                                    <p id="AssStudio" name="AssStudio"> @Model.datidelega.AssStudio</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3 mt-1">
+                                                <div class="form-group">
+                                                    <label>Ragione Sociale</label>
+                                                    <p id="RagSocDe" name="RagSocDe">@Model.datidelega.RagSocDe</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-3 mt-1">
+                                                <div class="form-group">
+                                                    <label>Partita Iva</label>
+                                                    <p id="ParIvaDe" name="ParIvaDe" maxlength="11">@Model.datidelega.ParIvaDe</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row text-center d-flex justify-content-center">
+                                            @if (Model.datidelega.IsAttiva)
+                                            {
+                                                <h5 class="font-weight-bold">
+                                                    OPERAZIONE EFFETTUATA CON SUCCESSO: DELEGA ATTIVA
+                                                </h5>
+                                            }
+                                            else
+                                            {
+                                                <h5 class="font-weight-bold">
+                                                    OPERAZIONE EFFETTUATA CON SUCCESSO: DELEGA RIFIUTATA
+                                                </h5>
+                                            }
+                                        </div>
+                                    </div>
+                                </p>
+                                <div class="form-row justify-content-between mt-3">
+                                    <div class="col-10">
+                                    </div>
+                                    <div class="d-flex justify-content-around col-2">
+                                        @if (!Model.datidelega.IsFromLink)
+                                        {
+                                            <a class="btn btn-outline-success" id="back1" href="@Url.Action("Delega", "AziendaConsulente")">
+                                                Ritorna a Gestione Deleghe
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-outline-success" id="back1" href="@Url.Action("Login", "Login", new { tipoUtente = "A" })">
+                                                Vai a Login
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

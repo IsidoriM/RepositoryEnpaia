@@ -1,0 +1,172 @@
+﻿@model TFI.OCM.Amministrativo.DelegheOCM
+
+@{
+    ViewBag.Title = "Dettaglio Delega";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<style>
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+
+@using (Html.BeginForm("DettaglioDeleghe", "Amministrativo", FormMethod.Post))
+{
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <h3 style="background:#0c773c;text-align:center;width:100%;color:white">Dettaglio Delega</h3>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Codice Posizione Azienda</label>
+                                        <input class="form-control" id="AssStudio" name="AssStudio" value="@Model.datidelega.codpos" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Ragione Sociale Azienda</label>
+                                        <input type="text" class="form-control" id="Denominazione" name="Denominazione" value="@Model.datidelega.RagSocDe" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Ass./Studio</label>
+                                        <input class="form-control" id="AssStudio" name="AssStudio" value="@Model.datidelega.AssStudio" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Denominazione</label>
+                                        <input type="text" class="form-control" id="Denominazione" name="Denominazione" value="@Model.datidelega.Denominazione" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Ragione Sociale</label>
+                                        <input type="text" class="form-control" id="RagSocDe" name="RagSocDe" value="@Model.datidelega.RagSocDe" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Partita Iva</label>
+                                        <input class="form-control" id="ParIvaDe" name="ParIvaDe" value="@Model.datidelega.ParIvaDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Codice Fiscale</label>
+                                        <input type="text" class="form-control" id="CodFisDe" name="CodFisDe" value="@Model.datidelega.CodFisDe" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Indirizzo</label>
+                                        <input type="text" class="form-control" id="ViaDe" name="ViaDe" value="@Model.datidelega.ViaDe" readonly>
+
+
+                                        <input class="form-control" id="CODDUG" name="CODDUG" hidden>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>&nbsp</label>
+                                        <input type="text" class="form-control" id="IndDe" name="IndDe" value="@Model.datidelega.IndDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Numero Civico</label>
+                                        <input class="form-control" id="NumCivDe" name="NumCivDe" value="@Model.datidelega.NumCivDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label>Comune</label>
+                                        <input type="text" class="form-control" id="ComuneDe" name="ComuneDe" value="@Model.datidelega.ComuneDe" readonly>
+                                        <input type="text" class="form-control" id="CODCOM" name="CODCOM" hidden>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Provincia</label>
+                                        <input type="text" class="form-control" id="PrDe" name="PrDe" value="@Model.datidelega.PrDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cap</label>
+                                        <input class="form-control" id="CapDe" name="CapDe" value="@Model.datidelega.CapDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Località</label>
+                                        <input type="text" class="form-control" id="LocalitaDe" name="LocalitaDe" value="@Model.datidelega.LocalitaDe" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Telefono</label>
+                                        <input type="text" class="form-control" id="TelDe" name="TelDe" value="@Model.datidelega.TelDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Cellulare</label>
+                                        <input type="text" class="form-control" id="CelDe" name="CelDe" value="@Model.datidelega.CelDe" readonly>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" id="EmailDe" name="EmailDe" value="@Model.datidelega.EmailDe" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Email Certificata</label>
+                                        <input type="text" class="form-control" id="EmailCertDe" name="EmailCertDe" value="@Model.datidelega.EmailCertDe" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  ">
+
+                        <div class="col-sm-2 ">
+                            <button type="button" onclick="window.location.href='@Url.Action("SearchDelega", "Amministrativo")'" id="btnIndietro" class="btn btn-block btn-outline-success btn-lg">Indietro</button>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+}

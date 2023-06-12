@@ -1,0 +1,106 @@
+﻿@model TFI.OCM.Amministrativo.GestioneContrattiOCM
+@{
+    ViewBag.Title = "ContrattiRicerca";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+<style>
+    .btn-group-lg > .btn, .btn-lg {
+        padding: 0.4rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-radius: 0.3rem;
+    }
+</style>
+
+@using (Html.BeginForm("ContrattiRicerca", "Amministrativo", FormMethod.Post))
+{
+    <div class="card" style="background-color:white">
+        <div style="background-color: #0c773c" class="card-header">
+            <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca Contratti</h3>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Denominazione </label>
+                <input type="text" class="form-control" id="Denominazione" name="Denominazione"  />
+            </div>
+            <div class="col-sm-4">
+                <label>Qualifica</label>
+                <select class="form-control" id="livello" name="livello" asp-for="livello">
+                    <option selected disabled></option>
+                    <option value="1">DIRIGENTE</option>
+                    <option value="2">IMPIEGATO</option>
+                    <option value="3">IMPIEGATO QUADRO</option>
+
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="input-group offset-lg-3">
+                <div class="col-lg-3">
+                    <label>&nbsp;</label>
+                    @Html.ActionLink("Nuovo Contratto", "ContrattoInserimento", "Amministrativo", routeValues: null, htmlAttributes: new { @class = "Indietro btn btn-block btn-outline-success btn-lg" })
+
+                </div>
+                <div class="col-lg-3 offset-lg-4">
+                    <label>&nbsp;</label>
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+        </div>
+        <br>
+
+
+        @if (Model != null)
+        {
+
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="height:300px; overflow:scroll;">
+                                <table id="" class="table table-bordered table-hover table-striped" style="margin-bottom: 20px;padding:2px; text-align: center; ">
+                                    <thead>
+                                        <tr class="header">
+                                            <th>Denominazione</th>
+                                            <th>Qualifica</th>
+                                            <th>Data Inizio</th>
+                                            <th>Data Fine</th>
+                                            <th>Modifica</th>
+                                            <th>Elimina</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var i in Model.ListCont)
+                                        {
+                                            <tr style="vertical-align:middle;text-align:center">
+                                                <td>@i.Denominazione</td>
+                                                <td>@i.Qualifica</td>
+                                                <td>@i.DATINI.Substring(0, 10)</td>
+                                                <td>@i.DATFIN.Substring(0, 10)</td>
+                                                <td><a href="@Url.Action("ModificaContratto","Amministrativo",new { Qualifica=i.Qualifica,ASSCON=i.ASSCON,Denominazione=i.Denominazione,DATINI=i.DATINI,DATFIN=i.DATFIN,NUMMEN=i.NUMMEN,MAXSCA=i.MAXSCA,PERSCA=i.PERSCA,RIVAUT=i.RIVAUT,CODCON=i.CODCON,PROCON=i.PROCON,CODTIPCON=i.CODTIPCON})"><i class="far fa-edit fa-lg"></i></a></td>
+                                                <td><a href="@Url.Action("EliminaContratti","Amministrativo", new {DATFIN=i.DATFIN,DATINI=i.DATINI,CODCON=i.CODCON,PROCON=i.PROCON})"><i class="fas fa-trash-alt"></i></a></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        }
+
+
+
+
+    </div>
+}

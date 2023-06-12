@@ -1,0 +1,163 @@
+﻿@using System.Text.RegularExpressions
+@using OCM.TFI.OCM.Registrazione
+@using TFI.OCM.Utilities
+@model OCM.TFI.OCM.Registrazione.DettaglioPraticaRegistrazioneAzienda
+
+@{
+    ViewBag.Title = "Enpaia | Consultazione Registrazione Azienda";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+    Regex regexSplitPascalCase = new Regex("([a-z,0-9](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", RegexOptions.Compiled);
+}
+
+@section showMessage{
+    @{ Html.RenderPartial("PartialViewShowMessages"); }
+}
+
+<link href="@Url.Content("~/dist/css/pages/RegistrazioneAzienda.css")" rel="stylesheet" type="text/css"/>
+
+<div class="container pt-3">
+    <div class="card" style="background-color: #097132">
+        <div class="mb-4 d-flex justify-content-center w-100" style="background-color: #097132">
+            <div class="text-center mr-3">
+                <img class="mt-3 mb-3" style="border-radius: 2%; width:123px; background-color:white" src="~/Images/Logo-Fondazione-Enpaia.png">
+            </div>
+            <div class="text-sm-center text-md-left">
+                <h2 style="margin-top:50px;">
+                    <label class="text-white" style="font-family: 'Poppins',sans-serif;">Consultazione Registrazione Azienda</label>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+        @{
+            switch (Model.StatoRegistrazione)
+            {
+                case StatoRegistrazioneAzienda.InAttestaDiDocumentazione:
+                    <div class="tab-pane fade show active" id="datiAzienda" role="tabpanel" aria-labelledby="datiAzienda-Tab">
+                        <div class="form-group mt-4">
+                            <h2 class="font-weight-bold text-center">Registrazione in attesa di conferma dall'utente Enpaia</h2>
+                            <p class="mt-5">
+                                Questo è lo stato attuale della tua pratica!
+                            </p>
+                            <p>Di seguito potrai vedere i dettagli e caricare i documenti mancanti!</p>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label>Numero Protocollo:</label>
+                                        <p>@Model.Protocollo.NumeroProtocollo</p>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label>Data inzio procedura registrazione:</label>
+                                        <p>@Model.Protocollo.DataProtocollo.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-6">
+                                        <label>Lista dei documenti caricati correttamente:</label>
+                                        <ul>
+                                            @foreach (var documento in Model.DocumentiCaricati)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("DownloadFileRegistrazione", "FileDownload", new {uuid = documento.Uuid, idAllegato = documento.IdAllegato})"><i class="fas fa-file"></i></a>
+                                                    @regexSplitPascalCase.Replace(@documento.TipoDocumento.ToString(), "$1 ")
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label><b>Lista dei documenti ancora da caricare</b>:</label>
+                                        @using (Html.BeginForm("CaricaDocumentiRegistrazioneAzienda", "Registrazione", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            foreach (var documento in Model.DocumentiDaCaricare)
+                                            {
+                                                switch (documento.TipoDocumento)
+                                                {
+                                                    case TipoDocumento.CertificatoIscrizioneCCIAA:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.CertificatoIscrizioneCCIAA)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.CertificatoIscrizioneCCIAA.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.CertificatoIscrizioneCCIAA.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.StatutoAttoCostitutivo:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.StatutoAttoCostitutivo)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.StatutoAttoCostitutivo.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.StatutoAttoCostitutivo.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.DocumentoLegaleRappresentante:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.DocumentoLegaleRappresentante)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.DocumentoLegaleRappresentante.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.DocumentoLegaleRappresentante.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.PartitaIva:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.PartitaIva)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.PartitaIva.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.PartitaIva.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.DM80:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.DM80)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.DM80.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.DM80.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.DelegaConsulente:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.DelegaConsulente)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.DelegaConsulente.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.DelegaConsulente.File)
+                                                        </div>
+                                                        break;
+                                                    case TipoDocumento.InformativaPrivacy:
+                                                        <div class="p-3">
+                                                            @Html.LabelFor(m => m.DocumentiInCaricamento.InformativaPrivacy)
+                                                            @Html.TextBoxFor(m => m.DocumentiInCaricamento.InformativaPrivacy.File, new { type = "file", @class = "form-control", accept = ".pdf, .doc, .docx"  })
+                                                            @Html.ValidationMessageFor(m => m.DocumentiInCaricamento.InformativaPrivacy.File)
+                                                        </div>
+                                                        break;
+                                                    default:
+                                                        throw new ArgumentOutOfRangeException();
+                                                }
+                                            }
+                                            @Html.HiddenFor(m => m.Protocollo.IdProtocollo)
+                                            @Html.HiddenFor(m => m.Protocollo.NumeroProtocollo)
+                                            @Html.HiddenFor(m => m.Protocollo.DataProtocollo)
+                                            @Html.HiddenFor(m => m.PartitaIva)
+                                            @Html.HiddenFor(m => m.CodicePosizione)
+                                            <div class="form-row justify-content-end mt-3">
+                                                <input type="submit" class="btn btn-block btn-outline-success col-3" value="Carica Documenti">
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    break;
+                case StatoRegistrazioneAzienda.InLavorazione:
+                    <div class="d-flex justify-content-center">
+                        <h3>Pratica di registrazione in lavorazione</h3>
+                    </div>
+                    break;
+                case StatoRegistrazioneAzienda.PresaInCarico:
+                    <div class="d-flex justify-content-center">
+                        <h3>Registrazione presa in carico</h3>
+                    </div>
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    </div>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/dist/js/Validators/FileSize.js"></script>
+    <script src="~/dist/js/Validators/FileType.js"></script>
+</div>

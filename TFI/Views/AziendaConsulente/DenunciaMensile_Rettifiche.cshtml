@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "DenunciaMensile_Rettifiche";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@model TFI.OCM.AziendaConsulente.RettificheDIPA
+
+<div class="card card-default" id="denunciaMensile_rettifiche">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            Rettifiche Denuncia Mensile
+        </h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row" id="headRow1">
+                                        <div class="col-6">
+                                            <b>@Model.Periodo</b>
+                                        </div>
+                                        <div class="col-6">
+                                            <div style="float:right">
+                                                @Html.Label("Data Denuncia")
+                                                @Html.TextBox("dataDenuncia", Model.DatApe, new { @readonly = true, @id = "dataDenuncia" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row" id="headRow2">
+                                        <div class="col-4">
+                                            @Html.Label("Indirizzo: ")
+                                            @Model.SedeLegale
+                                        </div>
+                                        <div class="col-4">
+                                            @Html.Label("Codice Fiscale: ")
+                                            @Model.CodFis
+                                        </div>
+                                        <div class="col-4">
+                                            @Html.Label("Partita IVA: ")
+                                            @Model.PartitaIVA
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row">
+
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-bordered table-hover table-striped" id="tb_RettificheDIPA">
+                                        <thead>
+                                            <tr>
+                                                <th>Mat.</th>
+                                                <th>Cognome e Nome</th>
+                                                <th>Dal</th>
+                                                <th>Al</th>
+                                                <th>Retribuzione</th>
+                                                <th>Occasionale</th>
+                                                <th>Figurativa</th>
+                                                <th>Aliquota</th>
+                                                <th>Contributi</th>
+                                                <th>Sanzione</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (TFI.OCM.AziendaConsulente.DatiRettificheDIPA ret in Model.ListaRettifiche)
+                                            {
+                                                <tr>
+                                                    <td>@ret.Mat</td>
+                                                    <td>@ret.Nome</td>
+                                                    <td>@ret.Dal</td>
+                                                    <td>@ret.Al</td>
+                                                    <td>@Html.TextBox("impRet", ret.ImpRet, new { @readonly = "readonly" })</td>
+                                                    <td>@Html.TextBox("impOcc", ret.ImpOcc, new { @readonly = "readonly" })</td>
+                                                    <td>@Html.TextBox("impFig", ret.ImpFig, new { @readonly = "readonly" })</td>
+                                                    <td>@ret.Aliquota</td>
+                                                    <td>@ret.ImpConDel</td>
+                                                    <td>@ret.ImpSanDet</td>
+                                                    <td style="display:none">@ret.DenQua</td>
+                                                    <td style="display:none">@ret.CodLiv</td>
+                                                    <td style="display:none">@ret.PerApp</td>
+                                                </tr>
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <section style="width:100%" id="totali">
+                                        <div class="row" id="barraBassa">
+                                            <div class="col-4"></div>
+                                            <div class="col-8 row">
+                                                <div class="col-3">
+                                                    @Html.Label("Contributi")
+                                                    @Html.Label(Model.ImpConDel.ToString())
+                                                </div>
+                                                <div class="col-3">
+                                                    @Html.Label("Addizionale")
+                                                    @Html.Label(Model.ImpAddRecDel.ToString())
+                                                </div>
+                                                <div class="col-3">
+                                                    @Html.Label("Totale")
+                                                    @Html.Label(Model.ImpTotale.ToString())
+                                                </div>
+                                                <div class="col-3">
+                                                    @Html.Label("Sanzioni")
+                                                    @Html.Label(Model.ImpSanRet.ToString())
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                            </div>
+                                            <div class="col-3">                                                
+                                                @Html.ActionLink(Model.BtnOriginale, "DenunciaMensile_Lettura", "AziendaConsulente", new { anno = Model.Anno, mese = Model.Mese, proDen = Model.ProDen, idDipa = Model.IdDipa }, new { @class = "btn_official", id = "btn_lettura" })
+                                            </div>
+                                            <div class="col-3">
+                                                @Html.ActionLink("Torna Indietro", "DenunciaMensile_Index", new { annoSelezionato = Model.Anno, isFirstLoading = false}, new { @class = "btn_official", id = "btn_chiudi" })
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row justify-content-end">
+
+        </div>
+    </div>
+</div>
+

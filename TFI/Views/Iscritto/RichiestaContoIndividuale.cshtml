@@ -1,0 +1,512 @@
+﻿@model TFI.OCM.Iscritto.Anagrafica
+@{
+    ViewBag.Title = "RichiestaContoIndividuale";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    var visibilitàBottone =
+        !String.IsNullOrEmpty(HttpContext.Current.Items["TipoDocumento"] as string) &&
+        !String.IsNullOrEmpty(HttpContext.Current.Items["NumeroDocumento"] as string) &&
+        !String.IsNullOrEmpty(HttpContext.Current.Items["ScadenzaDocumento"] as string);
+    visibilitàBottone = true;
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .table th {
+        text-align: right;
+        vertical-align: middle;
+    }
+
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table label:not(.form-check-label):not(.custom-file-label) {
+        font-weight: 100;
+    }
+
+    .table tr {
+        height: 60px;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    .table-bordered {
+        font-size: 20px;
+    }
+</style>
+
+<!-- #region Tabella_Richiesta_Conto_Individuale -->
+@*<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div style="background-color:#0c773c;color:white;text-align:center;font-size:25px" class="card-header">Lista richieste Conto Individuale </div>
+                    <div class="card-body">*@
+@*@{ List<TFI.OCM.Iscritto.IscrittoRicTFROCM.RichiestaLiquidazione> listaRichiestaLiquidazione = ViewBag.ListaRicLiq as List<TFI.OCM.Iscritto.IscrittoRicTFROCM.RichiestaLiquidazione>;}
+    @if (listaRichiestaLiquidazione != null)
+    {
+        if (listaRichiestaLiquidazione.Count >= 1)*@
+@*{
+    <table id="example2" class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th style="background:#0c773c;color:white;width:55%;text-align:center;vertical-align:middle">Data Fine RDL</th>
+                <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Data Richiesta</th>
+                <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Importo</th>
+                <th style="background:#0c773c;color:white;width:15%;text-align:center;vertical-align:middle">Stato</th>
+
+            </tr>
+        </thead>
+        <tbody>*@
+
+@*@foreach (var i in ViewBag.ListaRicLiq)
+    {
+            <tr>
+                <td style="text-align:center;vertical-align:middle">@i.DATFINRDL.ToString("d")</td>
+                <td style="text-align:center">@i.DTRIC.ToString().Substring(0,10)</td>
+                <td style="text-align:center">@(i.IMPTFR == 0 ? "Dato non disponibile" : i.IMPTFR)</td>
+                <td style="text-align:center">Richiesta Presentata</td>
+            </tr>
+    }*@
+@*</tbody>
+
+            </table>
+        }
+        else
+        {
+            <p style="text-align:center"> Richieste Conto Individuale non trovate</p>
+        }
+    }
+    else
+    {
+        <p style="text-align:center"> Richieste Conto Individuale non trovate</p>
+    }*@
+<!--</div>-->
+<!-- /.card-body -->
+<!--</div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<!-- #endregion-->
+<div class="card">
+    <div style="background-color:#0c773c;color:white;text-align:center;font-weight:600;font-size:20px" class="card-header">Richiesta Conto Individuale Iscritto</div>
+    <div class="card-body">
+        <form id="form_Conto" method="post">
+            <!--
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <table id="tblRDL" class="table table-bordered" style="font-size:20px">
+                <tr>
+                    <td style="font-weight: bold;">Matricola</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Mat" asp-for="Mat" name="Mat" value="@Model.Mat">
+                        <label>@Model.Mat</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Cognome</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cognome" asp-for="Cognome" name="Cognome" value="@Model.Cognome">
+                        <label>@Model.Cognome</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Nome</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Nome" asp-for="Nome" name="Nome" value="@Model.Nome">
+                        <label>@Model.Nome</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Codice Fiscale</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="CodiceFiscale" asp-for="CodiceFiscale" name="CodiceFiscale" value="@Model.CodiceFiscale">
+                        <label>@Model.CodiceFiscale</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Sesso</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Sesso" asp-for="Sesso" name="Sesso" value="@Model.Sesso">
+                        <label>@Model.Sesso</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Indirizzo</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Indirizzo" asp-for="Indirizzo" name="Indirizzo" value="@Model.Indirizzo">
+                        <input type="text" hidden style="width:0" class="form-control" id="TipoResidenza" asp-for="TipoResidenza" name="TipoResidenza" value="@Model.TipoResidenza">
+                        <input type="text" hidden style="width:0" class="form-control" id="NumeroCivico" asp-for="NumeroCivico" name="NumeroCivico" value="@Model.NumeroCivico">
+                        <label>@Model.TipoResidenza @Model.Indirizzo @Model.NumeroCivico</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Comune</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="ComuneResidenza" asp-for="ComuneResidenza" name="ComuneResidenza" value="@Model.ComuneResidenza">
+                        <label>@Model.ComuneResidenza</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <table id="tblRDL1" class="table table-bordered " style="font-size:20px">
+                <tr>
+                    <td style="font-weight: bold;">Data di nascita</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="DataNascita" asp-for="DataNascita" name="DataNascita" value="@Model.DataNascita.ToString().Substring(0, 10)">
+                        <label>@Model.DataNascita.ToString().Substring(0, 10)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Comune di nascita</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="ComuneNascita" asp-for="ComuneNascita" name="ComuneNascita" value="@Model.ComuneNascita">
+                        <label>@Model.ComuneNascita</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Provincia di nascita</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="SigproNascita" asp-for="SigproNascita" name="SigproNascita" value="@Model.SigproNascita">
+                        <label>@Model.SigproNascita</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Stato Est. Nascita</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroNascita" asp-for="StatoEsteroNascita" name="StatoEsteroNascita" value="@Model.StatoEsteroNascita">
+                        <label>@Model.StatoEsteroNascita</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="font-weight: bold;">CAP</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cap" asp-for="Cap" name="Cap" value="@Model.Cap">
+                        <label>@Model.Cap</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Provincia</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="SigproResidenza" asp-for="SigproResidenza" name="SigproResidenza" value="@Model.SigproResidenza">
+                        <label>@Model.SigproResidenza</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Stato Estero</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroResidenza" asp-for="StatoEsteroResidenza" name="StatoEsteroResidenza" value="@Model.StatoEsteroResidenza">
+                        <label>@Model.StatoEsteroResidenza</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <table id="tblRDL2" class="table table-bordered " style="font-size:20px">
+                <tr>
+                    <td style="font-weight: bold;">Località</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Localita" asp-for="Localita" name="Localita" value="@Model.Localita">
+                        <label>@Model.Localita</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="font-weight: bold;">Telefono</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Telefono1" asp-for="Telefono1" name="Telefono1" value="@Model.Telefono1">
+                        <label>@Model.Telefono1</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">&nbsp;</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Telefono2" asp-for="Telefono2" name="Telefono2" value="@Model.Telefono2">
+                        <label>@Model.Telefono2</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Cellulare</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cellulare" asp-for="Cellulare" name="Cellulare" value="@Model.Cellulare">
+                        <label>@Model.Cellulare</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">&nbsp;</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Fax" asp-for="Fax" name="Fax" value="@Model.Fax">
+                        <label>@Model.Fax</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Email</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Email" asp-for="Email" name="Email" value="@Model.Email">
+                        <label>@Model.Email</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">PEC</td>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="EmailCert" asp-for="EmailCert" name="EmailCert" value="@Model.EmailCert">
+                        <label>@Model.EmailCert</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr />
+    -->
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Data chiusura rapporto assicurativo con ENPAIA</label>
+                        <input type="text" id="DataFineRapp" asp-for="DataFineRapp" name="DataFineRapp" class="form-control" placeholder="" value="@HttpContext.Current.Items["DataFineRapp"]" readonly>
+                        <input type="text" hidden style="width:0" id="DataFineRapp" asp-for="DataFineRapp" name="DataFineRapp" class="form-control" placeholder="" value="@HttpContext.Current.Items["DataFineRapp"]">
+                    </div>
+                </div>
+            </div>
+            <!-- <center><p style="font-size:20px"><strong>Modalità di Pagamento FP</strong></p></center> -->
+            <!--  <div class="row" id="divBonifico">
+        <div class="col-sm-5">
+            <div class="icheck-success d-inline">
+                <input type="radio" name="modpag" id="rdBonifico" required />
+                <label for="rdBonifico" style="font-weight:600">&nbsp;Bonifico Bancario</label>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label>IBAN</label>
+                <input type="text" id="Iban" asp-for="Iban" name="Iban" class="form-control" value="@Model.Iban" placeholder="Inserire IBAN">
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label>BIC/SWIFT</label>
+                <input type="text" id="Bic_swift" asp-for="Bic_swift" name="Bic_swift" class="form-control" value="@Model.Bic_swift" placeholder="Inserire BIC/SWIFT">
+                <p>(Solo per bonifici esteri)</p>
+            </div>
+        </div>
+    </div> -->
+            <br />
+            <center><p style="font-size:20px"><strong>Modalità di Pagamento Conto Individuale </strong></p></center>
+            @*<div class="row" id="divAssegno">
+            <div class="col-sm-5">
+                <div class="icheck-success d-inline">
+                    <input type="radio" name="modpag" id="rdAssegno" required />
+                    <label for="rdAssegno" style="font-weight:600">&nbsp;Assegno di Traenza(per importi fino a 3000euro)</label>
+                </div>
+            </div>
+        </div>*@
+            <div class="row" id="divAssegno">
+                <div class="col-sm-5">
+                    <div class="icheck-success d-inline">
+                        <input type="radio" name="checkboxDefault" id="checkboxAssegno" required>
+                        <label for="checkboxAssegno">
+                            Assegno di Traenza (per importi fino a 3000 euro)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row" id="divBonifico">
+                <div class="col-sm-5">
+                    <div class="icheck-success d-inline">
+                        <input type="radio" name="checkboxDefault" id="checkboxBonifico" required>
+                        <label for="checkboxBonifico">
+                            Bonifico Bancario
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>IBAN</label>
+                        <input type="text" id="txtIBAN" class="form-control" placeholder="Inserire IBAN" name="IBAN" asp-for="IBAN" value="@ViewBag.IBAN" pattern="^(AL|al)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(AD|ad)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{12}$|^(AT|at)[0-9]{2}[0-9]{16}$|^(AZ|az)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{20}$|^(BH|bh)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{14}$|^(BY|by)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{4}[a-zA-Z0-9]{16}$|^(BE|be)[0-9]{2}[0-9]{12}$|^(BA|ba)[0-9]{2}[0-9]{16}$|^(BR|br)[0-9]{2}[0-9]{23}[a-zA-Z][a-zA-Z0-9]$|^(BG|bg)[0-9]{2}[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{8}$|^(CR|cr)[0-9]{2}[0-9]{18}$|^(HR|hr)[0-9]{2}[0-9]{17}$|^(CY|cy)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(CZ|cz)[0-9]{2}[0-9]{20}$|^(DK|dk)[0-9]{2}[0-9]{14}$|^(DO|do)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(TL|tl)[0-9]{2}[0-9]{19}$|^(EG|eg)[0-9]{2}[0-9]{25}$|^(SV|sv)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(EE|ee)[0-9]{2}[0-9]{16}$|^(FO|fo)[0-9]{2}[0-9]{14}$|^(FI|fi)[0-9]{2}[0-9]{14}$|^(FR|fr)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(GE|ge)[0-9]{2}[a-zA-Z0-9]{2}[0-9]{16}$|^(DE|de)[0-9]{2}[0-9]{18}$|^(GI|gi)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{15}$|^(GR|gr)[0-9]{2}[0-9]{7}[a-zA-Z0-9]{16}$|^(GL|gl)[0-9]{2}[0-9]{14}$|^(GT|gt)[0-9]{2}[a-zA-Z0-9]{24}$|^(HU|hu)[0-9]{2}[0-9]{24}$|^(IS|is)[0-9]{2}[0-9]{22}$|^(IQ|iq)[0-9]{2}[a-zA-Z]{4}[0-9]{15}$|^(IE|ie)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{14}$|^(IL|il)[0-9]{2}[0-9]{19}$|^(IT|it)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(JO|jo)[0-9]{2}[a-zA-Z]{4}[0-9]{22}$|^(KZ|kz)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(XK|xk)[0-9]{2}[0-9]{16}$|^(KW|kw)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{22}$|^(LV|lv)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{13}$|^(LB|lb)[0-9]{2}[0-9]{4}[a-zA-Z0-9]{20}$|^(LY|ly)[0-9]{2}[0-9]{21}$|^(LI|li)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(LT|lt)[0-9]{2}[0-9]{16}$|^(LU|lu)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(MK|mk)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{10}[0-9]{2}$|^(MT|mt)[0-9]{2}[a-zA-Z]{4}[0-9]{5}[a-zA-Z0-9]{18}$|^(MR|mr)[0-9]{2}[0-9]{23}$|^(MU|mu)[0-9]{2}[a-zA-Z]{4}[0-9]{19}[a-zA-Z]{3}$|^(MC|mc)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(MD|md)[0-9]{2}[a-zA-Z0-9]{20}$|^(ME|me)[0-9]{2}[0-9]{18}$|^(NL|nl)[0-9]{2}[a-zA-Z]{4}[0-9]{10}$|^(NO|no)[0-9]{2}[0-9]{11}$|^(PK|pk)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$|^(PS|ps)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{21}$|^(PL|pl)[0-9]{2}[0-9]{24}$|^(PT|pt)[0-9]{2}[0-9]{21}$|^(QA|qa)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{21}$|^(RO|ro)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{16}$|^(LC|lc)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{24}$|^(SM|sm)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(ST|st)[0-9]{2}[0-9]{21}$|^(SA|sa)[0-9]{2}[0-9]{2}[a-zA-Z0-9]{18}$|^(RS|rs)[0-9]{2}[0-9]{18}$|^(SC|sc)[0-9]{2}[a-zA-Z]{4}[0-9]{20}[a-zA-Z]{3}$|^(SK|sk)[0-9]{2}[0-9]{20}$|^(SI|si)[0-9]{2}[0-9]{15}$|^(ES|es)[0-9]{2}[0-9]{20}$|^(SD|sd)[0-9]{2}[0-9]{14}$|^(SE|se)[0-9]{2}[0-9]{20}$|^(CH|ch)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(TN|tn)[0-9]{2}[0-9]{20}$|^(TR|tr)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{17}$|^(UA|ua)[0-9]{2}[0-9]{6}[a-zA-Z0-9]{19}$|^(AE|ae)[0-9]{2}[0-9]{19}$|^(GB|gb)[0-9]{2}[a-zA-Z]{4}[0-9]{14}$|^(VA|va)[0-9]{2}[0-9]{18}$|^(VG|vg)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$" title="inserire un iban valido">
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>BIC/SWIFT</label>
+                        <input type="text" id="txtBIC" class="form-control" placeholder="Inserire BIC/SWIFT" name="BICSWIFT" asp-for="BICSWIFT" value="@HttpContext.Current.Items["BicSwift"]">
+                        <p>(Solo per bonifici esteri)</p>
+                    </div>
+                </div>
+            </div>
+            <select class="form-control" id="divPagamento" name="divPagamento" asp-for="divPagamento" style="visibility: hidden;height: 0;width: 0"></select>
+            <br />
+            <div class="row">
+                <div class="col-12">
+                    <h4> Documento di riconoscimento</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 form-group">
+                    <label class="control-label">Tipo Documento</label>
+                    <select class="form-control" id="tipoDocumento" name="tipoDocumento" placeholder="Inserire il tipo del documento" required>
+                        <option value="" placeholder="Inserire il tipo di documento" selected>Inserire il tipo di documento</option>
+                        @foreach (var doc in ViewBag.TipoDocumenti)
+                        {
+                            <option value="@doc">@doc</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Numero Documento</label>
+                    <input class="form-control documento" name="numeroDocumento" type="text" placeholder="Inserire il numero del documento" required value="@HttpContext.Current.Items["NumeroDocumento"]" />
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Data Scadenza Documento</label>
+                    <input class="form-control documento" name="scadenzaDocumento" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" required value="@HttpContext.Current.Items["ScadenzaDocumento"]" />
+                </div>
+            </div>
+            @{
+                bool isUploaded = ViewBag.IsDocumentUploaded ?? false;
+            }
+            @*<div class="row @(visibilitàBottone?"d-none":"")">*@
+            <div class="row @(isUploaded?"d-none":"")">
+                <div class="col-4 form-group">
+                    <label class="control-label">Fronte Documento</label>
+                    <input class="form-control-file documento-file" name="fronteFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Retro Documento</label>
+                    <input class="form-control-file documento-file" name="retroFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                </div>
+                @*<div class="col-4 form-group">
+                <input type="submit" class="btn btn-block btn-outline-success btn-lg" value="Carica Documento" />
+            </div>*@
+            </div>
+            @if (ViewBag.Visibility == true)
+            {
+                if ((HttpContext.Current.Items["ErrorMessage"]) != null || HttpContext.Current.Items["SuccessMessage"] != null)
+                {
+                    <div class="row justify-content-end">
+                        <div class="col-sm-2 justify-content-end">
+                            <button type="submit" id="btnInviaRichiesta" onclick="InviaRichiesta()" class="btn btn-block btn-outline-success btn-lg @(visibilitàBottone?"":"d-none")" style="visibility:hidden">Invia richiesta</button>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="row justify-content-end">
+                    <div class="col-sm-2 justify-content-end">
+                        <button type="submit" id="btnInviaRichiesta" onclick="InviaRichiesta()" class="btn btn-block btn-outline-success btn-lg @(visibilitàBottone?"":"d-none")">Invia richiesta</button>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<script>
+    var node2 = document.getElementById('divPagamento');
+
+    $('#divBonifico').change(function () { 
+        if (document.getElementById("checkboxBonifico").checked == true) {
+            node2.innerHTML = '<option id="radioPagamento" name="radioPagamento" asp-for="radioPagamento" value="1"></option>';
+            document.getElementById("txtIBAN").disabled = false;
+            document.getElementById("txtIBAN").setAttribute("required", true);
+            document.getElementById("txtBIC").disabled = false;
+        } else {
+            document.getElementById("txtBIC").removeAttribute("required");
+            document.getElementById("txtIBAN").removeAttribute("required");
+        }
+    });
+
+    $('#txtIBAN').change(function () {
+        if ((this.value[0] + this.value[1]) != "IT") {
+            document.getElementById("txtBIC").setAttribute("required", true);
+        } else {
+            document.getElementById("txtBIC").removeAttribute("required");
+        }
+    });
+
+    $(document).ready(function () {
+        if (($('#txtIBAN')[0].defaultValue[0] + $('#txtIBAN')[0].defaultValue[1]) != "IT") {
+            document.getElementById("txtBIC").setAttribute("required", true);
+        } else {
+            document.getElementById("txtBIC").removeAttribute("required");
+        }
+
+        $('#txtIBAN').on("blur",
+            () => {
+                var validityIban = CheckIban();
+                if (!validityIban) {
+                    document.getElementById("txtIBAN").setCustomValidity("Iban non valido");
+                } else
+                    document.getElementById("txtIBAN").setCustomValidity("");
+            });
+
+        function CheckIban() {
+            var ibanValue = $("#txtIBAN").val().replace(" ", "").toUpperCase();
+            if (!ibanValue.match(/^(AL|al)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(AD|ad)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{12}$|^(AT|at)[0-9]{2}[0-9]{16}$|^(AZ|az)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{20}$|^(BH|bh)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{14}$|^(BY|by)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{4}[a-zA-Z0-9]{16}$|^(BE|be)[0-9]{2}[0-9]{12}$|^(BA|ba)[0-9]{2}[0-9]{16}$|^(BR|br)[0-9]{2}[0-9]{23}[a-zA-Z][a-zA-Z0-9]$|^(BG|bg)[0-9]{2}[a-zA-Z]{4}[0-9]{6}[a-zA-Z0-9]{8}$|^(CR|cr)[0-9]{2}[0-9]{18}$|^(HR|hr)[0-9]{2}[0-9]{17}$|^(CY|cy)[0-9]{2}[0-9]{8}[a-zA-Z0-9]{16}$|^(CZ|cz)[0-9]{2}[0-9]{20}$|^(DK|dk)[0-9]{2}[0-9]{14}$|^(DO|do)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(TL|tl)[0-9]{2}[0-9]{19}$|^(EG|eg)[0-9]{2}[0-9]{25}$|^(SV|sv)[0-9]{2}[a-zA-Z]{4}[0-9]{20}$|^(EE|ee)[0-9]{2}[0-9]{16}$|^(FO|fo)[0-9]{2}[0-9]{14}$|^(FI|fi)[0-9]{2}[0-9]{14}$|^(FR|fr)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(GE|ge)[0-9]{2}[a-zA-Z0-9]{2}[0-9]{16}$|^(DE|de)[0-9]{2}[0-9]{18}$|^(GI|gi)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{15}$|^(GR|gr)[0-9]{2}[0-9]{7}[a-zA-Z0-9]{16}$|^(GL|gl)[0-9]{2}[0-9]{14}$|^(GT|gt)[0-9]{2}[a-zA-Z0-9]{24}$|^(HU|hu)[0-9]{2}[0-9]{24}$|^(IS|is)[0-9]{2}[0-9]{22}$|^(IQ|iq)[0-9]{2}[a-zA-Z]{4}[0-9]{15}$|^(IE|ie)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{14}$|^(IL|il)[0-9]{2}[0-9]{19}$|^(IT|it)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(JO|jo)[0-9]{2}[a-zA-Z]{4}[0-9]{22}$|^(KZ|kz)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(XK|xk)[0-9]{2}[0-9]{16}$|^(KW|kw)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{22}$|^(LV|lv)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{13}$|^(LB|lb)[0-9]{2}[0-9]{4}[a-zA-Z0-9]{20}$|^(LY|ly)[0-9]{2}[0-9]{21}$|^(LI|li)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(LT|lt)[0-9]{2}[0-9]{16}$|^(LU|lu)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{13}$|^(MK|mk)[0-9]{2}[0-9]{3}[a-zA-Z0-9]{10}[0-9]{2}$|^(MT|mt)[0-9]{2}[a-zA-Z]{4}[0-9]{5}[a-zA-Z0-9]{18}$|^(MR|mr)[0-9]{2}[0-9]{23}$|^(MU|mu)[0-9]{2}[a-zA-Z]{4}[0-9]{19}[a-zA-Z]{3}$|^(MC|mc)[0-9]{2}[0-9]{10}[a-zA-Z0-9]{11}[0-9]{2}$|^(MD|md)[0-9]{2}[a-zA-Z0-9]{20}$|^(ME|me)[0-9]{2}[0-9]{18}$|^(NL|nl)[0-9]{2}[a-zA-Z]{4}[0-9]{10}$|^(NO|no)[0-9]{2}[0-9]{11}$|^(PK|pk)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$|^(PS|ps)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{21}$|^(PL|pl)[0-9]{2}[0-9]{24}$|^(PT|pt)[0-9]{2}[0-9]{21}$|^(QA|qa)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{21}$|^(RO|ro)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{16}$|^(LC|lc)[0-9]{2}[a-zA-Z]{4}[a-zA-Z0-9]{24}$|^(SM|sm)[0-9]{2}[a-zA-Z][0-9]{10}[a-zA-Z0-9]{12}$|^(ST|st)[0-9]{2}[0-9]{21}$|^(SA|sa)[0-9]{2}[0-9]{2}[a-zA-Z0-9]{18}$|^(RS|rs)[0-9]{2}[0-9]{18}$|^(SC|sc)[0-9]{2}[a-zA-Z]{4}[0-9]{20}[a-zA-Z]{3}$|^(SK|sk)[0-9]{2}[0-9]{20}$|^(SI|si)[0-9]{2}[0-9]{15}$|^(ES|es)[0-9]{2}[0-9]{20}$|^(SD|sd)[0-9]{2}[0-9]{14}$|^(SE|se)[0-9]{2}[0-9]{20}$|^(CH|ch)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{12}$|^(TN|tn)[0-9]{2}[0-9]{20}$|^(TR|tr)[0-9]{2}[0-9]{5}[a-zA-Z0-9]{17}$|^(UA|ua)[0-9]{2}[0-9]{6}[a-zA-Z0-9]{19}$|^(AE|ae)[0-9]{2}[0-9]{19}$|^(GB|gb)[0-9]{2}[a-zA-Z]{4}[0-9]{14}$|^(VA|va)[0-9]{2}[0-9]{18}$|^(VG|vg)[0-9]{2}[a-zA-Z0-9]{4}[0-9]{16}$/))
+                return false;
+            var ibanToCheck = ibanValue.substring(4) + ibanValue.substring(0, 4);
+            var num = 0;
+            for (var i = 0; i < ibanToCheck.length; i++) {
+                num = !ibanToCheck.charAt(i).match(/[A-Z]/) ? (10 * num + (ibanToCheck.charAt(i).charCodeAt(0) - 48)) % 97 : (100 * num + (ibanToCheck.charAt(i).charCodeAt(0) - 55)) % 97;
+            }
+            return num === 1;
+        }
+    });
+
+    $('#divAssegno').change(function () {
+        
+        if (document.getElementById("checkboxAssegno").checked == true) {
+            node2.innerHTML = '<option id="radioPagamento" name="radioPagamento" asp-for="radioPagamento" value="2"></option>';
+            document.getElementById("txtIBAN").disabled = true;
+            document.getElementById("txtBIC").disabled = true;
+        }
+
+    });
+</script>

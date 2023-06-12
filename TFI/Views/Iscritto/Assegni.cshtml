@@ -1,0 +1,362 @@
+﻿@model TFI.OCM.Iscritto.Anagrafica
+@{
+    ViewBag.Title = "Assegni";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style>
+    .cancelBtn {
+        visibility: hidden;
+    }
+
+        .cancelBtn::after {
+            content: 'Esci';
+            visibility: visible;
+            background-color: #0c773c;
+            color: white;
+            border: 1px solid black;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .applyBtn {
+        visibility: hidden;
+    }
+
+        .applyBtn::after {
+            content: 'Applica';
+            background-color: #0c773c;
+            color: white;
+            width: 10px;
+            visibility: visible;
+            padding: 5px 10px 5px 10px;
+        }
+
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #0c773c;
+    }
+
+    .table th {
+        text-align: right;
+        vertical-align: middle;
+    }
+
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table label:not(.form-check-label):not(.custom-file-label) {
+        font-weight: 100;
+    }
+
+    .table tr {
+        height: 60px;
+    }
+
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    .table-bordered {
+        font-size: 20px;
+    }
+</style>
+
+
+
+
+<div class="card">
+    <div style="background-color:#0c773c;color:white;text-align:center;font-weight:600;font-size:20px" class="card-header">Richiesta Conto Assegni Iscritto</div>
+    <div class="card-body">
+        <form id="form_Conto" method="post">
+            <input type="text" hidden style="width:0" class="form-control" id="Mat" asp-for="Mat" name="Mat" value="@Model.Mat">
+            <input type="text" hidden style="width:0" class="form-control" id="Cognome" asp-for="Cognome" name="Cognome" value="@Model.Cognome">
+            <input type="text" hidden style="width:0" class="form-control" id="Nome" asp-for="Nome" name="Nome" value="@Model.Nome">
+            <input type="text" hidden style="width:0" class="form-control" id="CodiceFiscale" asp-for="CodiceFiscale" name="CodiceFiscale" value="@Model.CodiceFiscale">
+            <input type="text" hidden style="width:0" class="form-control" id="Sesso" asp-for="Sesso" name="Sesso" value="@Model.Sesso">
+            <input type="text" hidden style="width:0" class="form-control" id="Indirizzo" asp-for="Indirizzo" name="Indirizzo" value="@Model.Indirizzo">
+            <input type="text" hidden style="width:0" class="form-control" id="TipoResidenza" asp-for="TipoResidenza" name="TipoResidenza" value="@Model.TipoResidenza">
+            <input type="text" hidden style="width:0" class="form-control" id="NumeroCivico" asp-for="NumeroCivico" name="NumeroCivico" value="@Model.NumeroCivico">
+            <input type="text" hidden style="width:0" class="form-control" id="ComuneResidenza" asp-for="ComuneResidenza" name="ComuneResidenza" value="@Model.ComuneResidenza">
+            <input type="text" hidden style="width:0" class="form-control" id="DataNascita" asp-for="DataNascita" name="DataNascita" value="@Model.DataNascita.ToString().Substring(0, 10)">
+            <input type="text" hidden style="width:0" class="form-control" id="DataNascita" asp-for="DataNascita" name="DataNascita" value="@Model.DataNascita.ToString().Substring(0, 10)">
+            <input type="text" hidden style="width:0" class="form-control" id="ComuneNascita" asp-for="ComuneNascita" name="ComuneNascita" value="@Model.ComuneNascita">
+            <input type="text" hidden style="width:0" class="form-control" id="SigproNascita" asp-for="SigproNascita" name="SigproNascita" value="@Model.SigproNascita">
+            <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroNascita" asp-for="StatoEsteroNascita" name="StatoEsteroNascita" value="@Model.StatoEsteroNascita">
+            <input type="text" hidden style="width:0" class="form-control" id="Cap" asp-for="Cap" name="Cap" value="@Model.Cap">
+            <input type="text" hidden style="width:0" class="form-control" id="SigproResidenza" asp-for="SigproResidenza" name="SigproResidenza" value="@Model.SigproResidenza">
+            <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroResidenza" asp-for="StatoEsteroResidenza" name="StatoEsteroResidenza" value="@Model.StatoEsteroResidenza">
+            <input type="text" hidden style="width:0" class="form-control" id="Localita" asp-for="Localita" name="Localita" value="@Model.Localita">
+            <input type="text" hidden style="width:0" class="form-control" id="Telefono1" asp-for="Telefono1" name="Telefono1" value="@Model.Telefono1">
+            <input type="text" hidden style="width:0" class="form-control" id="Telefono2" asp-for="Telefono2" name="Telefono2" value="@Model.Telefono2">
+            <input type="text" hidden style="width:0" class="form-control" id="Cellulare" asp-for="Cellulare" name="Cellulare" value="@Model.Cellulare">
+            <input type="text" hidden style="width:0" class="form-control" id="Fax" asp-for="Fax" name="Fax" value="@Model.Fax">
+            <input type="text" hidden style="width:0" class="form-control" id="Email" asp-for="Email" name="Email" value="@Model.Email">
+            <input type="text" hidden style="width:0" class="form-control" id="EmailCert" asp-for="EmailCert" name="EmailCert" value="@Model.EmailCert">
+
+            <!--
+    <div class="row form-group">
+        <div class="col-sm-4">
+            <table id="tblRDL" class="table table-bordered">
+                <tr>
+                    <td style="font-weight: bold;">Matricola</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Mat" asp-for="Mat" name="Mat" value="@Model.Mat">
+                        <label>@Model.Mat</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Cognome</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cognome" asp-for="Cognome" name="Cognome" value="@Model.Cognome">
+                        <label>@Model.Cognome</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Nome</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Nome" asp-for="Nome" name="Nome" value="@Model.Nome">
+                        <label>@Model.Nome</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Codice Fiscale</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="CodiceFiscale" asp-for="CodiceFiscale" name="CodiceFiscale" value="@Model.CodiceFiscale">
+                        <label>@Model.CodiceFiscale</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Sesso</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Sesso" asp-for="Sesso" name="Sesso" value="@Model.Sesso">
+                        <label>@Model.Sesso</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Indirizzo</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Indirizzo" asp-for="Indirizzo" name="Indirizzo" value="@Model.Indirizzo">
+                        <input type="text" hidden style="width:0" class="form-control" id="TipoResidenza" asp-for="TipoResidenza" name="TipoResidenza" value="@Model.TipoResidenza">
+                        <input type="text" hidden style="width:0" class="form-control" id="NumeroCivico" asp-for="NumeroCivico" name="NumeroCivico" value="@Model.NumeroCivico">
+                        <label>@Model.TipoResidenza @Model.Indirizzo @Model.NumeroCivico</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Comune</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="ComuneResidenza" asp-for="ComuneResidenza" name="ComuneResidenza" value="@Model.ComuneResidenza">
+                        <label>@Model.ComuneResidenza</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <table id="tblRDL1" class="table table-bordered ">
+                <tr>
+                    <td style="font-weight: bold;">Data di nascita</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="DataNascita" asp-for="DataNascita" name="DataNascita" value="@Model.DataNascita.ToString().Substring(0, 10)">
+                        <label>@Model.DataNascita.ToString().Substring(0, 10)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Comune di nascita</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="ComuneNascita" asp-for="ComuneNascita" name="ComuneNascita" value="@Model.ComuneNascita">
+                        <label>@Model.ComuneNascita</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Provincia di nascita</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="SigproNascita" asp-for="SigproNascita" name="SigproNascita" value="@Model.SigproNascita">
+                        <label>@Model.SigproNascita</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Stato Est. Nascita</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroNascita" asp-for="StatoEsteroNascita" name="StatoEsteroNascita" value="@Model.StatoEsteroNascita">
+                        <label>@Model.StatoEsteroNascita</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="font-weight: bold;">CAP</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cap" asp-for="Cap" name="Cap" value="@Model.Cap">
+                        <label>@Model.Cap</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Provincia</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="SigproResidenza" asp-for="SigproResidenza" name="SigproResidenza" value="@Model.SigproResidenza">
+                        <label>@Model.SigproResidenza</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Stato Estero</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="StatoEsteroResidenza" asp-for="StatoEsteroResidenza" name="StatoEsteroResidenza" value="@Model.StatoEsteroResidenza">
+                        <label>@Model.StatoEsteroResidenza</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <table id="tblRDL2" class="table table-bordered ">
+                <tr>
+                    <td style="font-weight: bold;">Località</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Localita" asp-for="Localita" name="Localita" value="@Model.Localita">
+                        <label>@Model.Localita</label>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="font-weight: bold;">Telefono</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Telefono1" asp-for="Telefono1" name="Telefono1" value="@Model.Telefono1">
+                        <label>@Model.Telefono1</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">&nbsp;</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Telefono2" asp-for="Telefono2" name="Telefono2" value="@Model.Telefono2">
+                        <label>@Model.Telefono2</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Cellulare</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Cellulare" asp-for="Cellulare" name="Cellulare" value="@Model.Cellulare">
+                        <label>@Model.Cellulare</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">&nbsp;</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Fax" asp-for="Fax" name="Fax" value="@Model.Fax">
+                        <label>@Model.Fax</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Email</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="Email" asp-for="Email" name="Email" value="@Model.Email">
+                        <label>@Model.Email</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">PEC</th>
+                    <td>
+                        <input type="text" hidden style="width:0" class="form-control" id="EmailCert" asp-for="EmailCert" name="EmailCert" value="@Model.EmailCert">
+                        <label>@Model.EmailCert</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr />
+    -->
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>Data chiusura rapporto assicurativo con ENPAIA</label>
+                        <input type="text" id="DataFineRapp" asp-for="DataFineRapp" name="DataFineRapp" value="@Model.DataFineRapp" class="form-control" placeholder="" readonly>
+                        <input type="text" hidden style="width:0" id="DataFineRapp" asp-for="DataFineRapp" name="DataFineRapp" value="@Model.DataFineRapp" class="form-control" placeholder="">
+                    </div>
+                </div>
+            </div>
+            <!--<center><p style="font-size:20px"><strong>Modalità di Pagamento FP</strong></p></center> -->
+           <!-- <div class="row" id="divBonifico">
+                <div class="col-sm-5">
+                    <div class="icheck-success d-inline">
+                        <input type="radio" name="modpag" id="rdBonifico" required />
+                        <label for="rdBonifico" style="font-weight:600">&nbsp;Bonifico Bancario</label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>IBAN</label>
+                        <input type="text" id="Iban" asp-for="Iban" name="Iban" class="form-control" value="@Model.Iban" placeholder="Inserire IBAN">
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label>BIC/SWIFT</label>
+                        <input type="text" id="Bic_swift" asp-for="Bic_swift" name="Bic_swift" class="form-control" value="@Model.Bic_swift" placeholder="Inserire BIC/SWIFT">
+                        <p>(Solo per bonifici esteri)</p>
+                    </div>
+                </div>
+            </div>-->
+            <br />
+            <!-- <center><p style="font-size:20px"><strong>Modalità di Pagamento TFR </strong></p></center> -->
+            <div class="row" id="divAssegno">
+                <div class="col-sm-5">
+                    <div class="icheck-success d-inline">
+                        <input type="radio" name="modpag" id="rdAssegno" required />
+                        <label for="rdAssegno" style="font-weight:600">&nbsp;Assegno di Traenza (per importi fino a 3000 euro)</label>
+                    </div>
+                </div>
+            </div>
+            <select class="form-control" id="divPagamento" name="divPagamento" asp-for="divPagamento" style="visibility: hidden;height: 0;width: 0"></select>
+
+            <br />
+
+            @{ string strDisabled = Model.ShowBtn ? String.Empty : "disabled"; }
+            <div class="row justify-content-end">
+                <div class="col-sm-2">
+                    <button type="submit" @strDisabled class="btn btn-block btn-outline-success btn-lg">Invia richiesta</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+
+
+@section JS{
+    <script>
+        $(document).ready(function () {
+
+            //var dataFineRapporto = $("#DataFineRapp").val();
+
+            //if (dataFineRapporto == "") {
+
+            //}
+
+            var node2 = document.getElementById('divPagamento');
+
+            $('[id$=divBonifico]').change(function () {
+                if (document.getElementById('rdBonifico').checked == true) {
+                    node2.innerHTML = '<option id="radioPagamento" name="radioPagamento" asp-for="radioPagamento" value="1"></option>';
+                    document.getElementById("Iban").disabled = false;
+                    document.getElementById("Bic_swift").disabled = false;
+                }
+            });
+            $('[id$=divAssegno]').change(function () {
+                if (document.getElementById('rdAssegno').checked == true) {
+                    node2.innerHTML = '<option id="radioPagamento" name="radioPagamento" asp-for="radioPagamento" value="2"></option>';
+                    document.getElementById("Iban").disabled = true;
+                    document.getElementById("Bic_swift").disabled = true;
+
+                }
+            });
+        });
+    </script>
+}

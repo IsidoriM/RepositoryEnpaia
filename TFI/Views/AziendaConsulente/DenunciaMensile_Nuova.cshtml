@@ -1,0 +1,602 @@
+﻿@model TFI.OCM.AziendaConsulente.DatiNuovaDenuncia
+@{
+    ViewBag.Title = "Nuova denuncia mensile";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+@*----------------------------------------- ModalDialogSospensioni*@
+<div class="modal fade" tabindex="-1" id="sospensioni_modal" data-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Elenco Sospensioni - Matricola: <span id="numMatricola"></span></h5>
+                
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="cont_tbSospensioni">
+                    <table class="table" id="tb_sospensioni">
+                        <thead>
+                            <tr>
+                                <th>Data Inizio</th>
+                                <th>Data Fine</th>
+                                <th>Motivo Sospensione</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn_official" data-dismiss="modal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*------------------------------------------------------------------------------*@
+
+
+<div class="card card-default" id="denunciaMensile_nuova">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">
+            Nuova Denuncia Mensile
+        </h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row" id="headRow1">
+                                        <div class="col-6">
+                                            <b>@Html.Label("Denuncia Mensile relativa al Periodo:")</b>&ensp;
+                                            <b>@Model.StrMese</b>&nbsp;
+                                            <b>@Model.Anno</b>
+                                        </div>
+                                        <div class="col-6">
+                                            @Html.Label("Data Denuncia")
+                                            @Html.TextBox("dataDenuncia", Model.DataDenuncia, new { @readonly = Model.IsNotEnpaiaUser, @id = "dataDenuncia" })
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row" id="headRow2">
+                                        <div class="col-4">
+                                            @Html.Label("Indirizzo: ")
+                                            @Model.IndirizzoSedeLegale
+                                        </div>
+                                        <div class="col-4">
+                                            @Html.Label("Codice Fiscale: ")
+                                            @Model.DatiAnagrafici.CodFiscAziendale
+                                        </div>
+                                        <div class="col-4">
+                                            @Html.Label("Partita IVA: ")
+                                            @Model.DatiAnagrafici.PartitaIVA
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row">
+            <section class="content" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                @*<div class="card-header card_h">
+                                    </div>*@
+                                <div class="card-body">
+                                    @using (Html.BeginForm("SalvaParzialeDIPA", "AziendaConsulente", FormMethod.Post, new { @id = "form_insDenMen" }))
+                                    {
+                                        <div class="overflow-auto" style="max-height: 75vh">
+                                            <table class="table table-bordered table-hover table-striped mb-0" id="tb_DenunciaMensile">
+                                                <thead class="sticky-top">
+                                                    <tr>
+                                                        <th>Mat.</th>
+                                                        <th>Cognome e Nome</th>
+                                                        <th>Dal</th>
+                                                        <th>Al</th>
+                                                        <th>Qual.</th>
+                                                        <th>Liv.</th>
+                                                        <th>Prest.</th>
+                                                        <th width="80px">Ret.Imp.</th>
+                                                        <th width="80px">di cui Occ.</th>
+                                                        <th width="80px">Fig.</th>
+                                                        <th>Aliq.</th>
+                                                        <th>Contrib.</th>
+                                                        @if (!Model.ABBPREColumnIsHidden)
+                                                        {
+                                                            <th>Abb.</th>
+                                                        }
+                                                        <th>A.C.</th>
+                                                        <th>Sosp.</th>
+                                                        <th style="display:none">ProRap</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tb_DenunciaMensile_Body">
+                                                    @if (Model.ListaReport != null)
+                                                    {
+                                                        for (var i = 0; i < Model.ListaReport.Count(); i++)
+                                                        {
+                                                            var uniqueId = Model.ListaReport[i].Mat.ToString() + Model.ListaReport[i].ProRap + Model.ListaReport[i].ProDenDet;
+                                                            <text>
+                                                                <tr hidden>
+                                                                    <td class="mat">
+                                                                    <input value="@Model.ListaReport[i].Mat" name="listaReport[@i].Mat" hidden/> @Model.ListaReport[i].Mat</td>
+                                                                    <td>@Model.ListaReport[i].Nome</td>
+                                                                    <td>@Model.ListaReport[i].Dal</td>
+                                                                    <td>@Model.ListaReport[i].Al</td>
+                                                                    <td>@Model.ListaReport[i].Qualifica</td>
+                                                                    <td>@Model.ListaReport[i].Livello</td>
+                                                                    <td class="prest">€ @Model.ListaReport[i].PerApp</td>
+                                                                    <td>
+                                                                        <div class="d-flex justify-content-around">
+                                                                            <div class="mx-1">€</div>
+                                                                            @Html.TextBox("listaReport[" + @i + "].ImpRet", Model.ListaReport[i].ImpRet, new
+                                                                       {
+                                                                           @id = "impRet_" + @uniqueId,
+                                                                           style = "max-width: 5rem",
+                                                                           @class = "txt_impRet numberonly",
+                                                                           @oldvalue = "0,00",
+                                                                           @onchange = "gestioneImpRet(event)",
+                                                                           pattern = "\\d*[,]?\\d{0,2}$"
+                                                                       })
+                                                                        </div>
+                                                                       
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex justify-content-around">
+                                                                            <div class="mx-1">€</div>
+                                                                            @Html.TextBox("listaReport[" + @i + "].impOcc", Model.ListaReport[i].ImpOcc, new
+                                                                       {
+                                                                           @id = "impOcc_" + @uniqueId,
+                                                                           style = "max-width: 5rem",
+                                                                           @class = "txt_impOcc numberonly",
+                                                                           @oldvalue = "0,00",
+                                                                           @onchange = "gestioneImpOcc(event)",
+                                                                           pattern = "^\\d*[,]?\\d{0,2}$"
+                                                                       })
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex justify-content-around">
+                                                                            <div class="mx-1">€</div>
+                                                                            @Html.TextBox("listaReport[" + @i + "].impFig", Model.ListaReport[i].ImpFig, new
+                                                                       {
+                                                                           @id = "impFig_" + @uniqueId,
+                                                                           style = "max-width: 5rem",
+                                                                           @class = "txt_impFig",
+                                                                           @readonly = "readonly",
+                                                                           @oldvalue = "0,00",
+                                                                           @onchange = "gestioneImpFig(event)",
+                                                                           pattern = "^\\d*[,]?\\d{0,2}$"
+                                                                       })
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="aliq" id="aliq_@uniqueId">@Model.ListaReport[i].Aliquota</td>
+                                                                    <td class="impCon" id="impCon_@uniqueId">
+                                                                        € @Model.ListaReport[i].ImpCon
+                                                                    </td>
+                                                                    @if (!Model.ABBPREColumnIsHidden)
+                                                                    {
+                                                                        <td>@Model.ListaReport[i].AbbPre</td>
+                                                                    }
+                                                                    <td class="assCon">@Model.ListaReport[i].AssCon</td>
+                                                                    <td>
+                                                                        @*sospensioni*@
+                                                                        <a class="link_sosp" id="link_@uniqueId">
+                                                                            <i class="far fa-calendar-alt"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td style="display: none" class="proRap">@Model.ListaReport[i].ProRap</td>
+                                                                    <td style="display: none" class="impMin" id="impMin_@uniqueId">@Model.ListaReport[i].ImpMin</td>
+                                                                    <td style="display: none" class="impSca" id="impSca_@uniqueId">@Model.ListaReport[i].ImpSca</td>
+                                                                    <td style="display: none" class="traEco" id="traEco_@uniqueId">@Model.ListaReport[i].ImpTraEco</td>
+                                                                    <td hidden><input id="areSospesioniInMonth_@uniqueId" value="@Model.ListaReport[i].AreSospesioniInMonth"/></td>
+                                                                    <td hidden>
+                                                                        @Html.TextBox("listaReport[" + @i + "].ImpCon", Model.ListaReport[i].ImpCon, new
+                                                                   {
+                                                                       @id = "impConInput_" + @uniqueId,
+                                                                       style = "display: none",
+                                                                       @readonly = "readonly",
+                                                                       @oldvalue = "0,00",
+                                                                       @class = "txt_impCon"
+                                                                   })
+                                                                    </td>
+                                                                    <td name="uniqueId" hidden>@uniqueId</td>
+                                                                    <td hidden><input name="listaReport[@i].ProDenDet" value="@Model.ListaReport[i].ProDenDet"/></td>
+                                                                    <td hidden><input name="listaReport[@i].ProRap" value="@Model.ListaReport[i].ProRap"/></td>
+                                                                </tr>
+                                                            </text>
+                                                        }
+
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <section id="paginazione">
+                                            <div class="row d-flex justify-content-end w-100 align-items-center mb-0 h-75">
+                                                <div>
+                                                    <select id="pageSize" class="page-link page-number m-3 pagination" aria-label="Default select example" onchange="changePageSize(event)">
+                                                        <option value="10" selected>10</option>
+                                                        <option value="25">25</option>
+                                                        <option value="50">50</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <nav class="m-3" aria-label="Page navigation example">
+                                                        <ul class="pagination">
+                                                            <li class="page-item"><button type="button" class="page-link" value="" onclick="goToPage(-1, true)"><<</button></li>
+                                                            <li class="page-item"><button type="button" class="page-link" value="" onclick="goToPage(-1)"><</button></li>
+                                                            <li class="page-item"><button type="button" class="page-link" value="" onclick="goToPage(1)">></button></li>
+                                                            <li class="page-item"><button type="button" class="page-link" value="" onclick="goToPage(1, true)">>></button></li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                                <div id="pageCount">
+                                                    0/0
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <section class="content row" style="width:100%">
+                                            <div class="container-fluid">
+                                                <div class="card col-12 boxTotali mt-0" style="flex-direction:row; align-items:center; height:3em">
+                                                    <div class="card-body row" style="justify-content:center; align-items:flex-end">
+                                                        <div class="col-2 d-flex flex-row">
+                                                            <b>@Html.Label("Dipendenti")</b>&ensp;
+                                                            <b id="totDipendenti">@Model.TotDip</b>
+                                                        </div>
+                                                        <div class="row col-10">
+                                                            <div class="col-3 d-flex flex-row">
+                                                                <div class="d-flex flex-row" style="float:right">
+                                                                    <b>@Html.Label("Imponibile")</b>&ensp;
+                                                                    <b id="totImponibili">€ @Model.Imponibile</b>
+                                                                    <input id="totImponibiliHidden" name="imponibile" value="@Model.Imponibile" hidden />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3 d-flex flex-row">
+                                                                <div class="d-flex flex-row" style="float:right">
+                                                                    <b>@Html.Label("Occasionale")</b>&ensp;
+                                                                    <b id="totOccasionali">€ @Model.Occasionali</b>
+                                                                    <input id="totOccasionaliHidden" name="occasionale" value="@Model.Occasionali" hidden />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3 d-flex flex-row">
+                                                                <div class="d-flex flex-row" style="float:right">
+                                                                    <b>@Html.Label("Figurativa")</b>&ensp;
+                                                                    <b id="totFigurativa">€ @Model.Figurative</b>
+                                                                    <input id="totFigurativoHidden" name="figurativo" value="@Model.Figurative" hidden />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-3 d-flex flex-row">
+                                                                <div class="d-flex flex-row" style="float:right">
+                                                                    <b>@Html.Label("Contributi")</b>&ensp;
+                                                                    <b id="totContributi">€ @Model.Contributi</b>
+                                                                    <input id="totContributiHidden" name="contributi" value="@Model.Contributi" hidden />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <section>
+                                            <div class="card-body row d-flex justify-content-around p-0">
+                                                <div class="col-4">
+                                                    @Html.ActionLink("Indietro", "DenunciaMensile_Index", null, new { @class = "btn_official" })
+                                                </div>
+                                                <div class="col-4">
+                                                    @if (Model.ProDen != 0)
+                                                    {
+                                                        @Html.ActionLink("Totali", "Filtro_totaliNuovaDenuncia", "AziendaConsulente", new { anno = Model.Anno, mese = Model.IntMese, proDen = Model.ProDen, idDipa = Model.IdDIPA }, new { @class = "btn_official" })
+                                                    }
+                                                </div>
+                                                <input name="proDen" value="@Model.ProDen" hidden />
+                                                <div class="col-4">
+                                                    <button type="submit" class="btn_official">Salva</button>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="row justify-content-end">
+        </div>
+    </div>
+</div>
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+<script>
+
+    var reports = Array.from(document.querySelectorAll('#tb_DenunciaMensile_Body > tr'));
+    var reportLength = reports.length;
+    let pageSize = 10;
+    let currentPage = 1;
+
+    function changePageSize(event) {
+        pageSize = +event.target.value;
+        currentPage = 1;
+        changePage(reports);
+    };
+
+    function changePage(list) {
+        hideRows(list);
+        showRows(list.slice((currentPage - 1) * pageSize, (currentPage - 1) * pageSize + pageSize));
+        changePageCount();
+
+        function changePageCount() {
+            let maxPages = Math.ceil(reportLength / pageSize);
+            document.getElementById("pageCount").innerHTML = currentPage + "/" + maxPages;
+        }
+
+        function hideRows(list) {
+            for (let row of list)
+                row.setAttribute('hidden', true);
+        }
+    };
+
+    function showRows(listToShow) {
+        for (let i = 0; i < listToShow.length; i++)
+            listToShow[i].removeAttribute('hidden', false);
+    };    
+
+    function goToPage(pageChange, isBulk = false) {
+        if (isBulk) {
+            let nextPage = currentPage + pageSize * pageChange;
+            isPageChangeable(nextPage);
+        }
+        else {
+            let nextPage = currentPage + pageChange;
+            isPageChangeable(nextPage);
+        }
+
+        function isPageChangeable(nextPage) {
+            let maxPages = Math.ceil(reportLength / pageSize);
+            if (nextPage > 0 && nextPage <= maxPages)
+                currentPage = nextPage;
+
+            if (nextPage < 0)
+                currentPage = 1;
+
+            if (nextPage > maxPages)
+                currentPage = maxPages;
+
+            changePage(reports);
+        }
+    };
+
+    function setAttributesFromSospensioni(reports) {
+        for (let report of reports) {
+            let reportMatricola = report.querySelector('[name="uniqueId"]').innerHTML;      
+            let areSospensioniInReport = $('#areSospesioniInMonth_'+reportMatricola).val();
+            let sospensioniIconaTag = document.getElementById("link_" + reportMatricola);
+            let impFigTag = report.children[9].children[0].children[1];
+
+            if (areSospensioniInReport)
+                impFigTag.removeAttribute('readonly');
+            else {
+                sospensioniIconaTag.removeAttribute('href');
+                sospensioniIconaTag.setAttribute('style', 'pointer-events: none');
+            }                
+        }
+    }
+
+    $(document).ready(function () {
+        changePage(reports);
+        setAttributesFromSospensioni(reports);
+    });
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function (event) {
+            let arrRet = Array.from(document.getElementsByClassName('txt_impRet'));
+            let arrOcc = Array.from(document.getElementsByClassName('txt_impRet'));
+            let arrFig = Array.from(document.getElementsByClassName('txt_impFig'));
+
+            arrRet.concat(arrOcc).concat(arrFig).forEach(e => {
+                e.addEventListener(event, function () {
+                    if (/^[0-9]*[,]?[0-9]{0,2}$/.test(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        });
+    });
+
+    function decimalToInternal(value) {
+        return parseFloat(value.replace('.', '').replace(',', '.') || 0.00);
+    }
+
+    function decimalToReadable(value) {
+        return value.toFixed(2).replace('.', ',');
+    }
+
+    function updateTotal(impType) {
+        let fieldsIdentifier = getIdentifier(impType, false);
+        let total = decimalToReadable(getAggregateValueForElements(fieldsIdentifier));
+
+        let totalIdentifier = getIdentifier(impType, true);
+        $(`#${totalIdentifier}`).html(`€ ${total}`);
+        $(`#${totalIdentifier}Hidden`).val(total);
+
+
+        function getAggregateValueForElements(className) {
+            return Array.from(document.getElementsByClassName(className))
+                .map(e => decimalToInternal(e.value))
+                .reduce((accumulator, curr) => accumulator + curr, 0);
+        }
+
+        function getIdentifier(impType, isTot) {
+            const columnFields = { impRet: 'txt_impRet', impOcc: 'txt_impOcc', impFig: 'txt_impFig', impCon: 'txt_impCon' };
+            const totFields = { impRet: 'totImponibili', impOcc: 'totOccasionali', impFig: 'totFigurativa', impCon: 'totContributi' };
+
+            return isTot ? totFields[impType] : columnFields[impType];
+        }
+    }
+
+    function gestioneImpFig(event) {
+        const impFigId = event.target.id;
+        if (!document.getElementById(impFigId).reportValidity()) {
+            $(`#${impFigId}`).val('0,00');
+            alert('Inserire importo valido');
+        }
+
+        updateTotal('impFig');
+        
+    }
+
+    function gestioneImpOcc(event) {
+        let impOccId = event.target.id;
+
+        let matricola = impOccId.split('_')[1];
+        let impOcc = decimalToInternal($('#' + impOccId).val());
+        let impRet = decimalToInternal($('#impRet_' + matricola).val());
+
+        if (!document.getElementById(impOccId).reportValidity()) {
+            $(`#${impOccId}`).val('0,00');
+            impOcc = 0;
+            alert('Inserire importo valido');
+        }
+
+        if (impOcc > impRet && impOcc > 0) {
+            $(`#${impOccId}`).val('0,00');
+            alert('L\'importo occasionale non puo\' essere maggiore dell\'imponibile!');
+        }
+
+        updateTotal('impOcc');
+
+    }
+
+    function gestioneImpRet(event) {
+        const impRetId = event.target.id;
+
+        if (!document.getElementById(impRetId).reportValidity()) {
+            $(`#${impRetId}`).val('0,00');
+            alert('Inserire importo valido');
+            return;
+        }
+
+        const matricola = impRetId.split('_')[1];
+        const impRet = decimalToInternal($('#' + impRetId).val());
+        const impOcc = decimalToInternal($('#impOcc_' + matricola).val());
+        let impCon = 0.0;
+
+        checkImpRetPerAlert(matricola, impRetId, impRet, impOcc);
+
+        impCon = calcoloContributiDelSingoloReport(impCon, impRet);
+        $(`#impConInput_${matricola}`).val(decimalToReadable(impCon));
+        $(`#impCon_${matricola}`).html(decimalToReadable(impCon));
+
+        updateTotal('impCon');
+        updateTotal('impRet');
+
+
+        function checkImpRetPerAlert(matricola, impRetId, impRet, impOcc) {
+            const traEco = decimalToInternal($('#traEco_' + matricola).html());
+            const impMin = decimalToInternal($('#impMin_' + matricola).html());
+            const impSca = decimalToInternal('0' + $('#impSca_' + matricola).html());
+
+            if (impOcc > impRet && impOcc > 0) {
+                alert('L\'importo occasionale non puo\' essere maggiore dell\'imponibile!');
+                $(`#${impRetId}`).val('0,00');
+                return;
+            }
+
+
+            if (traEco > 0 && impRet < traEco && impRet > 0) {
+                alert('Attenzione! E\' stato inserito un imponibile inferiore al trattamento economico.');
+                $(`#${impRetId}`).focus();
+                return;
+            }
+
+            if (impRet < (impMin + impSca) && impRet > 0) {
+                alert('Attenzione! E\' stato inserito un imponibile inferiore al minimo contrattuale.');
+                $(`#${impRetId}`).focus();
+            }
+        }
+
+        function calcoloContributiDelSingoloReport(impCon, impRet) {
+            const aliquota = decimalToInternal($('#aliq_' + matricola).html());
+            if (!isNaN(Math.round(impRet)) && !isNaN(aliquota))
+                impCon = impRet * aliquota / 100;
+            return impCon;
+        }
+
+    }
+    
+
+
+</script>
+
+<script>
+    $("#tb_DenunciaMensile .link_sosp").click(function () {
+        var obj = $(this);
+        VisualizzaSospensioni(obj);
+    });
+    
+    function VisualizzaSospensioni(obj) {
+        let matricola = obj.parent().parent().children().eq(0).children().eq(0).val().toString();
+        let proRap = obj.parent().parent().children(".proRap").html().toString();
+        let dal = obj.parent().parent().children().eq(2).html().toString();
+        let al = obj.parent().parent().children().eq(3).html().toString();
+        let row = "";
+    
+        $.ajax({
+            url: '/AziendaConsulente/CaricaListaSospensioni',
+            dataType: "json",
+            method: "POST",
+            data: { 'matricola': matricola, 'proRap': proRap, 'dataIni': dal, 'dataFin': al },
+            success: (listaSospensioni) => {
+                $("#numMatricola").html(matricola);
+                SvuotaTabellaSospensioni();
+    
+                if (listaSospensioni != null) {
+                    for (let i in listaSospensioni) {
+                        row = "<tr>";
+                        row += "<td>" + listaSospensioni[i].DataInizio + "</td>";
+                        row += "<td>" + listaSospensioni[i].DataFine + "</td>";
+                        row += "<td>" + listaSospensioni[i].DenSos + "</td>";
+                        row += "</tr>";
+                        $("#tb_sospensioni tbody").append(row);
+                    }
+                }
+                $("#sospensioni_modal").modal("show");
+            },
+            error: () => alert("Errore chiamata ajax")
+        });
+    }
+    
+    function SvuotaTabellaSospensioni() {
+        let row = "<tr><td></td></tr>";
+        $("#tb_sospensioni tbody").html(row);
+    }
+</script>

@@ -1,0 +1,136 @@
+﻿
+@model TFI.OCM.AziendaConsulente.RapportiLavoro
+@{
+    var carriera = Model.carr;
+}
+
+@{
+    ViewBag.Title = "Carriera Rapporti di lavoro";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+<style>
+    .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table th {
+        background: #0c773c;
+        color: white;
+        width: fit-content;
+        text-align: center;
+    }
+    .btn:hover {
+        background-color: #0c773c
+    }
+</style>
+<title>Enpaia | Rapporti di lavoro</title>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+                        Visualizza Carriera
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Matricola</label>
+                                    <input type="text" class="form-control" value="@carriera.matricola" disabled>
+                                    <input type="text" class="form-control" value="@carriera.uteagg" hidden />
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Cognome e Nome</label>
+                                    <input type="text" class="form-control" value="@carriera.nominativo" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Data Iscrizione</label>
+                                    <input type="text" class="form-control" value="@carriera.datIsc" disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label>Data Denuncia</label>
+
+                                    <input type="text" class="form-control" value="@carriera.datDen" disabled>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="input-group justify-content-center" style="overflow:scroll;">
+                            <table id="dtRDL" class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr class="header">
+                                        <th>Data Ultima Variazione</th>
+                                        <th>Tipo Rapporto</th>
+                                        <th>Livello	</th>
+                                        <th>Contratto</th>
+                                        <th>Dettaglio</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itm in Model.listContratti)
+                                        {
+                                            <tr class="dataRow">
+                                                <td style="text-align:center;vertical-align:middle">@itm.datVar</td>
+                                                <td>@itm.tipRap</td>
+                                                <td>@itm.livello</td>
+                                                <td>@itm.contratto</td>
+                                                <td><a href="@Url.Action("DettagliCarriera","AziendaConsulente",new {matricola=@carriera.matricola, uteagg=@carriera.uteagg,datini=@itm.datVar,prorap=@carriera.prorap})"><i class="far fa-calendar-times fa-lg"></i></a></td>
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                            <nav>
+                                <ul id="nav" class="pagination">
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="row justify-content-start">
+                            <div class="col-sm-3"> <button type="button" onclick="window.location.href='@Url.Action("RapportiLavoro","AziendaConsulente")'" class="btn btn-outline-success hover btn-lg">Indietro</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

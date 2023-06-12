@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewBag.Title = "ListaAziende";
+    Layout = "~/Views/Shared/_AmministrativoLayout.cshtml";
+}
+
+<style>
+    .table thead th {
+        background: #0c773c;
+        color: white;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .input-group > .form-control {
+        border-color: #0c773c;
+        margin-right: 20px;
+    }
+
+    .btn:hover{
+        background-color:#0c773c
+    }
+</style>
+
+<div class="card" style="background-color:white">
+    <div class="card-body">
+        <div class="input-group" style="margin-left:380px">
+            <div class="form-group">
+                <label>Posizione azienda:</label>
+                <div class="input-group">
+                    <input class="form-control" id="searchPos" placeholder="Ricerca per posizione..." autocomplete="off" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nome azienda:</label>
+                <div class="input-group">
+                    <input class="form-control" id="searchAzi" placeholder="Ricerca per nome azienda..." autocomplete="off" autofocus>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-block btn-outline-success">Cerca</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-default">
+    <div style="background-color: #0c773c" class="card-header">
+        <h2 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Lista Aziende</h2>
+    </div>
+    <div class="card-body">
+        <table id="table" class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="header">
+                    <th>Posizione</th>
+                    <th>Ragione sociale</th>
+                    <th>Codice Fiscale</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center">
+                <tr>
+                    <td>1234</td>
+                    <td>Beni agroalimentari</td>
+                    <td>RSSMRA71E05H501Q</td>
+
+                    <td><a type="button" class=" btn  btn-outline-secondary" href='@Url.Action(ViewBag.src, "Amministrativo")' /> Dettaglio</td>
+
+                </tr>
+                <tr>
+                    <td>1235</td>
+                    <td>Verdure e frutta</td>
+                    <td>RSSMRA71E05H501Q</td>
+
+                    <td><a type="button" class=" btn  btn-outline-secondary" href='@Url.Action(ViewBag.src, "Amministrativo")' /> Dettaglio</td>
+
+                </tr>
+                <tr>
+                    <td>1236</td>
+                    <td>Beni fruttiferi</td>
+                    <td>RSSMRA71E05H501Q</td>
+
+                    <td><a type="button" class=" btn  btn-outline-secondary" href='@Url.Action(ViewBag.src, "Amministrativo")' /> Dettaglio</td>
+
+                </tr>
+                <tr>
+                    <td>1237</td>
+                    <td>Azienda vinicola</td>
+                    <td>RSSMRA71E05H501Q</td>
+
+                    <td><a type="button" class=" btn  btn-outline-secondary" href='@Url.Action(ViewBag.src, "Amministrativo")' /> Dettaglio</td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+
+    $(function () {
+      
+        $('#searchPos').on('input', function () {
+            searchRow();
+        });
+        $('#searchAzi').on('input', function () {
+            searchRow();
+        });
+
+    })
+    function searchRow() {
+        var $rows = $('#table > tbody > tr').not(".header");
+       
+        var val3 = $.trim($('#searchPos').val()).replace(' ').toLowerCase();
+        var val4 = $.trim($('#searchAzi').val()).replace(' ').toLowerCase();
+
+
+
+        $rows.show().filter(function () {
+           
+            var text3 = $(this).find('td:nth-child(1)').text().replace(' ').toLowerCase();
+            var text4 = $(this).find('td:nth-child(2)').text().replace(' ').toLowerCase();
+
+            return !~text3.indexOf(val3) || !~text4.indexOf(val4);
+        }).hide();
+    }
+
+</script>
+
+

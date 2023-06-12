@@ -1,0 +1,707 @@
+﻿@model TFI.OCM.AziendaConsulente.ModPrevOCM
+@{
+    ViewBag.Title = "Modprev01";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+<style>
+    #btnnuovapos:hover {
+        background-color: #0c773c;
+    }
+
+    #btnsave_arr:hover {
+        background-color: #0c773c;
+    }
+
+    #btnsave_Tot:hover {
+        background-color: #0c773c;
+    }
+
+    #btnsave_sosp:hover {
+        background-color: #0c773c;
+    }
+
+    #btnsave_den:hover {
+        background-color: #0c773c;
+    }
+
+    #Arretrato:hover {
+        background-color: #0c773c;
+    }
+
+    #btn_annulla:hover {
+        background-color: #0c773c;
+    }
+
+    #Nuovasosp:hover {
+        background-color: #0c773c;
+    }
+
+    #btnnuovasosp:hover {
+        background-color: #0c773c;
+    }
+
+    .modal-dialog {
+        max-width: 70%;
+    }
+</style>
+
+
+<div class="card">
+    <div class="card-header" style="background: #0c773c;text-align: center;width: 100%;color: white;font-size: 25px">
+        Trasmissione rapporto a previdenza  Matricola: @Model.datGen.matricola - @Model.datGen.cognome @Model.datGen.nome
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1" style="background-color: #0c773c;">
+                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
+                            <li class="col-3 col-sm-3">
+                                <a class="nav-link active" id="custom-tabs-one-home-tab" data-toggle="pill" href="#datigen" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">DATI GENERALI</a>
+                            </li>
+                            <li class="col-3 col-sm-3">
+                                <a class="nav-link " id="custom-tabs-one-profile-tab" data-toggle="pill" href="#divden" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">DENUNCE</a>
+                            </li>
+                            <li class="col-3 col-sm-3">
+                                <a class="nav-link " id="custom-tabs-one-messages-tab" data-toggle="pill" href="#divarr" role="tab" aria-controls="custom-tabs-one-messages" aria-selected="false">ARRETRATI</a>
+                            </li>
+                            <li class="col-3 col-sm-3">
+                                <a class="nav-link " id="custom-tabs-one-settings-tab" data-toggle="pill" href="#divtot" role="tab" aria-controls="custom-tabs-one-settings" aria-selected="false">TOTALI</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        @if (Model != null)
+                        {
+                            <div class="tab-content" id="custom-tabs-one-tabContent">
+                                <div class="tab-pane fade show active" id="datigen" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                                    @using (Html.BeginForm("Modprev01", "AziendaConsulente"))
+                                        {
+                                            <hr style="border: 3px solid #3ea16a;background: #3ea16a">
+                                            <div class="form-group col-sm-4">
+                                                <div class="input-group ">
+                                                    <label>Rapp. Legale:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.rapplegale" style="height:25px" class="form-control col-sm-6" placeholder="" readonly>
+                                                </div>
+                                            </div>
+                                            <hr style="border: 3px solid #3ea16a;background: #3ea16a">
+                                            <div class="form-group col-sm-12">
+                                                <div class="input-group">
+                                                    <label>Matricola:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.matricola" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;&emsp;
+                                                    <label>Cognome:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.cognome" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;&emsp;
+                                                    <label>Nome:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.nome" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp; &emsp;&emsp;
+                                                </div>
+                                                <br />
+                                                <div class="input-group">
+                                                    <label>Data Inizio:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.dataini.Substring(0, 10)" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;&emsp;
+                                                    <label>Data Cessazione:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.datacess.Substring(0, 10)" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;&emsp;
+                                                    <label>Casuale:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="@Model.datGen.causale" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp; &emsp;&emsp;
+                                                </div>
+                                            </div>
+                                            <hr style="border: 3px solid #3ea16a;background: #3ea16a">
+                                            <div class="form-group col-sm-12">
+                                                <div class="input-group">
+                                                    <label>Indennità sost. del preavviso:</label> &nbsp; &nbsp;
+                                                    <input type="checkbox" style=" text-align:center" /> &emsp;
+                                                    <label>Dal:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                                    <label>Al:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                                </div>
+                                                <div class="input-group">
+                                                    <label>Importo:</label> &nbsp; &nbsp;
+                                                    <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                                    <label>Indennità dichiarata nella denuncia mensile</label> &nbsp; &nbsp;
+                                                    <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                                </div>
+                                            </div>
+                                            <hr style="border: 3px solid #3ea16a;background: #3ea16a">
+                                            <div class="input-group">
+                                                <label>Consulente:</label> &nbsp; &nbsp;
+                                                <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                                <label>Telefono:</label> &nbsp; &nbsp;
+                                                <input type="text" value="" style="height:25px" class="form-control col-sm-3" placeholder="" readonly>&emsp;&emsp;
+                                            </div>
+                                            <br />
+                                            <hr style="border: 3px solid #3ea16a;background: #3ea16a">
+                                            <br />
+
+                                            <div class="row">
+                                                <div class="col-sm-6 justify-content-center">
+                                                    <label style="font-size: 20px">Elenco sospensioni</label>
+                                                    <br />
+                                                    <table class="table table-bordered table-hover table-striped">
+                                                        <thead style="height:10px">
+                                                            <tr>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Data Inizio</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Data Fine</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Motivo</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var sosp in Model.sosp)
+                                                            {
+                                                                <tr>
+                                                                    <td style="text-align:center">
+                                                                        @sosp.dal
+                                                                    </td>
+                                                                    <td style="text-align:center">
+                                                                        @sosp.al
+                                                                    </td>
+                                                                    <td style="text-align:center">
+                                                                        @sosp.motsosp
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                @*modal*@
+                                                <div class="modal fade show" id="modal-default" style="display:none;" aria-modal="true" role="dialog">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Nuova Sospensione</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <label>Data Inizio:</label>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <label>Data Cessazione:</label>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <label>Sospensione:</label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <input type="date" value="" id="dal" name="dal" asp-for="dal" style="display: inline" class="form-control" placeholder="" required>&emsp;
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <input type="date" value="" id="al" name="al" asp-for="al" style="display: inline " class="form-control" placeholder="" required>&emsp;
+
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                        <div class="form-group">
+                                                                            <select class="form-control" id="motsosp" name="motsosp" asp-for="motsosp">
+                                                                                <option selected></option>
+                                                                                @foreach (var i in Model.listsosps)
+                                                                                {
+                                                                                    <option>@i.densos</option>
+                                                                                    <option hidden>@i.codsos</option>
+                                                                                }
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-between">
+                                                                <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                                                                <input type="submit" value="Nuova Sospensione" id="Nuovasosp" name="Nuovasosp" asp-for="Nuovasosp" class="btn  btn-outline-success hover">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @*end modal*@
+                                                <div class="col-sm-6 justify-content-center">
+                                                    <label style="font-size: 20px">Elenco Prestazioni Ridotte</label>
+                                                    <br />
+                                                    <table class="table table-bordered table-hover table-striped">
+                                                        <thead style="height:10px">
+                                                            <tr>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Data Inizio</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Data Fine</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle;width:25%">Percentuale</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var partime in Model.part_time)
+                                                            {
+                                                                <tr>
+                                                                    <td style="text-align:center">
+                                                                        @partime.datini
+                                                                    </td>
+                                                                    <td style="text-align:center">
+                                                                        @partime.datini
+                                                                    </td>
+                                                                    <td style="text-align:center">
+                                                                        @partime.prepar
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                        @using (Html.BeginForm("Modprev01", "AziendaConsulente"))
+                                        {
+                                            <br />
+                                            <div class="row justify-content-end">
+                                                <div class="col-sm-6" style="text-align:center">
+                                                    <input type="button" id="btnnuovasosp" class="btn btn-outline-success hover" value="Nuova Sospensione" data-toggle="modal" data-target="#modal-default">
+                                                </div>
+                                                <div class="col-sm-6 justify-content-end" style="text-align:center">
+                                                    <input type="submit" id="btnsave_sosp" name="btnsave_sosp" asp-for="btnsave_sosp" style="width:25%" value="Salva" class="btn btn-outline-success hover" />
+                                                </div>
+                                            </div>
+                                        }
+                                    
+                                </div>
+                                <div class="tab-pane fade" id="divden" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                    <br />
+                                    <div class="row justify-content-end" style="padding-right:9px">
+                                        <div style="width:30%;background-color:#0c773c;color:white;text-align:center;vertical-align:middle">
+                                            Rettifiche
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table class="table table-bordered table-hover table-striped table-responsive " style="height:300px" id="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Anno</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Mese</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Dal</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Al</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Retr. Imp.</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Di cui Occ.</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Fig.</th>
+                                                        <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Aliq.</th>
+                                                        <th style="width:10%;background:#0c773c;color:white;text-align:center;vertical-align:middle">Occ.</th>
+                                                        <th style="width:10%;background:#0c773c;color:white;text-align:center;vertical-align:middle">Fig.</th>
+                                                        <th style="width:10%;background:#0c773c;color:white;text-align:center;vertical-align:middle">Aliq.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="btnNuovo">
+                                                    @foreach (var den in Model.denunces)
+                                                    {
+                                                        <tr>
+                                                            <td style="text-align:center" class="anno" id="anno">
+                                                                @den.anno
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                @TFI.BLL.Utilities.Utils.GetMesi()[Convert.ToInt32(den.mese)]
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                @den.iniperiodo.Substring(0, 10)
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                @den.finperiodo.Substring(0, 10)
+                                                            </td>
+                                                            <td style="text-align:center" class="imp1" id="imp">
+                                                                @den.retrimp
+                                                            </td>
+                                                            <td style="text-align:center" class="occ1" id="occ">
+                                                                @den.occ
+                                                            </td>
+                                                            <td style="text-align:center" class="fig1" id="fig">
+                                                                @den.fig
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                @den.Aliq
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                <input type="text" oldvalue="0" value="" id="retocc" style="height: 25px; text-align: center;" class="form-control occ" />
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                <input type="text" oldvalue="0" value="" id="retfig" style="height: 25px; text-align: center;" class="form-control fig" />
+                                                            </td>
+                                                            <td style="text-align:center">
+                                                                <input type="text" value="" style="height: 25px; text-align: center;" class="form-control" />
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-end" style="background-color:#0c773c;color:white">
+                                        <div class=" col-sm-1">
+                                            <label>Imponibile:</label>
+                                            <span id="val"></span>
+                                        </div>
+                                        <div class=" col-sm-1">
+                                            <label>Occasionale:</label>
+                                            <span style="text-align:center" id="occtot"></span>
+                                        </div>
+                                        <div class=" col-sm-1">
+                                            <label>Figurative:</label>
+                                            <span id="figtot" style="text-align:center"></span>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    @{ using (Html.BeginForm("Modprev01", "AziendaConsulente"))
+                                        { <div class="row justify-content-end">
+                                                <div class="col-sm-3 ">
+                                                    <input type="submit" id="btnsave_den" name="btnsave_den" asp-for="btnsave_den" value="Salva" class="btn  btn-outline-success hover" />
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane fade" id="divarr" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+
+                                    @{ using (Html.BeginForm("Modprev01", "AziendaConsulente"))
+                                        {
+
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <table class="table table-bordered table-hover table-striped" id="arretrati_table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Anno Den.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Anno Comp.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Dal</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Al</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Retr. Imp.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Di cui Occ.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Aliq.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Retr. Imp.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle">Di cui Occ.</th>
+                                                                <th style="background:#0c773c;color:white;text-align:center;vertical-align:middle"></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @{
+                                                                foreach (var den in Model.Arretrati)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            @den.annoComp
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.annoDen
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.iniperiodo
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.finperiodo
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.retrimp
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.occ
+                                                                        </td>
+                                                                        <td>
+                                                                            @den.Aliq
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="text" />
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="submit" id="elimina" name="elimina" asp-for="elimina" value="elimina" style="border:none">
+                                                                                <i class="far fa-trash-alt fa-lg"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Anno Competenza:</label> &nbsp; &nbsp;
+                                                        <input type="text" id="AnnComp" name="AnnComp" asp-for="AnnComp" value="" style="height:25px" class="form-control col-sm-3" placeholder="" maxlength="4">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="input-group justify-content-center ">
+                                                        <input type="submit" id="Arretrato" name="Arretrato" asp-for="Arretrato" value="Nuovo Arretrato" class="btn btn-block btn-outline-success hover col-sm-3" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div class="row justify-content-end">
+                                                <div class="col-sm-2">
+                                                    <input type="submit" id="btnsave_arr" name="btnsave_arr" asp-for="btnsave_arr" value="Salva" class="btn btn-block btn-outline-success hover col-4" />
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="tab-pane fade" id="divtot" role="tabpanel" aria-labelledby="custom-tabs-one-settings-tab">
+                                    @{ using (Html.BeginForm("Modprev01", "AziendaConsulente"))
+                                        {
+                                            <div class="row">
+                                                <div class="col-sm-4" style="text-align:center">
+                                                    <label id="anno1" class="anno1" value="@Model.Totali.anno1">Anno @Model.Totali.anno1:</label>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Importo accettato:</label>
+                                                        <span class="col-sm-3" id="totacc1"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Occasionale accettato:</label>
+                                                        <span class="col-sm-3" id="occann1"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Figurativa accettata:</label>
+                                                        <span class="col-sm-3" id="figann1"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Imponibile certificato:</label>
+                                                        <span class="col-sm-3" id="impann1"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Occasionale rettificato:</label>
+                                                        <span class="col-sm-3"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Figurativa rettificata:</label>
+                                                        <span class="col-sm-3"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-4" style="text-align:center">
+                                                    <label id="anno2" class="anno2" value="@Model.Totali.anno2">Anno @Model.Totali.anno2:</label>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="row">
+                                                <div class="form-group col-sm-6">
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Importo accettato:</label>
+                                                        <span class="col-sm-3" id="totacc2"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Occasionale accettato:</label>
+                                                        <span class="col-sm-3" id="occann2"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-end">
+                                                        <label>Tot. Figurativa accettata:</label>
+                                                        <span class="col-sm-3" id="figann2"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-sm-6">
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Imponibile certificato:</label>
+                                                        <span class="col-sm-3" id="impann2"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Occasionale rettificato:</label>
+                                                        <span class="col-sm-3"></span>
+                                                    </div>
+                                                    <div class="input-group justify-content-center">
+                                                        <label>Tot. Figurativa rettificata:</label>
+                                                        <span class="col-sm-3"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div class="row justify-content-end">
+                                                <div class="col-sm-2 justify-content-end">
+                                                    <input type="submit" id="btnsave_Tot" name="btnsave_Tot" asp-for="btnsave_Tot" value="Conferma dati" class="btn btn-block btn-outline-success hover" />
+                                                </div>
+                                            </div>
+
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    //funzione tot imponibile
+    //var table = document.getElementById("table"), sumVal = 0;
+    //for (var i = 1; i < table.rows.length; i++) {
+    //    sumVal = sumVal + parseInt(table.rows[i].cells[4].innerHTML);
+    //}
+    //document.getElementById("val").innerHTML = sumVal + "€";
+    //document.getElementById("val2").innerHTML = sumVal + "€";
+    //console.log(sumVal);
+
+
+    $('.occ').on('blur', function () {
+        var oldvalue = $(this).attr('oldvalue');
+        var occ = parseFloat($(this).val().replace(',', '.') || 0.00);
+        if (occ != oldvalue) {
+            var occtot = parseFloat($('#occtot').text().replace(',', '.') || 0.00);
+            $(this).attr('oldvalue', occ);
+            var tot = parseFloat(occtot) + parseFloat(occ) + "€";
+            $("#occtot").html(tot);
+        }
+    });
+
+    $('.fig').on('blur', function () {
+        var oldvalue = $(this).attr('oldvalue');
+        var occ = parseFloat($(this).val().replace(',', '.') || 0.00);
+        if (occ != oldvalue) {
+            var occtot = parseFloat($('#figtot').text().replace(',', '.') || 0.00);
+            $(this).attr('oldvalue', occ);
+            var tot = parseFloat(occtot) + parseFloat(occ) + "€";
+            $("#figtot").html(tot);
+        }
+    });
+
+    var imp = $('#table').find('#imp');
+
+    $(function () {
+        $("#occtot").html(sumColumn(6) + " €");
+        $("#figtot").html(sumColumn(7) + " €");
+        $("#val").html(sumColumn(5) + " €");
+    });
+
+    function sumColumn(index) {
+        var total = 0;
+        $("td:nth-child(" + index + ")").each(function () {
+            total += parseFloat($(this).text(), 10) || 0;
+        });
+        return total;
+    }
+
+    var anno1 = $("#anno1").text().replace('Anno ', '').substring(0, 4);
+    var anno2 = $("#anno2").text().replace('Anno ', '').substring(0, 4);
+
+
+    //var trs = $('#table').find('tr');
+
+    //var total1 = 0;
+    //var total2 = 0;
+
+    $('#custom-tabs-one-settings-tab').on('click', function () {
+
+        var table = document.getElementById("table");
+        var tableRows = $("#btnNuovo tr");
+        var anno = document.getElementsByClassName("anno");
+        var imp = document.getElementsByClassName("imp1");
+        var sum2 = 0;
+        var sum1 = 0;
+        var x = $.trim(imp[1].innerText);
+
+
+
+        for (var i in tableRows) {
+            if (i <= tableRows.length) {
+                if ($.trim(anno[i].innerText) == anno1) {
+
+                    sum1 = parseFloat(sum1) + parseFloat($.trim(imp[i].innerText));
+
+                }
+                else {
+                    sum2 = parseFloat(sum2) + parseFloat($.trim(imp[i].innerText));
+                }
+            }
+
+
+        }
+
+        $('#impann1').html(sum1 + " €");
+        $('#impann2').html(sum2 + " €");
+
+
+    });
+
+    $('#custom-tabs-one-settings-tab').on('click', function () {
+
+        var table = document.getElementById("table");
+        var tableRows = $("#btnNuovo tr");
+        var anno = document.getElementsByClassName("anno");
+        var occ = document.getElementsByClassName("occ1");
+        var sum2 = 0;
+        var sum1 = 0;
+        var x = $.trim(occ[1].innerText);
+
+
+        for (var i in tableRows) {
+            if (i <= tableRows.length) {
+                if ($.trim(anno[i].innerText) == anno1) {
+
+                    sum1 = parseFloat(sum1) + parseFloat($.trim(occ[i].innerText));
+
+                }
+                else {
+                    sum2 = parseFloat(sum2) + parseFloat($.trim(occ[i].innerText));
+                }
+            }
+
+
+        }
+
+        $('#occann1').html(sum1 + " €");
+        $('#occann2').html(sum2 + " €");
+
+
+    });
+
+    $('#custom-tabs-one-settings-tab').on('click', function () {
+
+        var table = document.getElementById("table");
+        var tableRows = $("#btnNuovo tr");
+        var anno = document.getElementsByClassName("anno");
+        var fig = document.getElementsByClassName("fig1");
+        var sum2 = 0;
+        var sum1 = 0;
+        var x = $.trim(occ[1].innerText);
+
+
+
+        for (var i in tableRows) {
+            if (i <= tableRows.length) {
+                if ($.trim(anno[i].innerText) == anno1) {
+
+                    sum1 = parseFloat(sum1) + parseFloat($.trim(fig[i].innerText));
+
+                }
+                else {
+                    sum2 = parseFloat(sum2) + parseFloat($.trim(fig[i].innerText));
+                }
+            }
+
+
+        }
+
+        $('#figann1').html(sum1 + " €");
+        $('#figann2').html(sum2 + " €");
+        var occ1 = $('#occann1').text().replace(" €", "");
+        var imp1 = $('#impann1').text().replace(" €", "");
+        var occ2 = $('#occann2').text().replace(" €", "");
+        var imp2 = $('#impann2').text().replace(" €", "");
+        $('#totacc1').html(parseFloat(sum1) + parseFloat(occ1) + parseFloat(imp1) + " €");
+        $('#totacc2').html(parseFloat(sum2) + parseFloat(occ2) + parseFloat(imp2) + " €");
+    });
+
+
+
+</script>
+
+

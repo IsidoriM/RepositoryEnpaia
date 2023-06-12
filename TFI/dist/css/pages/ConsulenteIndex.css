@@ -1,0 +1,70 @@
+.table td {
+    vertical-align: middle;
+}
+
+.table thead th {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.input-group > .form-control {
+    border-color: #0c773c;
+    margin-right: 20px;
+}
+
+.cancelBtn::after {
+    visibility: visible;
+    background-color: #0c773c;
+    color: white;
+    border: 1px solid black;
+    padding: 5px 10px 5px 10px;
+}
+
+.applyBtn::after {
+    background-color: #0c773c;
+    color: white;
+    visibility: visible;
+    border: 1px solid black;
+    padding: 5px 10px 5px 10px;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+    background-color: #0c773c;
+}
+
+.webgrid-footer {
+    text-align: center;
+    background-color: #0c773c;
+    color: white;
+}
+
+.webgrid-header {
+    font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    background-color: #0c773c;
+    color: white;
+}
+
+    .webgrid-header a {
+        font-family: "Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+        color: white;
+    }
+
+#cerca {
+    text-align: center;
+    width: 300px;
+}
+
+    #cerca:hover {
+        text-align: center;
+        background-color: #0c773c;
+    }
+
+#cancella:hover {
+    text-align: center;
+    background-color: #0c773c;
+}
+
+#inserisci:hover {
+    text-align: center;
+    background-color: #0c773c;
+}

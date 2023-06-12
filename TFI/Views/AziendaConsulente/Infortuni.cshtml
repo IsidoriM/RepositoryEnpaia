@@ -1,0 +1,276 @@
+﻿@model IEnumerable<TFI.OCM.AziendaConsulente.NuovoInfortunio>
+    @using Newtonsoft.Json;
+
+    @{
+        var result = Model;
+    }
+    @{
+
+
+        ViewBag.Title = "Infortuni";
+        Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+    }
+
+    <style>
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .input-group > .form-control {
+            border-color: #0c773c;
+            margin-right: 10px;
+        }
+
+        .cancelBtn {
+            visibility: hidden;
+        }
+
+            .cancelBtn::after {
+                content: 'Esci';
+                visibility: visible;
+                background-color: #0c773c;
+                color: white;
+                border: 1px solid black;
+                padding: 5px 10px 5px 10px;
+            }
+
+        .applyBtn {
+            visibility: hidden;
+        }
+
+            .applyBtn::after {
+                content: 'Applica';
+                background-color: #0c773c;
+                color: white;
+                width: 10px;
+                visibility: visible;
+                padding: 5px 10px 5px 10px;
+            }
+
+        .daterangepicker td.active, .daterangepicker td.active:hover {
+            background-color: #0c773c;
+        }
+
+        .btn:hover {
+            background-color: #0c773c
+        }
+    </style>
+    <style>
+        #data tr {
+            display: none;
+        }
+
+        .page {
+            margin-top: 150px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        #data {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            #data td, #data th {
+                border: 1px solid #ddd;
+                padding: 8px;
+            }
+
+            #data tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            #data tr:hover {
+                background-color: #ddd;
+            }
+
+            #data th {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                text-align: left;
+                background-color: #4CAF50;
+                color: white;
+            }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        #nav a {
+            color: #4CAF50;
+            font-size: 20px;
+            margin-top: 22px;
+            margin-left: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none;
+        }
+
+
+        .page-link {
+            position: relative;
+            display: block;
+            color: #673AB7 !important;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #673AB7 !important;
+        }
+
+
+            .page-link:hover {
+                z-index: 2;
+                color: #fff !important;
+                background-color: #673ab7;
+                border-color: #024dbc;
+            }
+
+
+            .page-link:focus {
+                z-index: 3;
+                outline: 0;
+                box-shadow: none;
+            }
+
+        ul {
+            list-style-type: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#data').after('<div id="nav" style="text-align: center"></div>');
+            var rowsShown = 10;
+            var rowsTotal = $('#data tbody tr').length;
+            var numPages = rowsTotal / rowsShown;
+            for (i = 0; i < numPages; i++) {
+                var pageNum = i + 1;
+                $('#nav ').append('<a style="text-align: center"  href="#"  rel="' + i + '">' + pageNum + '</a>');
+            }
+            $('#data tbody tr').hide();
+            $('#data tbody tr').slice(0, rowsShown).show();
+            $('#nav a:first').addClass('active');
+            $('#nav a').bind('click', function () {
+                $('#nav a').removeClass('active');
+                $(this).addClass('active');
+                var currPage = $(this).attr('rel');
+                var startItem = currPage * rowsShown;
+                var endItem = startItem + rowsShown;
+                $('#data tbody tr').css('opacity', '0.0').hide().slice(startItem, endItem).
+                    css('display', 'table-row').animate({ opacity: 1 }, 300);
+            });
+        });
+    </script>
+
+    @using (Html.BeginForm("Infortuni", "AziendaConsulente", FormMethod.Get, null))
+    {
+        <div class="card" style="background-color:white">
+            <div class="card-body">
+                <div class="input-group">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="background-color: #0c773c" class="card-header">
+                <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Lista Infortuni Denunciati</h3>
+            </div>
+            <div class="card-body">
+                <table id="data" style="text-align:center" class="table table-hover table-striped">
+                    <thead>
+                        <tr class="header" style="background:#0c773c;color:white">
+                            <th>Matricola</th>
+                            <th>Nominativo Iscritto</th>
+                            <th>Tipo Infortunio</th>
+                            <th>Data infortunio</th>
+                            <th>Data denuncia infortunio</th>
+                            <th>Dettaglio</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TFI.OCM.AziendaConsulente.NuovoInfortunio lista in result)
+                        {
+                            <tr style="vertical-align:middle;text-align:center">
+                                <td>@lista.Matricola</td>
+                                <td>@lista.Cognome @lista.Nome</td>
+                                <td>@lista.Prognosi</td>
+                                <td>@lista.Datainf.Substring(0, 10)</td>
+                                <td>@lista.Dataden.Substring(0, 10)</td>
+
+
+
+                                <td><a href='@Url.Action("DettaglioInfortuni", "AziendaConsulente",new {matr= lista.Matricola,ID = lista.Proinf} )' /> <i class="fa fa-search"></i></td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+
+                </table>
+
+
+                <div id="myPager">
+
+                </div>
+
+            </div>
+        </div>
+    }
+    <script>
+
+        $(function () {
+            $('#search').on('input', function () {
+                searchRow();
+            });
+            $('#searchMat').on('input', function () {
+                searchRow();
+            });
+            $('#searchAzienda').on('input', function () {
+                searchRow();
+            });
+
+        })
+        function searchRow() {
+            var $rows = $('#table > tbody > tr').not(".header");
+            var val1 = $.trim($('#search').val()).replace(' ').toLowerCase();
+            var val3 = $.trim($('#searchMat').val()).replace(' ').toLowerCase();
+            var val4 = $.trim($('#searchAzienda').val()).replace(' ').toLowerCase();
+
+
+            $rows.show().filter(function () {
+                var text1 = $(this).find('td:nth-child(2)').text().replace(' ').toLowerCase();
+                var text3 = $(this).find('td:nth-child(1)').text().replace(' ').toLowerCase();
+                var text4 = $(this).find('td:nth-child(7)').text().replace(' ').toLowerCase();
+                return !~text1.indexOf(val1) || !~text3.indexOf(val3) || !~text4.indexOf(val4);
+            }).hide();
+        }
+
+    </script>
+
+
+    <script>
+        $(function () {
+            //Date range picker
+            $('#reservation').daterangepicker();
+        })
+    </script>
+    <script>
+        $(function () {
+            //Date range picker
+            $('#reservation1').daterangepicker();
+        })
+    </script>
+
+
+

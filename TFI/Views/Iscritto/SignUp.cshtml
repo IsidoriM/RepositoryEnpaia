@@ -1,0 +1,383 @@
+﻿@using OCM.TFI.OCM.AziendaConsulente
+
+@model TFI.OCM.Iscritto.AnagraficaConPwd
+@{
+    ViewBag.Title = "Enpaia | Sign Up";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+}
+
+@{ 
+    var genere = (ViewBag.ListaGeneri as IEnumerable<Genere>).FirstOrDefault(g => g.Id.ToString() == Model.Sesso)
+ ?? new Genere() { Id = 0, Descrizione = "" };
+}
+
+<div class="container">
+    <div class="row shadow mb-4 d-flex justify-content-center" style="background-color: #097132">
+        <div class="text-center mr-3">
+            <img class="mt-3 mb-3" style="border-radius: 2%; width:123px; background-color:white" src="~/Images/Logo-Fondazione-Enpaia.png">
+
+        </div>
+
+        <div class="text-sm-center text-md-left">
+            <h2 style="margin-top:50px;">
+                <label class="text-white" style="font-family: 'Poppins',sans-serif;">Registrazione Iscritto</label>
+            </h2>
+
+        </div>
+    </div>
+
+    <form method="post" style="color: #097132; font-size: 18px" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Matricola:</label>
+            <input type="text" name="Mat" value="@((int)Model.Mat)" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Codice Fiscale:</label>
+            <input type="text" name="CodiceFiscale" value="@Model.CodiceFiscale" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Cognome:</label>
+            <input type="text" name="Cognome" value="@Model.Cognome" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" name="Nome" value="@Model.Nome" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Genere:</label>
+            <input type="text" value="@genere.Descrizione" class="form-control" readonly />
+            <input type="text" name="Sesso" value="@genere.Id" class="form-control" hidden />
+        </div>
+        <div class="form-group">
+            <label>Data di nascita:</label>
+            <input type="text" name="DataNascita" value="@Model.DataNascita.ToString("dd/MM/yyyy").Substring(0, 10)" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Comune di nascita:</label>
+            <input type="text" name="ComuneNascita" value="@Model.ComuneNascita" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label>Provincia di nascita:</label>
+            <input type="text" name="SigproNascita" value="@Model.SigproNascita" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label for="statEsteroNascita">Stato Estero di Nascita:</label>
+            <input type="text" name="StatoEsteroNascita" value="@Model.StatoEsteroNascita" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label for="TitoloStudio">Titolo di studio:</label>
+            <select required name="TitoloStudio" id="TitoloStudio" class="form-control">
+                <option value="">Selezionare un valore</option>
+                @{
+                    foreach (var ts in ViewBag.TitoloStudio)
+                    {
+                        <option value="@ts.dentistu" @(Model.TitoloStudio == ts.dentistu ? "selected" : "")>@ts.dentistu</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group d-flex flex-row align-items-end">
+            <div class="form-group" style="width: 16%; min-width: 200px; margin-right: 2%">
+                <label for="Indirizzo">Indirizzo di Residenza:</label>
+                <select required name="TipoResidenza" id="TipoResidenza" class="form-control">
+                    <option value="">Selezionare un valore</option>
+                    @{
+                        foreach (var tr in ViewBag.TipoResidenza)
+                        {
+                            <option value="@tr" @(Model.TipoResidenza == tr ? "selected" : "")>@tr</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group" style="width: 70%; min-width: 450px; margin-right: 2%">
+                <input required type="text" maxlength="80" name="Indirizzo" value="@Model.Indirizzo" placeholder="Inserire indirizzo" id="Indirizzo" class="form-control" />
+            </div>
+            <div class="form-group" style="width: 10%; min-width: 100px">
+                <label for="NumeroCivico">Civico</label>
+                <input required type="text" maxlength="10" name="NumeroCivico" value="@Model.NumeroCivico" placeholder="Inserire il civico" id="NumeroCivico" class="form-control" pattern="^(^\d+(\/[a-zA-Z])?[a-zA-Z]?$)|(SNC)$"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="SigproResidenza">Provincia di Residenza:</label>
+            <select required id="SigproResidenza" class="form-control" name="SigproResidenza">
+                <option value="">Selezionare un valore</option>
+                @foreach (var prov in ViewBag.Provincie)
+                {
+                    if (prov.SIGPRO != "EE")
+                    {
+                        <option value="@prov.SIGPRO" @(Model.SigproResidenza == prov.SIGPRO ? "selected" : "")>@prov.SIGPRO</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ComuneResidenza">Comune di Residenza:</label>
+            <select required name="ComuneResidenza" id="ComuneResidenza" class="form-control">
+                <option value="">Selezionare un valore</option>
+                @foreach (var std in ViewBag.Comuni)
+                {
+                    <option value="@std.CODCOM" @(Model.CodComuneResidenza == std.CODCOM ? "selected" : "")>@std.DENCOM</option>
+
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Localita">Località:</label>
+            <select required name="Localita" id="Localita" class="form-control">
+                <option value="">Selezionare un valore</option>
+                @foreach (var loc in ViewBag.Localitas)
+                {
+                    <option value="@loc.DENLOC" @(Model.Localita == loc.DENLOC ? "selected" : "")>@loc.DENLOC</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Cap">CAP:</label>
+            <input required readonly type="text" pattern=".{5}" name="Cap" value="@Model.Cap" placeholder="@ViewBag.Cap" id="Cap" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="StatoEsteroResidenza">Stato Estero di Residenza:</label>
+            <select required name="StatoEsteroResidenza" id="StatoEsteroResidenza" class="form-control">
+                <option value="0">Selezionare un valore</option>
+                @foreach (var se in ViewBag.ListaStati)
+                {
+                    <option value="@se" @(Model.StatoEsteroResidenza == se ? "selected" : "")>@se</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Co">C/O:</label>
+            <input type="text" class="form-control" maxlength="40" id="Co" name="Co" value="@Model.Co" placeholder="Inserire il C/O">
+        </div>
+        <div class="form-group">
+            <label for="Telefono1">Telefono:</label>
+            <input type="tel" title="Inserisci un numero di telefono di 9 cifre" class="form-control" pattern="[0-9]{2}[0-9]{7}" name="Telefono1" value="@Model.Telefono1" placeholder="Inserire Telefono" id="Telefono1"  maxlength="9"/>
+        </div>
+        <div class="form-group">
+            <label for="Cellulare">Cellulare:</label>
+            <input type="tel" title="Inserisci un numero di telefono di 10 cifre" class="form-control" id="Cellulare" pattern="[0-9]{3}[0-9]{7}" name="Cellulare" value="@Model.Cellulare" placeholder="Inserire il Cellulare" required maxlength="10">
+        </div>
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input required type="email" maxlength="100" name="Email" value="@Model.Email" placeholder="Inserire Email" id="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="EmailCert">PEC:</label>
+            <input type="email" class="form-control" title="Inserisci un dominio valido (&#64;pec o &#64;legalmail)" pattern="(.+)@("@")(legalmail|pec)(\.{1}([a-zA-Z0-9-])+)*" maxlength="100" id="EmailCert" name="EmailCert" value="@Model.EmailCert" placeholder="Inserire la PEC" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <div class="d-flex flex-row" style="background: white">
+                <input required type="password" name="Password" id="password" class="form-control" value="@Model.Password" 
+                       pattern="@("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"?$%&()=[\\]<>+._*@#-]).{8,16}$")" 
+                       title="Inserire una password con: &nbsp; &ndash; una lunghezza tra 8 e 16 caratteri &nbsp; &ndash; almeno un carattere minuscolo &nbsp; &ndash; almeno un carattere maiuscolo &nbsp; &ndash; almeno un carattere numerico &nbsp; &ndash; almeno un carattere speciale tra @("!\"?$%&()=[\\]<>+._*@#-")" />
+                <i class="fas fa-eye" id="togglePassword" style="cursor: pointer; color: black; margin-left: -35px; margin-top: 10px"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="confPassword">Conferma Password:</label>
+            <div class="d-flex flex-row" style="background: white">
+                <input required type="password" equalto="#password" name="ConfermaPassword" id="confPassword" class="form-control" value="@Model.ConfermaPassword" 
+                       pattern="@("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!\"?$%&()=[\\]<>+._*@#-]).{8,16}$")" 
+                       title="Inserire una password con: &nbsp; &ndash; una lunghezza tra 8 e 16 caratteri &nbsp; &ndash; almeno un carattere minuscolo &nbsp; &ndash; almeno un carattere maiuscolo &nbsp; &ndash; almeno un carattere numerico &nbsp; &ndash; almeno un carattere speciale tra @("!\"?$%&()=[\\]<>+._*@#-")" />
+                <i class="fas fa-eye" id="toggleRepeatPassword" style="cursor: pointer; color: black; margin-left: -35px; margin-top: 10px"></i>
+            </div>
+        </div>
+        <div class="form-group justify-content-center align-items-center">
+            <div class="row">
+                <div class="col-4 form-group">
+                    <label class="control-label">Tipo Documento</label>
+                    <select class="form-control documento" id="Tipo_Documento" name="Tipo_Documento" placeholder="Inserire il tipo del documento" required>
+                        <option value="0" selected>Inserire il tipo di documento</option>
+                        @foreach (var doc in ViewBag.TipoDocumenti)
+                        {
+                            <option value="@doc">@doc</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Numero Documento</label>
+                    <input class="form-control documento" name="Numero_Documento" type="text" placeholder="Inserire il numero del documento" required />
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Data Scadenza Documento</label>
+                    <input class="form-control documento" name="Scadenza_Documento" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 form-group">
+                    <label class="control-label">Fronte Documento</label>
+                    <input class="form-control-file documento-file" name="fronteFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                    @Html.ValidationMessageFor(m => m.FronteFile, null, new { @class = "text-danger" })
+                </div>
+                <div class="col-4 form-group">
+                    <label class="control-label">Retro Documento</label>
+                    <input class="form-control-file documento-file" name="retroFile" type="file" accept='.pdf, .jpeg, .jpg, .png' required />
+                    @Html.ValidationMessageFor(m => m.RetroFile, null, new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group d-flex flex-row justify-content-center align-items-center">
+            <div class="mr-2" style="width: 5%; min-width: 30px; max-width: 50px;">
+                <input required type="checkbox" name="privacy" id="privacy" value="@Model.Privacy" class="form-control" />
+            </div>
+            <label for="privacy"><a href="~/Files/Informativa/INFORMATIVA_SULLA_TUTELA_DEI_DATI_PERSONALI.pdf" target="_blank"><u>Accetto l'informativa sulla privacy</u></a></label>
+        </div>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-success" type="submit" style="width: 120px; font-size: 18px">Registrati</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $('#privacy').click(function () {
+        $('#privacy').attr("value", this.checked);
+    });
+
+    $(document).ready(function () {
+        const togglePassword = document.querySelector('#togglePassword');
+        const toggleRepeatPassword = document.querySelector('#toggleRepeatPassword');
+        const password = document.querySelector('#password');
+        const repeatPassword = document.querySelector('#confPassword');
+        const privacy = document.querySelector('#privacy');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        toggleRepeatPassword.addEventListener('click', function (e) {
+            const type = repeatPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            repeatPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+
+    $("#SigproResidenza").change(function () {
+        if ($(this).val() != "") {
+            $("#StatoEsteroResidenza").val("0");
+            const uri = '@Url.Action("GetComune", "Iscritto")';
+            const provincia = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { provincia: provincia },
+                success: function (data) {
+                    var s = '<option value="">Selezionare un valore</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].CODCOM + '">' + data[i].DENCOM + '</option>';
+                    }
+                    $("#ComuneResidenza").html(s);
+                    $("#Localita").html('');
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+        if ($(this).val() != "" && $("#StatoEsteroResidenza").val() == "0") {
+            $("#Localita").attr("disabled", false);
+            $("#ComuneResidenza").attr("disabled", false);
+        }
+    });
+
+    $("#ComuneResidenza").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetLocalita", "Iscritto")';
+            const comune = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { comune: comune },
+                success: function (data) {
+                    var s = '<option value="">Selezionare un valore</option>';
+                    for (var i = 0; i < data.length; i++) {
+                        s += '<option value="' + data[i].DENLOC + '">' + data[i].DENLOC + ' - ' + data[i].CAP +'</option>';
+                    }
+                    $("#Localita").html(s);
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+    });
+
+     $("#Localita").change(function () {
+        if ($(this).val() != "") {
+            const uri = '@Url.Action("GetCap", "Iscritto")';
+            const localita = $(this).val();
+            $.ajax({
+                cache: false,
+                url: uri,
+                type: 'GET',
+                data: { loc: localita },
+                success: function (data) {
+                    const loc = $("#Localita option:selected").text();
+                    const locArray = loc.split("-");
+                    if (locArray !== undefined && locArray.length == 2) {
+                        const cap = locArray[1].trim();
+                        indexCap = data.findIndex(x => x.CAP === cap);
+                        if (indexCap > 0) {
+                            $("#Cap").val(data[indexCap].CAP)
+                        }
+                        else {
+                            $("#Cap").val(data[0].CAP)
+                        }
+                    }
+                    else {
+                        $("#Cap").val(data[0].CAP)
+                    }
+                },
+                error: function (result) {
+
+                }
+            });
+        }
+     });
+
+    $("#StatoEsteroResidenza").change(function () {
+        if($(this).val() != "0"){
+            $("#ComuneResidenza").html('');
+            $("#Localita").html('');
+            $("#Cap").val('');
+            $("#SigproResidenza").val('');
+            $("#Localita").attr("disabled", true);
+            $("#Cap").attr("disabled", true);
+            $("#ComuneResidenza").attr("disabled", true);
+            $("#SigproResidenza").attr("required", false);
+        }
+        else
+        {
+            $('#SigproResidenza').attr("disabled", false);
+            $("#Localita").attr("disabled", false);
+            $("#Cap").attr("disabled", false);
+            $("#ComuneResidenza").attr("disabled", false);
+        }
+    })
+
+    $(document).ready(function () {
+        if ($("#StatoEsteroResidenza").val() != "0") {
+            $("#ComuneResidenza").html('');
+            $("#Localita").html('');
+            $("#Cap").val('');
+            $("#SigproResidenza").val('');
+            $("#SigproResidenza").attr("required", false);
+            $("#Localita").attr("disabled", true);
+            $("#Cap").attr("disabled", true);
+            $("#ComuneResidenza").attr("disabled", true);
+        }
+        else {
+            $('#SigproResidenza').attr("disabled", false);
+            $("#Localita").attr("disabled", false);
+            $("#ComuneResidenza").attr("disabled", false);
+        }
+    });
+</script>

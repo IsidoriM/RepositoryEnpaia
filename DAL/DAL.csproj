@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Users\unikey\Desktop\tfi_collaudo.enpaia.it\tfi_collaudo.enpaia.it\bin\DAL.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EED5715E-85F5-4610-9C8B-C41B61586D75}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
+    <ApplicationVersion>1.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="IBM.Data.DB2.iSeries">
+      <HintPath>lib\IBM.Data.DB2.iSeries.dll</HintPath>
+    </Reference>
+    <Reference Include="Itenso.TimePeriod, Version=2.1.1.0, Culture=neutral, PublicKeyToken=8cb6db75b4e81486, processorArchitecture=MSIL">
+      <HintPath>..\packages\TimePeriodLibrary.NET.2.1.1\lib\net46\Itenso.TimePeriod.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="clsSediinNet2010">
+      <HintPath>lib\clsSediinNet2010.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AziendaConsulente\InfortuniDAL.cs" />
+    <Compile Include="Convenzioni\ConvenzioniDAL.cs" />
+    <Compile Include="Dropdown\DropdownDAL.cs" />
+    <Compile Include="Infortuni\InfortuniDAL.cs" />
+    <Compile Include="Iscritto\GestionePraticheDAL.cs" />
+    <Compile Include="Iscritto\RegistrazioneDAL.cs" />
+    <Compile Include="Iscritto\RetribuzioneDAL.cs" />
+    <Compile Include="Registrazione\BaseRegistrazioneDAL.cs" />
+    <Compile Include="Registrazione\RegistrazioneConsulenteDAL.cs" />
+    <Compile Include="Registrazione\RegistrazioneDAL.cs" />
+    <Compile Include="Utilities\DataRowExtensions.cs" />
+    <Compile Include="Utilities\DateFormats.cs" />
+    <Compile Include="Utilities\DbParameters.cs" />
+    <Compile Include="Utilities\IbanUtils.cs" />
+    <Compile Include="Utilities\ListToDataTableConverter.cs" />
+    <Compile Include="Admin\AdminDal.cs" />
+    <Compile Include="AziendaConsulente\clsPrev.cs" />
+    <Compile Include="Utilities\clsWRITE_DB.cs" />
+    <Compile Include="Utilities\DBMethods.cs" />
+    <Compile Include="Utilities\ErrorHandler.cs" />
+    <Compile Include="Utilities\IDOC_RDL.cs" />
+    <Compile Include="Utilities\ModGeneraRettifiche.cs" />
+    <Compile Include="Utilities\ModContabilita.cs" />
+    <Compile Include="Utilities\ModGeneraNotifiche.cs" />
+    <Compile Include="Utilities\ModGetDati.cs" />
+    <Compile Include="Utilities\modIDOC_TabelleDiServizio.cs" />
+    <Compile Include="Utilities\StringExtensions.cs" />
+    <Compile Include="Utilities\Utile.cs" />
+    <Compile Include="Utilities\Pdf.cs" />
+    <Compile Include="Utente\UtenteLogin.cs" />
+    <Compile Include="Stampa\StampaDAL.cs" />
+    <Compile Include="Login\LoginDAL.cs" />
+    <Compile Include="Iscritto\AnagraficaDAL.cs" />
+    <Compile Include="Iscritto\CartaDAL.cs" />
+    <Compile Include="Iscritto\ProsPagDAL.cs" />
+    <Compile Include="Iscritto\RicPagTFR_DAL.cs" />
+    <Compile Include="Iscritto\ListaConvenzioni.cs" />
+    <Compile Include="Iscritto\IscrittoEstrattoContoDAL.cs" />
+    <Compile Include="Iscritto\FondoContoIndDAL.cs" />
+    <Compile Include="Iscritto\FondoContoAssegniDAL.cs" />
+    <Compile Include="ConnectorDB\DataLayer.cs" />
+    <Compile Include="AziendaConsulente\AziendaDAL.cs" />
+    <Compile Include="AziendaConsulente\AziendaEstattoContoDAL.cs" />
+    <Compile Include="AziendaConsulente\CessazioniRdlDal.cs" />
+    <Compile Include="AziendaConsulente\clsIDOC.cs" />
+    <Compile Include="AziendaConsulente\ClsProtocolloDll.cs" />
+    <Compile Include="AziendaConsulente\ConsultazioneArretratiDAL.cs" />
+    <Compile Include="AziendaConsulente\DelegheDAL.cs" />
+    <Compile Include="AziendaConsulente\DenunciaMensileDAL.cs" />
+    <Compile Include="AziendaConsulente\GeneraDenunciaDAL.cs" />
+    <Compile Include="AziendaConsulente\Mav.cs" />
+    <Compile Include="AziendaConsulente\RapportiLavoroDAL.cs" />
+    <Compile Include="AziendaConsulente\ModulisticaDAL.cs" />
+    <Compile Include="AziendaConsulente\DatiPREV_TFR_DAL.cs" />
+    <Compile Include="AziendaConsulente\ModprevDAL.cs" />
+    <Compile Include="AziendaConsulente\RicercaArretratiDAL.cs" />
+    <Compile Include="AziendaConsulente\TotaleArretratiDAL.cs" />
+    <Compile Include="AziendaConsulente\WriteDIPA.cs" />
+    <Compile Include="AziendaConsulente\WriteDIPA_SalvataggioTotale.cs" />
+    <Compile Include="Amministrativo\AnnullamentiDAL.cs" />
+    <Compile Include="Amministrativo\EstrattoContoDAL.cs" />
+    <Compile Include="Amministrativo\GestioneAziendaWebDAL.cs" />
+    <Compile Include="Amministrativo\GestioneContrattiDAL.cs" />
+    <Compile Include="Amministrativo\GestioneRapportiLavoroIscrittiDAL.CS" />
+    <Compile Include="Amministrativo\ModelloPrevDAL.cs" />
+    <Compile Include="Amministrativo\modIDOC_Aziende.cs" />
+    <Compile Include="Amministrativo\DelegheDAL.cs" />
+    <Compile Include="Amministrativo\NotificheUfficioDAL.cs" />
+    <Compile Include="Amministrativo\RappLegDAL.cs" />
+    <Compile Include="Amministrativo\RettifichePA_CA_DAL.cs" />
+    <Compile Include="Amministrativo\Rettifiche_DAL.cs" />
+    <Compile Include="Amministrativo\ScadenzeDipaDAL.cs" />
+    <Compile Include="Amministrativo\TrasferimentiRdlDal.cs" />
+    <Compile Include="UtenteEnpaia\UtenteEnpaiaDAL.cs" />
+    <Compile Include="Iscritto\CertUnicDAL.cs" />
+    <Compile Include="Iscritto\PrivacyDAL.cs" />
+    <Compile Include="Iscritto\AnticipazioniTFRDAL.cs" />
+    <Compile Include="Consulente\ConsulenteDAL.cs" />
+    <Compile Include="Amministrativo\DiffideDAL.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\crittografia\CRYPTO.csproj">
+      <Project>{de7ff08c-c482-4314-89cb-fa810cfacfba}</Project>
+      <Name>CRYPTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OCM\OCM.csproj">
+      <Project>{26d7bac8-a958-45b2-8b6c-fa8c8e16f9f5}</Project>
+      <Name>OCM</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,19 @@
+.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table th {
+    background: #0c773c;
+    color: white;
+    width: fit-content;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #0c773c
+}
+
+.spazioCheckMesi > input {
+    margin-left: 8px;
+}

@@ -1,0 +1,88 @@
+﻿
+<div class="wrap">
+
+
+    @if (!String.IsNullOrEmpty((string)TempData["errorMessage"]))
+    {
+        <div class="toast toast-error danger messageStyle" style=" background-color: red; color: white" data-autohide="true" data-delay="10000">
+            <div class="toast-body">
+                @TempData["errorMessage"]
+            </div>
+        </div>
+    }
+    @if (!String.IsNullOrEmpty((string)TempData["successMessage"]))
+    {
+        <div class="d-flex flex-column">
+            <div class="toast toast-success success justify-content-end messageStyle" style="background-color: forestgreen; color: white" data-delay="3000" data-autohide="true">
+                <div class="toast-body">
+                    @TempData["successMessage"]
+                </div>
+            </div>
+            @if (!String.IsNullOrEmpty((string)TempData["warningMessage"]))
+            {
+                <div class="toast toast-warning justify-content-end messageStyle" style="background-color: orange; color: white; top: 50px" data-delay="3000" data-autohide="true">
+                    <div class="toast-body">
+                        @TempData["warningMessage"]
+                    </div>
+                </div>
+            }
+            @if (!String.IsNullOrEmpty((string)TempData["warningHtmlRawMessage"]))
+            {
+                <div class="toast toast-warning justify-content-end messageStyle" style="background-color: orange; color: white; top: 50px" data-delay="3000" data-autohide="true">
+                    <div class="toast-body">
+                        @Html.Raw(TempData["warningHtmlRawMessage"])
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    @if (!String.IsNullOrEmpty((string)TempData["infoMessage"]))
+    {
+        <div class="toast toast-info info-box justify-content-end messageStyle" style=" text-align: center; background-color: dodgerblue; color: white" data-delay="10000" data-autohide="true">
+            <div class="toast-body">
+                @TempData["infoMessage"]
+            </div>
+        </div>
+    }
+
+    @{
+        TempData["errorMessage"] = String.Empty;
+        TempData["successMessage"] = String.Empty;
+        TempData["infoMessage"] = String.Empty;
+    }
+</div>
+
+@*<section class="content">
+
+        @if (ViewBag.ViewCallout == true)
+        {
+            if (TempData["errorMessage"] != null)
+            {
+                <div class="callout callout-danger">
+                    <h5>Errore!</h5>
+                    <p>
+                        @TempData["errorMessage"]
+                    </p>
+                </div>
+            }
+            else if (TempData["successMessage"] != null)
+            {
+                <div class="callout callout-success">
+                    <h5>Successo!</h5>
+                    <p>
+                        @TempData["successMessage"]
+                    </p>
+                </div>
+            }
+        }
+    </section>*@
+
+
+@*@section JS{
+    <script>
+        $(document).ready(function () {
+            $('.toast').toast('show');
+        });
+    </script>
+    }*@
+

@@ -1,0 +1,431 @@
+﻿@model TFI.OCM.Amministrativo.GestioneRapportiLavoroIscrittiOCM
+@{
+    ViewBag.Title = "Gestione Rapporti Lavoro";
+    Layout = "~/Views/Shared/_LayoutContainer.cshtml";
+}
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+@section showMessage{
+    @{Html.RenderPartial("PartialViewShowMessages");}
+
+}
+
+
+<style>
+    .btn:hover {
+        background-color: #0c773c;
+    }
+
+    tr {
+        
+        background: #0c773c;
+        color: white;
+    }
+    
+    
+</style>
+
+
+
+<div class="card" style="background-color:white">
+    <div style="background-color: #0c773c" class="card-header">
+        <h3 style="color:white;text-align:center;width:100%;font-size:25px" class="card-title">Ricerca RDL/Iscritti</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("GestioneRapportiLavoroIscritti", "Amministrativo", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="input-group">
+                    <div class="col-lg-4">
+                        <label>Matricola</label>
+                        <div class="input-group">
+                            <input class="form-control" type="number" id="mat" name="mat" min="0" asp-for="mat" placeholder="Inserire Matricola">
+                        </div>
+                    </div>
+                    <div class=col-lg-4>
+                        <label>Cognome</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="cognome" name="cognome" asp-for="cognome" placeholder="Inserire Cognome">
+                        </div>
+                    </div>
+                    <div class=col-lg-4>
+                        <label>Nome</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="nome" name="nome" asp-for="nome" placeholder="Inserire Nome">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-4>
+                        <label>Codice Fiscale</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="codfis" name="codfis" asp-for="codfis" placeholder="Inserire Codice Fiscale">
+                        </div>
+                    </div>
+                    <div class=col-lg-3>
+                        <label>Data di Nascita</label>
+                        <div class="input-group">
+                            <input class="form-control" type="date" id="datnas" name="datnas" asp-for="datnas">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-4>
+                        <label>Codice Posizione Azienda</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="codposAz" name="codposAz" asp-for="codposAz" placeholder="Inserire Codice Posizione">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Ragione Sociale Azienda</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="ragsocAz" name="ragsocAz" asp-for="ragsocAz" placeholder="Inserire Ragione Sociale">
+                        </div>
+                    </div>
+                    <div class=col-lg-4>
+                        <label>Partita Iva/Codice Fiscale Azienda</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="parivaAz" name="parivaAz" asp-for="parivaAz" placeholder="Inserire Partita Iva o Codice Fiscale">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="input-group">
+                    <div class=col-lg-4>
+                        <label>&nbsp;</label>
+                    </div>
+                    <div class=col-lg-4 style=" text-align: center">
+                        <label>Stato:</label>
+                        <div class="icheck-success d-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0" checked>
+                            <label class="form-check-label" for="inlineRadio1">Tutti</label>
+                        </div>
+                        <div class="icheck-success d-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
+                            <label class="form-check-label" for="inlineRadio2">Aperti</label>
+                        </div>
+                        <div class="icheck-success d-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">
+                            <label class="form-check-label" for="inlineRadio3">Chiusi</label>
+                        </div>
+                        <input type="text" id="statocheck" name="statocheck" hidden />
+                    </div>
+                    <div class=col-lg-4>
+                        <label>&nbsp;</label>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row justify-content-between" style="margin-top:2%">
+                <div class="col-sm-2" style="float: right">
+                    <button type="button" name="inserimento" id="inserimento" asp-for="inserimento" class="btn btn-block btn-outline-success float-end" value="Cerca" data-toggle="modal" data-target="#modal-default">Inserimento</button>
+                </div>
+                <div class="col-sm-2">
+                    <button name="cerca" id="cerca" asp-for="cerca" type="submit" class="btn btn-block btn-outline-success float-end" value="Cerca">Cerca</button>
+                </div>
+            </div>
+            @*<div class="row">
+                    <div class="input-group">
+                        <input type="checkbox" class="from-control" id="checkAzienda" name="checkAzienda" />
+                    </div>
+                </div>*@
+            <div class="row" id="tabAzi" name="tabAzi" style="display:none">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Codice Posizione</label>
+                            <input type="text" class="form-control" id="codposAz" asp-for="codposAz" name="codposAz">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Posizione</label>
+                            <input type="text" class="form-control" id="pozioneAZ" asp-for="pozioneAZ" name="pozioneAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Ragione sociale</label>
+                            <input type="text" class="form-control" id="ragsocAZ" asp-for="ragsocAZ" name="ragsocAZ">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Codice fiscale</label>
+                            <input type="text" class="form-control" id="cfAz" asp-for="cfAz" name="cfAz" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Partita IVA</label>
+                            <input type="text" class="form-control" id="piAZ" asp-for="piAZ" name="piAZ" readonly>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Indirizzo di Residenza</label>
+                            <input class="form-control" id="residenzaAZ" asp-for="residenzaAZ" name="residenzaAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <input type="text" class="form-control" id="indirizzoAZ" asp-for="indirizzoAZ" name="indirizzoAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Civico</label>
+                            <input type="text" class="form-control" id="numCivAZ" asp-for="numCivAZ" name="numCivAZ" readonly>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Comune</label>
+                            <input type="text" class="form-control" id="comuneAZ" asp-for="comuneAZ" name="comuneAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>CAP</label>
+                            <input type="text" class="form-control" id="capAZ" asp-for="capAZ" name="capAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Provincia</label>
+                            <input type="text" class="form-control" id="provinciaAZ" asp-for="provinciaAZ" readonly>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Località</label>
+                            <input type="text" class="form-control" id="localitaAZ" asp-for="localitaAZ" name="localitaAZ" readonly>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+@*Modal modifica*@
+@using (Html.BeginForm("GestioneRapportiLavoroIscritti", "Amministrativo", FormMethod.Post))
+{
+    <div class="modal fade show" id="modal-default" style="display:none" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <h4 class="modal-title">Ricerca Azienda</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row ">
+                        <div class="col-sm-4">
+                            <label>Posizione:</label>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-sm-6">
+                            <input type="text" value="" id="codpos" name="codpos" asp-for="codpos" style="display: inline" class="form-control" placeholder="" required>&emsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" id="btn_annulla" class="btn  btn-outline-success hover" data-dismiss="modal">Annulla</button>
+                    <input type="submit" value="Inserimento" id="inserimento" name="inserimento" asp-for="inserimento" class="btn  btn-outline-success hover">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (Model != null)
+{
+    if (Model.listiscritti.Count > 0)
+    {
+        <div class="card">
+            <div class="card-body">
+                <div style="width: 100%; height: 500px; overflow: scroll; margin-top: 1%;">
+                    <div id="dvData">
+                        <table  class="table table-bordered table-hover table-striped">
+                            <tr>
+                                <th>Posizione</th>
+                                <th>Ragione Sociale</th>
+                                <th>Matricola</th>
+                                <th>Cognome</th>
+                                <th>Nome</th>
+                                <th>Codice Fiscale</th>
+                                <th>Data Inizio</th>
+                                <th>Data Fine</th>
+                                <th>Causale</th>
+                                <th>Modifica Dati Iscritto</th>
+                                <th>Modifica RDL</th>
+
+                            </tr>
+
+
+                            @foreach (var a in Model.listiscritti)
+                            {
+                                <tbody>
+                                    <tr>
+                                        <td>@a.codposAz</td>
+                                        <td>@a.ragsocAz</td>
+                                        <td>@a.mat</td>
+                                        <td>@a.cognome</td>
+                                        <td>@a.nome</td>
+                                        <td>@a.codfis</td>
+                                        <td>@a.datini</td>
+                                        <td>@a.datfin</td>
+                                        <td>@a.motivo</td>
+                                        @if (string.IsNullOrEmpty(@a.motivo))
+                                        {
+                                            <td><a href='@Url.Action("ModificaAnagraficaRapportiLavoroIscritti", "Amministrativo", new { mat = a.mat })'><i class="far fa-edit fa-lg"></i></a> </td>
+                                            <td><a href='@Url.Action("VariazioniRDL", "Amministrativo", new { mat = a.mat, DatNas = a.datnas,Nome=a.nome,Cognome=a.cognome })'><i class="far fa-edit fa-lg"></i></a></td>
+                                        }
+                                        else
+                                        {
+                                            <td><a onclick="Modifica()"><i class="far fa-edit fa-lg"></i></a></td>
+                                            <td><a onclick="Modifica()"><i class="far fa-calendar-times fa-lg"></i></a></td>
+                                        }
+
+
+
+                                    </tr>
+
+                                </tbody>
+                            }
+                        </table>
+                    </div>
+                    <br />
+                    <div>
+                        <input class="btn  btn-outline-success hover" type="button" id="btnExport" value=" Esporta in Excel " />
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+}
+
+<script>
+    $("input[name='inlineRadioOptions']").on("click", function () {
+        $("#statocheck").val($("input[name='inlineRadioOptions']:checked").val());
+    });
+
+    //$("#checkAzienda").on('change', function () {
+
+    //    var scelta = $("#checkAzienda").prop("checked");
+
+    //    if (scelta = true) {
+
+    //        $("#tabAzi").show();
+    //    }
+    //    if (scelta = false) {
+    //        $("#tabAzi").hide();
+    //    }
+    //});
+
+
+    function Modifica() {
+        if (confirm('Impossibile Modificare! Il Rapporto di Lavoro è cessato.')) {
+
+        }
+        return false;
+    };
+
+
+</script>
+
+
+<script>
+    
+    $("#btnExport").click(function (e) {
+        
+        window.open('data:application/vnd.ms-excel,' + encodeURI($('#dvData').html()));
+        e.preventDefault();
+    });
+
+        //function exportData() {
+        //    /* Get the HTML data using Element by Id */
+        //    var table = document.getElementById("tableIsc");
+
+        //    /* Declaring array variable */
+        //    var rows = [];
+
+        //    //iterate through rows of table
+        //    for (var i = 0, row; row = table.rows[i]; i++) {
+        //        //rows would be accessed using the "row" variable assigned in the for loop
+        //        //Get each cell value/column from the row
+        //        column1 = row.cells[0].innerText;
+        //        column2 = row.cells[1].innerText;
+        //        column3 = row.cells[2].innerText;
+        //        column4 = row.cells[3].innerText;
+        //        column5 = row.cells[4].innerText;
+        //        column6 = row.cells[5].innerText;
+        //        column7 = row.cells[6].innerText;
+        //        column8 = row.cells[7].innerText;
+        //        column9 = row.cells[8].innerText;
+
+        //        /* add a new records in the array */
+        //        rows.push(
+        //            [
+        //                column1,
+        //                column2,
+        //                column3,
+        //                column4,
+        //                column5,
+        //                column6,
+        //                column7,
+        //                column8,
+        //                column9
+        //            ]
+        //        );
+
+        //    }
+        //    csvContent = "data:text/csv;charset=utf-8,";
+        //    /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+        //    rows.forEach(function (rowArray) {
+        //        row = rowArray.join(",");
+        //        csvContent += row + "\r\n";
+        //    });
+
+        //    var encodedUri = encodeURI(csvContent);
+        //    var link = document.createElement("a");
+        //    link.setAttribute("href", encodedUri);
+        //    link.setAttribute("download", "RDL/Iscritti.csv");
+        //    document.body.appendChild(link);
+        //    link.click();
+        //}
+
+    </script>
